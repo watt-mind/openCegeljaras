@@ -1,0 +1,4 @@
+# Fixtures and pinned data are compared by digest and by exact bytes;
+# never convert their line endings on checkout.
+tests/fixtures/** -text
+data/** -text

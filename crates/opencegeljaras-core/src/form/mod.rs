@@ -340,6 +340,9 @@ impl BoundedInput {
     }
 }
 
+/// Stack reserved for the parsing thread; see `parse_bounded`.
+const PARSE_STACK_BYTES: usize = 16 * 1024 * 1024;
+
 /// Parse already-read bytes under `limits` into a bounded tree.
 ///
 /// This is the single entry point into decoding, the pre-parse scan, and
@@ -354,10 +357,10 @@ impl BoundedInput {
 /// Returns a [`Failure`] when the input is too large, is not decodable under
 /// an accepted encoding, contains a prohibited construct, exceeds a limit, or
 /// is not well-formed XML, and whatever `visit` itself returns.
-pub(crate) fn parse_bounded<T>(
+pub(crate) fn parse_bounded<T: Send>(
     bytes: &[u8],
     limits: &Limits,
-    visit: impl FnOnce(&Document<'_>, BoundedInput) -> Result<T, Failure>,
+    visit: impl FnOnce(&Document<'_>, BoundedInput) -> Result<T, Failure> + Send,
 ) -> Result<T, Failure> {
     let size = bytes.len() as u64;
     if size > limits.input_bytes {
@@ -384,8 +387,32 @@ pub(crate) fn parse_bounded<T>(
     };
 
     prescan::prescan(&decoded.text, limits).map_err(|code| input.failure(code))?;
-    let document = tree::parse(&decoded.text, limits).map_err(|code| input.failure(code))?;
-    visit(&document, input)
+    // The tokenizer inside `roxmltree` recurses once per nesting level. Its
+    // frames are small in optimised builds but several kilobytes in debug
+    // builds, and the main thread's stack is only 1 MiB on Windows, so the
+    // documented depth limit could overflow it. Parsing on a scoped thread
+    // with an explicit stack keeps the limit meaningful on every platform;
+    // the reservation is virtual and costs nothing until touched.
+    let text = &decoded.text;
+    let outcome: Result<Result<T, Failure>, Rejection> = std::thread::scope(|scope| {
+        let handle = std::thread::Builder::new()
+            .name("opencegeljaras-parse".to_owned())
+            .stack_size(PARSE_STACK_BYTES)
+            .spawn_scoped(scope, || {
+                let document = tree::parse(text, limits)?;
+                Ok(visit(&document, input))
+            })
+            .expect("the parsing thread should be spawnable");
+        // A panic inside the parser or the visitor is a bug in this crate,
+        // not a property of the document, so it propagates unchanged.
+        handle
+            .join()
+            .unwrap_or_else(|payload| std::panic::resume_unwind(payload))
+    });
+    match outcome {
+        Ok(result) => result,
+        Err(code) => Err(input.failure(code)),
+    }
 }
 
 /// Inspect one already-read document under the given limits.
