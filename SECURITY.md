@@ -17,7 +17,10 @@ input, enforce bounded resource use, disable external entity/resource loading,
 and avoid active HTML or XSLT execution. Rendering a receipt is not permission
 to visit its links or acknowledge delivery. Unknown profile versions fail closed.
 
-Preserve original signed bytes and verification provenance. Structural
+Symlinks inside a bundle directory are followed when `schemas verify` reads a
+mirrored resource, so never run it with elevated privileges over a directory
+you do not control. Preserve original signed bytes and verification
+provenance. Structural
 conformance cannot establish signature validity, filing acceptance, or legal
 effect. A receipt's textual claim is untrusted until independently verified
 and associated with the relevant submission.

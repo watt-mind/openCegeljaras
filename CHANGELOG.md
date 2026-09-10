@@ -27,6 +27,9 @@
 - A shared "parse bytes under `Limits` into a bounded tree" entry point in the
   core, used by both the form classifier and the schema import audit under one
   default `Limits`.
+- Offending import locations are de-duplicated in first-appearance order and
+  capped at 64 per resource, with `locations_truncated` on every `problems`
+  entry.
 - Synthetic CC0 schema fixtures under `tests/fixtures/schemas/`.
 - `sha2` 0.11 added for digesting already-read bytes.
 - `BSD-3-Clause` added to the licence allowlist for the `encoding_rs`

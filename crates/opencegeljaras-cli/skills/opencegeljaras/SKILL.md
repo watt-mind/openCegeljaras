@@ -45,7 +45,9 @@ Run `opencegeljaras schemas verify --bundle DIR --json` on a mirror the
 operator already has. It compares each pinned resource's bytes against the
 recorded SHA-256 digest and checks that every `xs:import` and `xs:include` in
 the form graph resolves to a pinned URL. It reads only the files the manifest
-names, opens no network connection, and writes nothing.
+names, opens no network connection, and writes nothing. Symlinks inside the
+bundle directory are followed, so never run it with elevated privileges over a
+directory the operator does not control.
 
 Exit 0 means every pinned resource matched and the form graph's imports
 audited. That is a digest and import audit of the operator's own copy. It is

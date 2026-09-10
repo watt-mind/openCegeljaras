@@ -22,9 +22,10 @@ the binary. None of this establishes XSD conformance or acceptance.
 
 The `schemas` contract tests run the built binary over the synthetic CC0 mini
 graph in `tests/fixtures/schemas/`: the stored good and tampered bundles, and
-copies generated into a scratch directory for an unpinned import, an import
-namespace mismatch, an unparseable resource, a missing form root, an oversize
-file, symlinked resources and directories, an unreadable bundle, and manifest
+copies generated into a scratch directory for an unpinned import, more
+offending locations than the 64-location cap, an import namespace mismatch,
+an unparseable resource, a missing form root, an oversize file,
+symlinked resources and directories, an unreadable bundle, and manifest
 files that are unreadable, not JSON, carry an unknown field, a `..` segment, a
 non-allowed host, or an `http` scheme. They assert the list, `--urls`, and
 verify shapes, every exit code and fixed message, that stderr is empty on
