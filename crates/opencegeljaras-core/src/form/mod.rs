@@ -35,6 +35,10 @@ pub struct Limits {
     /// Largest accepted number of attributes on one element, excluding
     /// namespace declarations.
     pub attributes: usize,
+    /// Largest accepted number of `xmlns` and `xmlns:*` declarations on one
+    /// element. The parser compares each declaration against every earlier
+    /// one on the same element, so an uncapped element is quadratic work.
+    pub namespace_declarations: usize,
 }
 
 impl Default for Limits {
@@ -45,6 +49,7 @@ impl Default for Limits {
             elements: 200_000,
             text_bytes: 1024 * 1024,
             attributes: 64,
+            namespace_declarations: 64,
         }
     }
 }
