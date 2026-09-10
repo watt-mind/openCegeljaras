@@ -1,6 +1,7 @@
 //! I/O-free capability and source-catalogue model for openCegeljaras.
 
 pub mod form;
+pub mod schema;
 
 use serde::{Deserialize, Serialize};
 
@@ -9,11 +10,24 @@ pub const PROJECT: &str = "openCegeljaras";
 /// Development stage reported by the scaffold.
 pub const STAGE: &str = "scaffold";
 /// Implemented filing or document-processing operations.
-pub const OPERATIONS: &[&str] = &["form inspect"];
+pub const OPERATIONS: &[&str] = &["form inspect", "schemas list", "schemas verify"];
 /// Commands that describe the scaffold without performing domain work.
 pub const INTROSPECTION_COMMANDS: &[&str] = &["capabilities", "sources", "skill"];
 
 const SOURCE_CATALOG_JSON: &str = include_str!("../../../data/source-catalog.json");
+
+/// Cut an untrusted string to a fixed number of Unicode scalar values.
+///
+/// Document- and bundle-derived strings are the only untrusted text this crate
+/// ever reports, and either can be made arbitrarily long, so every one of them
+/// passes through this cut before it reaches an output field.
+pub(crate) fn truncate_scalars(text: &str, limit: usize) -> String {
+    let mut cut: String = text.chars().take(limit).collect();
+    if text.chars().nth(limit).is_some() {
+        cut.push('…');
+    }
+    cut
+}
 
 /// The reviewed public metadata compiled into the binary.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -48,8 +62,19 @@ mod tests {
 
     #[test]
     fn capabilities_report_only_read_only_operations() {
-        assert_eq!(OPERATIONS, ["form inspect"]);
+        assert_eq!(
+            OPERATIONS,
+            ["form inspect", "schemas list", "schemas verify"]
+        );
         assert_eq!(INTROSPECTION_COMMANDS, ["capabilities", "sources", "skill"]);
+    }
+
+    #[test]
+    fn long_strings_are_cut_with_a_marker() {
+        assert_eq!(truncate_scalars("abc", 8), "abc");
+        assert_eq!(truncate_scalars("abcdefgh", 8), "abcdefgh");
+        assert_eq!(truncate_scalars("abcdefghi", 8), "abcdefgh…");
+        assert_eq!(truncate_scalars("áéíóöőúüű", 4), "áéíó…");
     }
 
     #[test]

@@ -10,6 +10,8 @@ mod decode;
 mod prescan;
 mod tree;
 
+use roxmltree::Document;
+
 pub use tree::{PROFILE, WRAPPER_NAMESPACE};
 
 /// The UTF-8 label, normalised as it is reported.
@@ -55,6 +57,24 @@ impl Default for Limits {
 }
 
 impl Limits {
+    /// The limits applied to one pinned schema resource during the import
+    /// audit.
+    ///
+    /// These are the form limits with a single documented exception. Two
+    /// form-closure resources of the pinned 2026 graph declare 82 and 85
+    /// namespace prefixes on their root element, so the 64-declaration form
+    /// cap would refuse the real schemas outright. The cap is raised for
+    /// schema resources only, and it stays bounded because the parser compares
+    /// each declaration against every earlier one on the same element. No
+    /// other limit differs, and a form document is never parsed under these.
+    #[must_use]
+    pub fn for_schema_resource() -> Self {
+        Self {
+            namespace_declarations: 256,
+            ..Self::default()
+        }
+    }
+
     /// The parser's own node backstop, four times the element limit.
     #[must_use]
     pub fn parser_nodes(&self) -> u32 {
@@ -304,21 +324,56 @@ pub struct Inspection {
 /// Element names and namespace URIs are the only document strings this crate
 /// ever reports, and an untrusted document can make either arbitrarily long.
 fn truncate_name(name: &str) -> String {
-    let mut cut: String = name.chars().take(NAME_LIMIT).collect();
-    if name.chars().nth(NAME_LIMIT).is_some() {
-        cut.push('…');
-    }
-    cut
+    crate::truncate_scalars(name, NAME_LIMIT)
 }
 
-/// Inspect one already-read document under the given limits.
+/// The input facts established by the shared bounded parsing entry point.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) struct BoundedInput {
+    /// Size of the input in bytes, including any byte-order mark.
+    pub(crate) bytes: u64,
+    /// Whether a UTF-8 byte-order mark was stripped.
+    pub(crate) bom: bool,
+    /// Whether an XML declaration was found by the sniff.
+    pub(crate) xml_declaration: bool,
+    /// The normalised label of the encoding that was applied.
+    pub(crate) encoding: &'static str,
+}
+
+impl BoundedInput {
+    /// A failure carrying everything established before it.
+    pub(crate) fn failure(self, code: Rejection) -> Failure {
+        Failure {
+            code,
+            input: Some(PartialInput {
+                bytes: self.bytes,
+                bom: Some(self.bom),
+                xml_declaration: Some(self.xml_declaration),
+                encoding: Some(self.encoding),
+            }),
+        }
+    }
+}
+
+/// Parse already-read bytes under `limits` into a bounded tree.
+///
+/// This is the single entry point into decoding, the pre-parse scan, and
+/// DTD-free tree parsing. The form classifier and the schema import audit both
+/// go through it, so both refuse the same encodings, the same prohibited
+/// declarations, and the same depth and node limits. The parsed tree borrows
+/// the decoded text, which lives only for the call, so callers receive it
+/// through `visit` rather than as a return value.
 ///
 /// # Errors
 ///
 /// Returns a [`Failure`] when the input is too large, is not decodable under
 /// an accepted encoding, contains a prohibited construct, exceeds a limit, or
-/// is not well-formed XML.
-pub fn inspect(bytes: &[u8], limits: &Limits) -> Result<Inspection, Failure> {
+/// is not well-formed XML, and whatever `visit` itself returns.
+pub(crate) fn parse_bounded<T>(
+    bytes: &[u8],
+    limits: &Limits,
+    visit: impl FnOnce(&Document<'_>, BoundedInput) -> Result<T, Failure>,
+) -> Result<T, Failure> {
     let size = bytes.len() as u64;
     if size > limits.input_bytes {
         return Err(Failure {
@@ -336,33 +391,42 @@ pub fn inspect(bytes: &[u8], limits: &Limits) -> Result<Inspection, Failure> {
             encoding: error.encoding,
         }),
     })?;
-    let partial = PartialInput {
+    let input = BoundedInput {
         bytes: size,
-        bom: Some(decoded.bom),
-        xml_declaration: Some(decoded.xml_declaration),
-        encoding: Some(decoded.encoding),
-    };
-    let failed = |code: Rejection| Failure {
-        code,
-        input: Some(partial.clone()),
+        bom: decoded.bom,
+        xml_declaration: decoded.xml_declaration,
+        encoding: decoded.encoding,
     };
 
-    prescan::prescan(&decoded.text, limits).map_err(failed)?;
-    let document = tree::parse(&decoded.text, limits).map_err(failed)?;
-    let (structure, schema_location_declared) = tree::walk(&document, limits).map_err(failed)?;
+    prescan::prescan(&decoded.text, limits).map_err(|code| input.failure(code))?;
+    let document = tree::parse(&decoded.text, limits).map_err(|code| input.failure(code))?;
+    visit(&document, input)
+}
 
-    Ok(Inspection {
-        input: InputFacts {
-            bytes: size,
-            bom: decoded.bom,
-            xml_declaration: decoded.xml_declaration,
-            encoding: decoded.encoding,
-            stylesheet_pi: tree::stylesheet_pi(&document),
-            schema_location_declared,
-        },
-        root: tree::root_facts(&document),
-        form: tree::classify(&document),
-        structure,
+/// Inspect one already-read document under the given limits.
+///
+/// # Errors
+///
+/// Returns a [`Failure`] when the input is too large, is not decodable under
+/// an accepted encoding, contains a prohibited construct, exceeds a limit, or
+/// is not well-formed XML.
+pub fn inspect(bytes: &[u8], limits: &Limits) -> Result<Inspection, Failure> {
+    parse_bounded(bytes, limits, |document, input| {
+        let (structure, schema_location_declared) =
+            tree::walk(document, limits).map_err(|code| input.failure(code))?;
+        Ok(Inspection {
+            input: InputFacts {
+                bytes: input.bytes,
+                bom: input.bom,
+                xml_declaration: input.xml_declaration,
+                encoding: input.encoding,
+                stylesheet_pi: tree::stylesheet_pi(document),
+                schema_location_declared,
+            },
+            root: tree::root_facts(document),
+            form: tree::classify(document),
+            structure,
+        })
     })
 }
 
