@@ -92,6 +92,10 @@ jobs:
 
   codeql:
     name: CodeQL
+    # Code scanning uploads need GitHub Advanced Security on a private
+    # repository; until the repository is public (or GHAS is enabled) the
+    # job would fail at upload, so it runs only for a public repository.
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
