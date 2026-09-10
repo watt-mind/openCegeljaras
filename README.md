@@ -5,13 +5,17 @@ checking Hungarian electronic company-court filings (**e-cégeljárás**) and
 interpreting their receipts.
 
 **Status: scaffold.** Alongside `capabilities`, `sources`, `skill`, help, and
-version there is one read-only document operation, `form inspect`. It decodes a
-local form file under fixed limits, checks that it is well-formed XML, and
-reports which company-form wrapper and variant it carries. It does not prove
-that the file is XSD-valid, signed, correctly filled in, currently accepted, or
-filed: there is still no XSD validator, dossier builder, signature verifier,
-submission transport, or receipt parser. No release has been published. This
-independent project is not a government service.
+version there are three read-only operations: `form inspect`, `schemas list`,
+and `schemas verify`. `form inspect` decodes a local form file under fixed
+limits, checks that it is well-formed XML, and reports which company-form
+wrapper and variant it carries. `schemas list` prints the pinned schema
+manifest compiled into the binary, and `schemas verify` checks a local mirror
+you supplied yourself against those pinned digests and audits the form graph's
+imports. None of this proves that a file is XSD-valid, signed, correctly
+filled in, currently accepted, or filed: there is still no XSD validator,
+dossier builder, signature verifier, submission transport, or receipt parser.
+No release has been published. This independent project is not a government
+service.
 
 ## Why this project
 
@@ -48,9 +52,14 @@ cargo run --locked -p opencegeljaras-cli -- sources --json
 cargo run --locked -p opencegeljaras-cli -- skill
 cargo run --locked -p opencegeljaras-cli -- form inspect \
   tests/fixtures/forms/cegbejegyzesi-minimal-utf8.xml --json
+cargo run --locked -p opencegeljaras-cli -- schemas list --json
+cargo run --locked -p opencegeljaras-cli -- schemas verify \
+  --bundle tests/fixtures/schemas/good \
+  --manifest tests/fixtures/schemas/manifest.json --json
 ```
 
-`capabilities` reports `stage: "scaffold"` and `operations: ["form inspect"]`.
+`capabilities` reports `stage: "scaffold"` and
+`operations: ["form inspect", "schemas list", "schemas verify"]`.
 Introspection commands are listed separately from document operations.
 `form inspect` exits 0 for a recognised 2026 form, 1 for an input it refuses,
 and 4 for a well-formed document that is not a supported form; recognition is
@@ -58,6 +67,15 @@ format recognition only. A successful command
 reports `ok: true`, `verified: false`, and `submitted: false`: it has neither
 verified a signature nor filed a case. `sources` prints a bundled research
 catalog; it does not contact the listed sites or check whether guidance changed.
+
+No official schema is vendored here. `schemas list --urls` prints the pinned
+URLs so that you can mirror them yourself with your own tool; `schemas verify`
+then compares your mirror's bytes against the pinned SHA-256 digests and checks
+that every `xs:import` and `xs:include` in the form graph resolves to a pinned
+URL. That is a digest and import audit of your own copy: it is not a
+redistribution licence, not XSD validation, and not acceptance by any
+authority. It exits 4 when the mirror does not match, and never downloads,
+writes, or modifies anything.
 
 ## Intended workflow
 

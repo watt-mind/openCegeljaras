@@ -19,6 +19,26 @@ namespace declaration counts, and that output is byte-identical across runs.
 Core unit tests cover decoding, the pre-parse scan, and classification without
 the binary. None of this establishes XSD conformance or acceptance.
 
+The `schemas` contract tests run the built binary over the synthetic CC0 mini
+graph in `tests/fixtures/schemas/`: the stored good and tampered bundles, and
+copies generated into a scratch directory for an unpinned import, an import
+namespace mismatch, an unparseable resource, a missing form root, an oversize
+file, symlinked resources and directories, an unreadable bundle, and manifest
+files that are unreadable, not JSON, carry an unknown field, a `..` segment, a
+non-allowed host, or an `http` scheme. They assert the list, `--urls`, and
+verify shapes, every exit code and fixed message, that stderr is empty on
+exit 0 and exactly one line otherwise, that no local path reaches either
+stream, and that output is byte-identical across runs. Core unit tests cover
+the manifest rules, the compiled manifest's 149 resources and 139-resource form
+closure, RFC 3986 resolution, scheme normalisation, and digesting.
+
+One test marked `#[ignore]` verifies a real mirror named by
+`OPENCEGELJARAS_SCHEMA_BUNDLE`; run it with `cargo test --workspace -- --ignored`
+and it panics with a fixed message when the variable is unset. CI does not run
+it, and no official schema is stored in this repository. Verifying a bundle is
+a digest comparison and an import audit: not a licence, not validation, and not
+acceptance.
+
 Before implementing further parsing, create synthetic fixtures independently
 from the published schemas. Cover positive and negative cases, mixed namespaces,
 unsupported profiles, old/new effective dates, ISO-8859-2 and UTF-8 handling,
