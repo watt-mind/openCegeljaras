@@ -6,6 +6,8 @@ use crate::form::Limits;
 /// The wrapper the form graph is rooted at.
 const FORM_ROOT: &str =
     "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101.xsd";
+/// The dossier graph's own root.
+const DOSSIER_ROOT: &str = "https://www.e-cegjegyzek.hu/schema/2026/e-cegeljaras2026.xsd";
 /// The dossier resource carrying a DOCTYPE and a `www` host copy of `xml.xsd`.
 const DOSSIER_XML: &str = "https://www.e-cegjegyzek.hu/schema/2026/xml.xsd";
 /// The dossier resource carrying a DOCTYPE and an entity in its namespace.
@@ -49,6 +51,42 @@ fn the_compiled_manifest_is_valid_and_pins_the_reviewed_graph() {
             "{dossier} carries a DOCTYPE and must stay outside the form closure"
         );
     }
+}
+
+#[test]
+fn the_dossier_closure_is_ten_resources_disjoint_from_the_form_closure() {
+    let manifest = compiled_manifest().expect("the compiled manifest must be valid");
+    assert_eq!(
+        manifest.roots.get(1).map(String::as_str),
+        Some(DOSSIER_ROOT)
+    );
+
+    let dossier = manifest.dossier_closure();
+    assert_eq!(dossier.len(), 10);
+    assert!(dossier.contains(DOSSIER_ROOT));
+    for resource in [DOSSIER_XML, DOSSIER_XMLDSIG] {
+        assert!(
+            dossier.contains(resource),
+            "{resource} carries a DOCTYPE and is verified by digest inside the dossier closure"
+        );
+    }
+    let form = manifest.form_closure();
+    assert!(
+        form.is_disjoint(&dossier),
+        "the two graphs share no resource"
+    );
+    assert_eq!(form.len() + dossier.len(), manifest.resources.len());
+}
+
+#[test]
+fn a_manifest_without_a_second_root_has_an_empty_dossier_closure() {
+    let text = manifest_text(
+        &resource("https://www.e-cegjegyzek.hu/a.xsd", ""),
+        r#""https://www.e-cegjegyzek.hu/a.xsd""#,
+    );
+    let manifest = SchemaManifest::parse(&text).expect("the built manifest is valid");
+    assert_eq!(manifest.form_closure().len(), 1);
+    assert!(manifest.dossier_closure().is_empty());
 }
 
 #[test]
