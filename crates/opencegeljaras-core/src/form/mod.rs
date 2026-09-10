@@ -18,6 +18,7 @@ pub use fields::{
     PATH_LIMIT, Path, VALUE_LIMIT, diff,
 };
 pub use tree::{PROFILE, WRAPPER_NAMESPACE};
+pub(crate) use tree::{root_facts, walk};
 
 /// The UTF-8 label, normalised as it is reported.
 pub const UTF_8_LABEL: &str = "UTF-8";
@@ -63,6 +64,22 @@ impl Default for Limits {
         }
     }
 }
+
+/// The fixed limits applied to one dossier container.
+///
+/// It differs from the form profile only where the container shape requires:
+/// a dossier carries whole documents as base64 text, so both the input and one
+/// text node may reach 64 MiB, and a container of many documents needs a much
+/// larger element budget. Depth, per-element attributes, and per-element
+/// namespace declarations are the form profile's.
+pub const DOSSIER_LIMITS: Limits = Limits {
+    input_bytes: 64 * 1024 * 1024,
+    depth: 128,
+    elements: 1_000_000,
+    text_bytes: 64 * 1024 * 1024,
+    attributes: 64,
+    namespace_declarations: 256,
+};
 
 impl Limits {
     /// The parser's own node backstop, four times the element limit.

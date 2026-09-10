@@ -150,6 +150,7 @@ struct Audit {
     problems: Vec<Problem>,
     closure_digests_complete: bool,
     closure_verified: bool,
+    dossier_closure_verified: bool,
     audit_failed: bool,
 }
 
@@ -319,8 +320,10 @@ fn read_manifest(path: &Path) -> Result<SchemaManifest, VerifyError> {
 
 /// Read at most the resource cap from a regular file, following symlinks.
 ///
-/// The file type is taken from the opened handle rather than from the path, so
-/// that nothing swapped in between a look and an open is read. Symlinks are
+/// The path is checked before it is opened, so that a named pipe named as a
+/// manifest or a bundle resource cannot block the command; the file type is
+/// then taken again from the opened handle, so that nothing swapped in between
+/// the look and the open is read. Symlinks are
 /// followed, which is what mirrors laid out by hand need; a bundle directory
 /// therefore has to be one the caller trusts.
 ///
@@ -328,6 +331,9 @@ fn read_manifest(path: &Path) -> Result<SchemaManifest, VerifyError> {
 /// cap is possible by one byte, which is how the caller detects an oversized
 /// file without reading it all.
 fn read_bounded(path: &Path) -> Option<Vec<u8>> {
+    if !fs::metadata(path).ok()?.is_file() {
+        return None;
+    }
     let file = fs::File::open(path).ok()?;
     if !file.metadata().ok()?.is_file() {
         return None;
@@ -343,11 +349,13 @@ fn read_bounded(path: &Path) -> Option<Vec<u8>> {
 fn audit_bundle(bundle: &Path, manifest: &SchemaManifest) -> Audit {
     let limits = Limits::default();
     let closure = manifest.form_closure();
+    let dossier_closure = manifest.dossier_closure();
     let mut audit = Audit {
         verified_count: 0,
         problems: Vec::new(),
         closure_digests_complete: true,
         closure_verified: true,
+        dossier_closure_verified: true,
         audit_failed: false,
     };
 
@@ -357,6 +365,9 @@ fn audit_bundle(bundle: &Path, manifest: &SchemaManifest) -> Audit {
         if status == ResourceStatus::Verified {
             audit.verified_count += 1;
             continue;
+        }
+        if dossier_closure.contains(resource.url.as_str()) {
+            audit.dossier_closure_verified = false;
         }
         if in_closure {
             audit.closure_verified = false;
@@ -450,6 +461,7 @@ fn verify_data(manifest: &SchemaManifest, audit: &Audit, source: &str, unpinned:
         "bundle": {
             "verified": audit.verified(),
             "form_closure_verified": audit.closure_verified,
+            "dossier_closure_verified": audit.dossier_closure_verified,
             "verified_count": audit.verified_count,
             "missing": audit.count(ResourceStatus::Missing),
             "mismatch": audit.count(ResourceStatus::Mismatch),
@@ -479,6 +491,10 @@ fn verify_report(manifest: &SchemaManifest, audit: &Audit, source: &str) -> Stri
     report.push_str(&format!(
         "form closure: {}\n",
         verdict(audit.closure_verified)
+    ));
+    report.push_str(&format!(
+        "dossier closure: {}\n",
+        verdict(audit.dossier_closure_verified)
     ));
     report.push_str(&format!(
         "counts: verified {}, missing {}, mismatch {}, oversize {}, unparseable {}, unpinned import {}\n",
@@ -538,8 +554,14 @@ pub(crate) struct BundleCheck {
     pub(crate) data: Value,
     /// Whether every form-closure resource verified.
     pub(crate) form_closure_verified: bool,
+    /// Whether every dossier-closure resource verified by digest.
+    pub(crate) dossier_closure_verified: bool,
     /// The canonical path of the form root inside the bundle, when readable.
     pub(crate) form_root: Option<PathBuf>,
+    /// The canonical path of the dossier root inside the bundle, when readable.
+    pub(crate) dossier_root: Option<PathBuf>,
+    /// How many graph roots the manifest pins.
+    pub(crate) roots: usize,
 }
 
 /// Why a bundle check produced no result at all.
@@ -567,14 +589,20 @@ pub(crate) fn check_bundle(
 
     let audit = audit_bundle(&bundle, &manifest);
     let source = if unpinned { "file" } else { "compiled" };
-    let form_root = manifest
-        .roots
-        .first()
-        .and_then(|root| resource_path(&bundle, root))
-        .and_then(|path| fs::canonicalize(path).ok());
+    let root_path = |index: usize| {
+        manifest
+            .roots
+            .get(index)
+            .and_then(|root| resource_path(&bundle, root))
+            .and_then(|path| fs::canonicalize(path).ok())
+    };
+    let (form_root, dossier_root) = (root_path(0), root_path(1));
     Ok(BundleCheck {
         data: verify_data(&manifest, &audit, source, unpinned),
         form_closure_verified: audit.closure_verified,
+        dossier_closure_verified: audit.dossier_closure_verified,
         form_root,
+        dossier_root,
+        roots: manifest.roots.len(),
     })
 }

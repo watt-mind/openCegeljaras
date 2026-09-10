@@ -30,7 +30,7 @@ const COMMAND: &str = "form validate";
 /// The fixed notice carried by every `form validate` envelope.
 const NOTICE: &str = "XSD conformance of one form against the pinned 2026 graph as interpreted by the named libxml2 version; not the technical conditions, not a signature check, not acceptance";
 /// How long the CLI lets one validator run take.
-const TIMEOUT: Duration = Duration::from_secs(60);
+pub(crate) const TIMEOUT: Duration = Duration::from_secs(60);
 /// Findings kept before the list is reported as truncated.
 const MAX_FINDINGS: usize = 256;
 /// Unicode scalar values kept from one validator message.
@@ -147,25 +147,25 @@ pub(crate) struct ValidateArgs {
 }
 
 /// One reported schema violation, already cut and redacted.
-struct Finding {
+pub(crate) struct Finding {
     /// Line of the temporary document copy the validator named.
-    line: u64,
+    pub(crate) line: u64,
     /// The element name the validator named, cut to a fixed length.
-    element: String,
+    pub(crate) element: String,
     /// The validator's message, redacted unless values were requested.
-    message: String,
+    pub(crate) message: String,
 }
 
 /// Everything parsed out of one validator run's standard error.
-struct Findings {
+pub(crate) struct Findings {
     /// The kept findings, in validator order.
-    items: Vec<Finding>,
+    pub(crate) items: Vec<Finding>,
     /// Whether more findings were reported than are kept.
-    truncated: bool,
+    pub(crate) truncated: bool,
     /// How many stderr lines did not match the expected format.
-    unparsed: usize,
+    pub(crate) unparsed: usize,
     /// Whether document values were removed from the messages.
-    redacted: bool,
+    pub(crate) redacted: bool,
 }
 
 /// Why `form validate` did not report a conforming document.
@@ -343,7 +343,7 @@ fn fail(outcome: &Outcome<'_>, args: &ValidateArgs, error: ValidateError) -> Com
 }
 
 /// The `validator` field: the name plus whatever was established about it.
-fn validator_value(version: Option<u32>, exit_code: Option<i32>) -> Value {
+pub(crate) fn validator_value(version: Option<u32>, exit_code: Option<i32>) -> Value {
     json!({ "name": VALIDATOR_NAME, "version": version, "exit_code": exit_code })
 }
 
@@ -490,7 +490,7 @@ fn validator_verdict(validator: &Value) -> String {
 /// The two fixed summary lines the validator ends with, one for each of the
 /// exit codes this adapter accepts, are expected output rather than something
 /// that could not be interpreted, so neither is counted as unparsed.
-fn collect(stderr: &str, show_values: bool) -> Findings {
+pub(crate) fn collect(stderr: &str, show_values: bool) -> Findings {
     let expected = [
         format!("{DOCUMENT_NAME} fails to validate"),
         format!("{DOCUMENT_NAME} validates"),

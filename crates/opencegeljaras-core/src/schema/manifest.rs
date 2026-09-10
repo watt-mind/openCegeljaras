@@ -184,8 +184,22 @@ impl SchemaManifest {
     /// This is computed from the manifest alone; nothing is read or fetched.
     #[must_use]
     pub fn form_closure(&self) -> BTreeSet<&str> {
+        self.closure(0)
+    }
+
+    /// The resources reachable from the dossier root through `dependencies`.
+    ///
+    /// It is empty when the manifest pins no second root, which the commands
+    /// that need the dossier graph refuse rather than treat as verified.
+    #[must_use]
+    pub fn dossier_closure(&self) -> BTreeSet<&str> {
+        self.closure(1)
+    }
+
+    /// The resources reachable from one root through `dependencies`.
+    fn closure(&self, index: usize) -> BTreeSet<&str> {
         let mut reached = BTreeSet::new();
-        let Some(root) = self.roots.first() else {
+        let Some(root) = self.roots.get(index) else {
             return reached;
         };
         let mut pending = vec![root.as_str()];

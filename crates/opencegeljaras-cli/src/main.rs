@@ -1,5 +1,6 @@
 //! Command-line entry point for the openCegeljaras scaffold.
 
+mod dossier;
 mod fields;
 mod form;
 mod output;
@@ -14,6 +15,7 @@ use clap::{Args, Parser, Subcommand};
 use opencegeljaras_core::{INTROSPECTION_COMMANDS, OPERATIONS, PROJECT, STAGE, source_catalog};
 use serde_json::{Value, json};
 
+use crate::dossier::DossierCommand;
 use crate::fields::{DiffArgs, FieldsArgs};
 use crate::form::InspectArgs;
 use crate::output::{
@@ -52,6 +54,11 @@ enum Command {
     Form {
         #[command(subcommand)]
         command: FormCommand,
+    },
+    /// Read-only operations on one local company-court e-dossier container.
+    Dossier {
+        #[command(subcommand)]
+        command: DossierCommand,
     },
     /// Read-only operations on the pinned schema manifest and a local mirror.
     Schemas {
@@ -209,6 +216,7 @@ fn run() -> u8 {
         Command::Form {
             command: FormCommand::Diff(args),
         } => fields::diff(&args),
+        Command::Dossier { command } => dossier::run(&command),
         Command::Schemas { command } => schemas::run(&command),
     };
 

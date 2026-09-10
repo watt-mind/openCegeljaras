@@ -1,15 +1,15 @@
 ---
 name: opencegeljaras
-description: Discover the capabilities and reference sources of the openCegeljaras development scaffold for Hungarian electronic company-court filings, recognise the format of a local company-form XML file, list its fields as stable paths or compare two forms field by field, check a local mirror of the pinned official schemas against its digests, and check one form's XSD conformance against that verified mirror.
+description: Discover the capabilities and reference sources of the openCegeljaras development scaffold for Hungarian electronic company-court filings, recognise the format of a local company-form XML file, list its fields as stable paths or compare two forms field by field, check a local mirror of the pinned official schemas against its digests, check one form's XSD conformance against that verified mirror, and inspect or preflight one local 2026 company-court e-dossier.
 ---
 
 # openCegeljaras
 
 Run `opencegeljaras capabilities --json` before choosing an operation.
 The current stage is `scaffold`. The document operations are `form inspect`,
-`form validate`, `form fields`, `form diff`, `schemas list`, and
-`schemas verify`; `capabilities`, `sources`, `skill`, help, and version
-describe the tool itself.
+`form validate`, `form fields`, `form diff`, `schemas list`, `schemas verify`,
+`dossier inspect`, and `dossier preflight`; `capabilities`, `sources`, `skill`,
+help, and version describe the tool itself.
 
 ## Inspecting a form
 
@@ -132,6 +132,65 @@ replaced by `'…'`, and `values_redacted` is `true`. Never pass
 `--show-values` unless the operator asked for the values: it keeps them and
 can expose personal data. `unparsed_lines` counts validator
 output that did not match the expected format; that text is never echoed.
+
+## Inspecting a dossier
+
+Run `opencegeljaras dossier inspect <PATH> --json` on one `.es3` container.
+It reports the procedure title and category the dossier declares, whether it is
+a receipt, the fixed `Documents` identifier, and, per document, the schema role
+its title matches, the declared media type, the transform chain, the signature
+and timestamp counts, and why the payload was or was not inspected. Exactly one
+kind of payload is decoded: a document whose chain is exactly `base64` and whose
+declared media type is XML, into memory, at most 16 MiB, and its `form inspect`
+result is reported as that document's `form`. `payload` says why any other
+document was not decoded (`object_missing`, `object_not_text`,
+`transform_not_plain_base64`, `not_xml`, `payload_too_large`, `base64_invalid`);
+report that as "not inspected", never as a defect. Zip and encrypt transforms
+are never applied and a nested dossier is only flagged: extraction beyond plain
+base64 belongs to openSzigno.
+
+Nothing in the container is resolved: no `OBJREF`, no `SIGREF`, no `Location`,
+and the acknowledgement address is never contacted. Declared document titles and
+the four company-identity values are personal and company data: they are hidden
+by default, `values_redacted` is `true`, and `role` reports the schema's own
+fixed pattern text rather than the declared title. Pass `--show-values` **only**
+when the operator asked to see them.
+
+Exit 0 means the file is a well-formed 2026 company dossier. Exit 4 means it is
+well-formed XML that is not one: `unsupported_version` for another dossier year,
+`unrecognized_root` for anything else, including a generic Microsec e-dossier.
+Exit 1 means the input was refused; the codes are `form inspect`'s, and
+`input_too_large` here means the 64 MiB dossier limit.
+
+## Preflighting a dossier
+
+Run `opencegeljaras dossier preflight <PATH> --json`, adding
+`--bundle DIR` when the operator has a verified mirror. It reports one finding
+per rule as `{ code, status, source, detail }`. Read `data.findings` and
+`data.preflight.status`, never the exit code alone.
+
+`preflight.status: passed` means every deterministic finding passed **and** the
+outer XML conforms to the pinned dossier graph, and nothing more. It is not the
+technical conditions, not signature validity, and not acceptance by any
+authority: never call a passing dossier valid, complete, accepted, or filed.
+`failed` means a finding failed, `incomplete` means nothing failed but something
+was not performed, and `not_applicable` means the dossier is a receipt.
+
+`signature_present` and `timestamp_present` report **presence only**. Signature
+validity is never assessed here; it needs openSzigno's `verify` with the
+operator's own trust material. A receipt (`electronic acknowledgement` or
+`elektronikus átvételi elismervény`) is recognised and **never acknowledged**:
+every filing finding becomes `not_applicable` and the notice says so. Reading a
+receipt is not acknowledgment of service.
+
+Exit 0 covers `passed`, `incomplete`, and `not_applicable`. Exit 4 is
+`preflight_failed` or an unrecognised dossier. Exit 5 means a required check
+could not be performed at all: `bundle_unverified` (the mirror's dossier closure
+does not match the pinned digests), `validator_unavailable`, `validator_failed`,
+or `payload_exceeds_validator_limit` — a text node past the validator's own
+10 000 000-byte ceiling, for which no validator is spawned. In every exit-5 case
+`xsd_conformance` stays `not_performed`; report it as "not checked", never as
+the dossier being wrong.
 
 Use `opencegeljaras sources --json` for a bundled, dated reference catalog.
 This prints metadata without fetching sites or establishing current rules.

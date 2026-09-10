@@ -820,6 +820,8 @@ fn capabilities_lists_both_operations_and_the_existing_ones_are_unchanged() {
             "form diff",
             "schemas list",
             "schemas verify",
+            "dossier inspect",
+            "dossier preflight",
         ])
     );
 

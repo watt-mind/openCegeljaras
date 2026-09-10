@@ -99,6 +99,15 @@ graph. The repository therefore includes original code and source metadata,
 not third-party schemas. This is an unresolved distribution question, not a
 conclusion that interoperable implementation is prohibited.
 
+One excerpt of the dossier schema is reproduced in the core as interoperability
+data: the 194 `pattern` texts restricting `Document/DocumentProfile/Title` and
+the enumerated procedure titles and categories of `DossierProfile`. They are
+the names the authority requires a document to carry, and recognising one
+locally is impossible without them. This is an excerpt used for
+interoperability, not a redistribution of the schema, which is still not
+vendored; the redistribution question above is unchanged by it, and the excerpt
+carries a comment naming its pinned source.
+
 The following remain unestablished: redistribution terms; a reusable official
 machine-readable conformance/receipt fixture suite; complete receipt profiles;
 authorized live interoperability testing; a general public filing REST API;

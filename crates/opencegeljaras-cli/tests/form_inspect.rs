@@ -598,3 +598,37 @@ fn the_form_group_keeps_the_existing_usage_error_behaviour() {
         );
     }
 }
+
+/// A named pipe is refused without being opened, so nothing can block.
+///
+/// `File::open` on a FIFO blocks until a writer appears, so the path type is
+/// checked before the open. The test fails rather than skips when `mkfifo` is
+/// available and the command does not answer inside the bound; it skips only
+/// when the platform cannot create a FIFO at all.
+#[cfg(unix)]
+#[test]
+fn a_named_pipe_is_refused_rather_than_waited_on() {
+    use std::sync::mpsc;
+    use std::time::Duration;
+
+    let path = scratch("pipe.xml");
+    let created = Command::new("mkfifo")
+        .arg(&path)
+        .status()
+        .is_ok_and(|status| status.success());
+    if !created {
+        return;
+    }
+
+    let (sender, receiver) = mpsc::channel();
+    let named = path.clone();
+    std::thread::spawn(move || {
+        let _ = sender.send(inspect(&named, true));
+    });
+    let output = receiver
+        .recv_timeout(Duration::from_secs(20))
+        .expect("a named pipe must be refused rather than opened and waited on");
+    assert_single_diagnostic(&output, "input_unreadable", 1);
+    assert_eq!(body(&output)["error"]["code"], "input_unreadable");
+    let _ = fs::remove_file(&path);
+}
