@@ -22,6 +22,7 @@ dependencies at this stage.
 | `sources [--json]` | Prints bundled reference metadata; no fetching or freshness check |
 | `skill [--json]` | Prints the embedded agent instructions |
 | `form inspect <PATH> [--json]` | Recognises one local form document's format under fixed limits |
+| `form validate <PATH> --bundle DIR [--manifest FILE] [--xmllint EXE] [--show-values] [--json]` | Checks XSD conformance against a verified local bundle through an external `xmllint` |
 | `schemas list [--json \| --urls]` | Prints the pinned schema manifest compiled into the binary; fetches nothing |
 | `schemas verify --bundle DIR [--manifest FILE] [--json]` | Digest-checks a local schema mirror and audits the form graph's imports |
 | `--help`, `--version` | Prints CLI usage or package version |
@@ -36,9 +37,11 @@ compliance.
 
 Exit 0 denotes success (including help/version); exit 1 denotes a refused
 document or bundle input; exit 2 denotes usage errors; exit 3 denotes
-output/internal failure; exit 4 denotes a performed check that failed: a
-well-formed document that is not a recognised form, or a bundle that does not
-match its manifest.
+output/internal failure. Exit 4 denotes a performed check that failed; exit 5
+denotes a required check that could not be performed. A performed check that
+failed is a well-formed document that is not a recognised form, a bundle that
+does not match its manifest, or a recognised form that does not conform to the
+pinned schema graph.
 Exit 1 and exit 4 use an error envelope, additive within schema version 1:
 `schema_version`, `ok: false`, `command`, `error` with a fixed `code` and
 `message`, `data` holding the facts established before the failure, `verified`,
@@ -63,6 +66,32 @@ directory never appears in any output, and bundle-derived strings follow the
 `form inspect` escaping rule and 128-scalar cut.
 The [schema conformance contract](schema-conformance.md) fixes the manifest
 rules, the resource statuses, and both output shapes.
+
+`form validate` reuses that verification and adds these fixed codes and
+messages:
+
+| Code | Exit | Message |
+| :--- | :--- | :--- |
+| `nonconformant` | 4 | the form does not conform to the pinned schema graph |
+| `bundle_unverified` | 5 | the schema bundle's form closure does not match the pinned manifest |
+| `validator_unavailable` | 5 | no supported xmllint validator could be run |
+| `validator_failed` | 5 | the validator did not produce a conformance result |
+
+It also returns `form inspect`'s own exit 1 codes unchanged, and `schemas
+verify`'s `bundle_unreadable`, `manifest_unreadable`, and `manifest_invalid`
+at exit 1, with `command` reported as `form validate`.
+
+XSD conformance is delegated to a caller-installed `xmllint` through an
+explicit process adapter in the CLI crate, so the core keeps no C dependency
+and no `unsafe`. The adapter accepts libxml2 2.9.14 up to but excluding 2.13,
+because later releases changed the diagnostic formats it parses. It writes the
+bytes the inspect boundary accepted into a private temporary directory, spawns
+one child there with a cleared environment plus `PATH` (and `SystemRoot`,
+`SYSTEMROOT`, `TEMP`, `TMP`, and `PATHEXT` on Windows), passes exactly
+`--nonet --noout --schema ROOT document.xml`, discards stdout, and drains
+stderr under a 1 MiB cap. Document values in findings are replaced by `'…'`
+unless the operator passes `--show-values`. A conforming result is not the
+technical conditions, not a signature check, and not acceptance.
 
 Usage errors emit fixed plain-text stderr diagnostics even when `--json` is
 present, without echoing rejected arguments. There is no JSON usage-error

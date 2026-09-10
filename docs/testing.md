@@ -34,10 +34,27 @@ stream, and that output is byte-identical across runs. Core unit tests cover
 the manifest rules, the compiled manifest's 149 resources and 139-resource form
 closure, RFC 3986 resolution, scheme normalisation, and digesting.
 
-One test marked `#[ignore]` verifies a real mirror named by
-`OPENCEGELJARAS_SCHEMA_BUNDLE`; run it with `cargo test --workspace -- --ignored`
-and it panics with a fixed message when the variable is unset. CI does not run
-it, and no official schema is stored in this repository. Verifying a bundle is
+The `form validate` tests never need a real bundle or a real xmllint for the
+mechanics. The fake validator is the running test executable itself,
+re-executed through `std::env::current_exe()` with a marker test name by a
+launcher that `--xmllint` points at, and driven by a control file with a fixed
+name in the case directory. It exercises the version gate at both bounds, the
+fixed argument list, the working directory, the environment allowlist, the
+exit-code mapping, the timeout with a short `Duration`, the 1 MiB standard-error
+cap, and that the `document.xml` copy is byte-identical to the input. Line
+parsing, value redaction, message and finding truncation are unit-tested
+without any child process. Real-validator tests run the installed `xmllint`
+over the synthetic mini graph for a conforming and a nonconforming instance and
+over a bundle directory whose path contains `#`, `?`, and `%`; they are ignored
+off Linux, fail rather than skip when `xmllint` is absent, and CI installs
+`libxml2-utils` on the Linux test job.
+
+Two tests marked `#[ignore]` use a real mirror named by
+`OPENCEGELJARAS_SCHEMA_BUNDLE`: one verifies the mirror, the other validates
+the two real form fixtures against it. Run them with
+`cargo test --workspace -- --ignored`; they panic with a fixed message when the
+variable is unset. CI does not run them, and no official schema is stored in
+this repository. Verifying a bundle is
 a digest comparison and an import audit: not a licence, not validation, and not
 acceptance.
 

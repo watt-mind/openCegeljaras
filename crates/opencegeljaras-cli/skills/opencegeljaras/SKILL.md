@@ -1,14 +1,14 @@
 ---
 name: opencegeljaras
-description: Discover the capabilities and reference sources of the openCegeljaras development scaffold for Hungarian electronic company-court filings, recognise the format of a local company-form XML file, and check a local mirror of the pinned official schemas against its digests.
+description: Discover the capabilities and reference sources of the openCegeljaras development scaffold for Hungarian electronic company-court filings, recognise the format of a local company-form XML file, check a local mirror of the pinned official schemas against its digests, and check one form's XSD conformance against that verified mirror.
 ---
 
 # openCegeljaras
 
 Run `opencegeljaras capabilities --json` before choosing an operation.
 The current stage is `scaffold`. The document operations are `form inspect`,
-`schemas list`, and `schemas verify`; `capabilities`, `sources`, `skill`,
-help, and version describe the tool itself.
+`form validate`, `schemas list`, and `schemas verify`; `capabilities`,
+`sources`, `skill`, help, and version describe the tool itself.
 
 ## Inspecting a form
 
@@ -62,6 +62,33 @@ directory or the manifest could not be read or is invalid. Read
 `data.checks`, not the exit code alone. `--manifest FILE` replaces the pinned
 manifest with an unpinned one; say so whenever a result was produced that way,
 because the notice then ends with "unpinned manifest".
+
+## Checking XSD conformance
+
+Verify the bundle before you validate anything against it. Then run
+`opencegeljaras form validate <PATH> --bundle DIR --json`. It inspects the
+file, re-verifies the bundle itself, and runs one `xmllint` from libxml2
+2.9.14 up to but excluding 2.13, which the operator installed: `--xmllint EXE`
+names it, otherwise the first one on `PATH` is used. The accepted bytes are
+copied into a private temporary directory, the child is spawned there with a
+cleared environment and a fixed argument list, and nothing the document names
+is ever resolved.
+
+Read `data.checks.xsd_conformance`, not the exit code alone. Exit 0 with
+`passed` means the form conforms to the pinned 2026 graph as the named libxml2
+version interprets it. That is **not** the technical conditions, **not** a
+signature check, and **not** acceptance: never call a conforming form valid,
+accepted, or filed. Exit 4 means a check was performed and failed: either the
+file is not a supported 2026 form, or `error.code` is `nonconformant` and
+`data.findings` lists `line`, `element`, and `message` for each violation.
+Exit 5 means a required check could not be performed at all — `bundle_unverified`,
+`validator_unavailable`, or `validator_failed` — and `xsd_conformance` stays
+`not_performed`; report it as "not checked", never as the form being wrong.
+
+Findings have every document value replaced by `'…'`, and `values_redacted` is
+`true`. Never pass `--show-values` unless the operator asked for the values:
+it keeps them and can expose personal data. `unparsed_lines` counts validator
+output that did not match the expected format; that text is never echoed.
 
 Use `opencegeljaras sources --json` for a bundled, dated reference catalog.
 This prints metadata without fetching sites or establishing current rules.
