@@ -10,7 +10,12 @@ pub const PROJECT: &str = "openCegeljaras";
 /// Development stage reported by the scaffold.
 pub const STAGE: &str = "scaffold";
 /// Implemented filing or document-processing operations.
-pub const OPERATIONS: &[&str] = &["form inspect", "schemas list", "schemas verify"];
+pub const OPERATIONS: &[&str] = &[
+    "form inspect",
+    "form validate",
+    "schemas list",
+    "schemas verify",
+];
 /// Commands that describe the scaffold without performing domain work.
 pub const INTROSPECTION_COMMANDS: &[&str] = &["capabilities", "sources", "skill"];
 
@@ -64,7 +69,12 @@ mod tests {
     fn capabilities_report_only_read_only_operations() {
         assert_eq!(
             OPERATIONS,
-            ["form inspect", "schemas list", "schemas verify"]
+            [
+                "form inspect",
+                "form validate",
+                "schemas list",
+                "schemas verify"
+            ]
         );
         assert_eq!(INTROSPECTION_COMMANDS, ["capabilities", "sources", "skill"]);
     }
