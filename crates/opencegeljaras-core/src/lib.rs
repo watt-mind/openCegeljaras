@@ -9,7 +9,7 @@ pub const PROJECT: &str = "openCegeljaras";
 /// Development stage reported by the scaffold.
 pub const STAGE: &str = "scaffold";
 /// Implemented filing or document-processing operations.
-pub const OPERATIONS: &[&str] = &[];
+pub const OPERATIONS: &[&str] = &["form inspect"];
 /// Commands that describe the scaffold without performing domain work.
 pub const INTROSPECTION_COMMANDS: &[&str] = &["capabilities", "sources", "skill"];
 
@@ -47,8 +47,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn capabilities_are_introspection_only() {
-        assert!(OPERATIONS.is_empty());
+    fn capabilities_report_only_read_only_operations() {
+        assert_eq!(OPERATIONS, ["form inspect"]);
         assert_eq!(INTROSPECTION_COMMANDS, ["capabilities", "sources", "skill"]);
     }
 
