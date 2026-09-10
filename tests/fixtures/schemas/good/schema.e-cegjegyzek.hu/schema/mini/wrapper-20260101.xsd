@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture, CC0. Not an official schema and not derived from one. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:a="urn:opencegeljaras:fixture:variant-a"
+           xmlns:b="urn:opencegeljaras:fixture:variant-b"
+           targetNamespace="urn:opencegeljaras:fixture:wrapper"
+           elementFormDefault="qualified">
+  <xs:import namespace="urn:opencegeljaras:fixture:variant-a"
+             schemaLocation="variant-a-20260101.xsd"/>
+  <xs:import namespace="urn:opencegeljaras:fixture:variant-b"
+             schemaLocation="./variant-b-20260101.xsd"/>
+  <xs:element name="MiniNyomtatvany">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="a:VariantA"/>
+        <xs:element ref="b:VariantB"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

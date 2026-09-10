@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture, CC0. The import below is written with the http scheme
+     on purpose, so that scheme normalisation is exercised by the audit. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:s="urn:opencegeljaras:fixture:shared"
+           targetNamespace="urn:opencegeljaras:fixture:variant-a"
+           elementFormDefault="qualified">
+  <xs:import namespace="urn:opencegeljaras:fixture:shared"
+             schemaLocation="http://schema.e-cegjegyzek.hu/schema/mini/common/shared-20260101.xsd"/>
+  <xs:element name="VariantA">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Nev2" type="s:NevTipus"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
