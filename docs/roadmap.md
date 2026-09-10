@@ -58,6 +58,11 @@ Gate: both schema validity and semantic counterexamples; unsupported remote
 checks listed explicitly; no blanket "ready to file" verdict. Publish a
 coverage matrix for rules implemented versus required/unknown.
 
+The [dossier preflight contract](dossier-preflight.md) covers `dossier
+inspect` and `dossier preflight`: recognition of the 2026 dossier, the form
+it carries, role and procedure findings, and outer-dossier XSD conformance
+through the same validator adapter.
+
 ## 3. Deterministic preparation
 
 Proposed commands:
