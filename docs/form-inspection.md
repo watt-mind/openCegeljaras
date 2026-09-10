@@ -247,7 +247,7 @@ Exit codes extend the existing contract without changing existing meanings:
 | ---: | :--- | :--- |
 | 0 | Recognised, supported form; inspection data complete | stdout |
 | 1 | Input rejected: unreadable, too large, encoding, malformed, limits, prohibited | JSON on stdout with `--json`; otherwise stderr only |
-| 2 | Usage error, unchanged fixed diagnostic | stderr |
+| 2 | Usage error: fixed stderr diagnostic, or since 2026-09-10 a `usage.arguments` envelope on stdout when `--json` is present (see architecture) | stderr or stdout |
 | 3 | Output or internal failure, unchanged | stderr |
 | 4 | Well-formed within limits but not a recognised form (`unrecognized_variant`, `unsupported_version`, `unrecognized_root`); inspection data with null form fields | as exit 0 |
 
