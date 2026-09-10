@@ -306,7 +306,8 @@ For a receipt (`dossier.receipt` true) every finding except
 `xsd_conformance` is `not_applicable`; `preflight.status` is `failed`
 with exit 4 when `xsd_conformance` failed, otherwise `not_applicable`
 with exit 0 (or 5 for the unperformed XSD cases when `--bundle` was
-given), and the notice gains "; receipt recognised, not acknowledged". `detail` is a fixed string per code and status, listed in
+given), and the notice gains "; receipt recognised, not acknowledged".
+`detail` is a fixed string per code and status, listed in
 the architecture document by the implementation, never a document value.
 
 With `--bundle`, preflight verifies the bundle with package 3 rules,
