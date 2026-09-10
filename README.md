@@ -133,8 +133,9 @@ cargo build --release --locked
 See [contributing](CONTRIBUTING.md), [security](SECURITY.md), and the
 [documentation index](docs/index.md). Public fixtures must be synthetic.
 `samples/` is reserved for ignored private inputs and is never part of tests
-or diagnostic output. GitHub publishing, releases, and Factory dispatch are
-not configured by this scaffold.
+or diagnostic output. The repository is hosted privately at
+`github.com/watt-mind/openCegeljaras`; releases and Factory dispatch are not
+configured.
 
 ## Claude orchestration
 
