@@ -1,5 +1,6 @@
 //! I/O-free capability and source-catalogue model for openCegeljaras.
 
+pub mod dossier;
 pub mod form;
 pub mod schema;
 
@@ -17,6 +18,8 @@ pub const OPERATIONS: &[&str] = &[
     "form diff",
     "schemas list",
     "schemas verify",
+    "dossier inspect",
+    "dossier preflight",
 ];
 /// Commands that describe the scaffold without performing domain work.
 pub const INTROSPECTION_COMMANDS: &[&str] = &["capabilities", "sources", "skill"];
@@ -77,7 +80,9 @@ mod tests {
                 "form fields",
                 "form diff",
                 "schemas list",
-                "schemas verify"
+                "schemas verify",
+                "dossier inspect",
+                "dossier preflight"
             ]
         );
         assert_eq!(INTROSPECTION_COMMANDS, ["capabilities", "sources", "skill"]);
