@@ -8,8 +8,8 @@ given a verified bundle, an XSD-conformance result for the outer dossier.
 Neither command verifies a signature, sends anything, or decides
 acceptance.
 
-Status: **contract, not implemented.** `capabilities` lists the operations
-only after the behaviour and tests below exist.
+Status: implemented and reviewed; this document remains the contract the
+implementation is held to.
 
 ## Problem and context
 
@@ -42,7 +42,7 @@ package 3 mirror) and its ten-resource closure:
 - `Document` holds a `DocumentProfile` with `Title` restricted by 194
   XSD `pattern` facets that name attachment roles, the first being
   `A kérelem formanyomtatványa` (the application form). They are regular
-  expressions, not literals: 29 contain `( … )` groups, two end in
+  expressions, not literals: 34 contain `( … )` groups, two end in
   `( - .*)?` (a fixed prefix plus an arbitrary suffix), and many contain
   an unescaped `.`. Then an optional, untyped `E-category` (the six-value
   enumeration `electronic data`, `electronic document`,
@@ -366,7 +366,7 @@ of the xmllint adapter apply unchanged.
 | Path | Role |
 | :--- | :--- |
 | `crates/opencegeljaras-core/src/dossier/` (new: model, recognition, roles table, base64, findings), `form/mod.rs` limits profile, `schema` dossier closure | Core |
-| `crates/opencegeljaras-cli/src/dossier.rs` (new), `main.rs` wiring, `schemas.rs` for `dossier_closure_verified`, `validate.rs`/`xmllint.rs` reuse | CLI |
+| `crates/opencegeljaras-cli/src/dossier/` (new), `main.rs` wiring, `schemas.rs` for `dossier_closure_verified`, `validate.rs`/`xmllint.rs` reuse | CLI |
 | `crates/opencegeljaras-cli/tests/dossier.rs` (new) | Contract tests |
 | `tests/fixtures/dossiers/` (new) | Synthetic fixtures |
 | `README.md`, `docs/architecture.md`, `docs/testing.md`, `CHANGELOG.md`, `SKILL.md` | Advertisement, last |
