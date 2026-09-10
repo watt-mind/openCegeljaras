@@ -1,0 +1,2324 @@
+{
+  "snapshot_version": 1,
+  "retrieved_at": "2026-09-10",
+  "purpose": "Research metadata only; not a vendored schema bundle or a claim of supported validation. Re-fetching requires explicit review.",
+  "roots": [
+    "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101.xsd",
+    "https://www.e-cegjegyzek.hu/schema/2026/e-cegeljaras2026.xsd"
+  ],
+  "resources": [
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101.xsd",
+      "bytes": 1368,
+      "sha256": "6f727249d5d3c7d261a9cb39b7fa929a112764b8693f309e245a609416db7765",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegbejegyzesiKerelem-20260101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/nevfoglalasiKerelem-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/valtozasbejegyzesiKerelem-20240101.xsd"
+      ],
+      "roots": [
+        "Nyomtatvány"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/e-cegeljaras2026.xsd",
+      "bytes": 98874,
+      "sha256": "af05d01a384bc46a230e88e3d7cfcf0ffea012dc3eb02dcc11e4bfc134b8506d",
+      "target_namespace": "http://www.e-cegjegyzek.hu/2026/e-cegeljaras#",
+      "dependencies": [
+        "https://www.e-cegjegyzek.hu/schema/2026/xmldsig-core-schema.xsd",
+        "https://www.e-cegjegyzek.hu/schema/2026/XAdES.xsd",
+        "https://www.e-cegjegyzek.hu/schema/2026/metadata.xsd"
+      ],
+      "roots": [
+        "Dossier",
+        "Document",
+        "E-category",
+        "Format",
+        "SourceSize",
+        "BaseTransform",
+        "SignatureProfile"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegbejegyzesiKerelem-20260101.xsd",
+      "bytes": 36094,
+      "sha256": "dfb8bc6002de1df07dc0a48569c9c360b85b9ab9771517704f089d147eb49a5d",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegbejegyzesiKerelem-20260101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/cegformaKod-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/atalakulasNapja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/afaNyilatkozat-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/illetekOsszeg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/jogiKepviseloAdatai-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/koltsegteritesOsszeg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/mellekletek-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/nevfoglalasiHatarozat-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/onlineEljaras-20220901.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegforma-20260101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegnev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegRovidNeve-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegIdegenNeve-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegSzekhelye-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegTelephelye-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegFioktelepe-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/alapitoOkiratKelte-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegTevekenysegiKore-20250101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegMukodesenekBefejezese-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jegyzettToke-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kepviseletreJogosultak-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/konyvvizsgalok-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/felugyelobizottsagiTagok-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogelod-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kamaraiTagsag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/elektronikusElerhetoseg-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vallalatcsoportiTagsag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vallalatcsoportCegei-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kozhasznusagiFokozat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kozpontiUgyintezesHelye-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/osszevontBeszamoloAdatai-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/osszevontBeszamoloCegei-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/merlegfordulonap-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tulajdonosiJoggyakorlo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegiratokForditasa-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tokeegyesitoJogelod-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozkeresetiTarsasagTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/betetiTarsasagBeltagja-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/betetiTarsasagKultagja-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/egyesulesTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozosVallalatTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kftTagokAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/uzletreszenJelzalog-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kftKozosTulajdonuUzletreszTulajdonosai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/uzletreszenAlzalog-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyesekAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyAtruhazas_r0310-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/atvaltoztathatoKotvenyek-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/jegyzesiJogotBiztositoKotvenyek-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/ugyvezetesTipusa-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyekSzamaNeverteke-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/cegtulajdonos-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasAdatai-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozastNyilvantartoHatosag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasKepviseloje-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vizgazdalkodasiTarsulatTipusa-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vizgazdalkodasiTarsulatEllenorzoBizottsagiTagokAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepAdatai-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepetNyilvantartoHatosag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepenekVezetoTisztsegviseloi-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepSportfiokMegjeloles-20260101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vegrehajtoIrodaOnalloBirosagiVegrehajtoTagjanakAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euGazdasagiEgyesulesTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euGazdasagiEgyesulesElozoSzekhelyAdatai-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtReszvenyesekAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtReszveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtAtvaltoztathatoKotveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtJegyzesiKotveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtHirdetmenyekKozzetetele-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtElozoSzekhelySzerintiAdatok-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtUgyvezetesTipusa-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyAtruhazas_r1020-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozjegyzoiIrodaTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiSzekhelyuEuGazdasagiEgyesules-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiSzekhelyuEuGazdasagiEgyesulesKepviselete-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euSzovSzekhelyAthelyezes-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euSzovUgyvezetesTipusa-20210101.xsd"
+      ],
+      "roots": [
+        "CégbejegyzésiKérelem"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/nevfoglalasiKerelem-20210401.xsd",
+      "bytes": 3487,
+      "sha256": "27e5c9da4e6767c9ce1426d320d19cd023c4cf7471d610b4cddc045e32fc4d97",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/nevfoglalasiKerelem-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/jogiKepviseloAdatai-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/illetekOsszeg-20210101.xsd"
+      ],
+      "roots": [
+        "NévfoglalásiKérelem"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/valtozasbejegyzesiKerelem-20240101.xsd",
+      "bytes": 39118,
+      "sha256": "440c8aee609e9fccdf151a4d672be64a22d48914963322aeca8cf5219eaa9099",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/valtozasbejegyzesiKerelem-20240101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/cegformaKod-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/atalakulasNapja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/illetekOsszeg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/jogiKepviseloAdatai-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/koltsegteritesOsszeg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/nevfoglalasiHatarozat-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/mellekletek-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/onlineEljaras-20220901.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegnev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegRovidNeve-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegIdegenNeve-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegSzekhelye-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegTelephelye-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegFioktelepe-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/alapitoOkiratKelte-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegMukodesenekBefejezese-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jegyzettToke-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kepviseletreJogosultak-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/konyvvizsgalok-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/felugyelobizottsagiTagok-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogelod-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kamaraiTagsag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogutod-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogutodNelkuliMegszunes-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vegelszamolas-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/elektronikusElerhetoseg-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vallalatcsoportiTagsag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vallalatcsoportCegei-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kozhasznusagiFokozat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kozpontiUgyintezesHelye-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/osszevontBeszamoloAdatai-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/osszevontBeszamoloCegei-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/merlegfordulonap-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tulajdonosiJoggyakorlo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegiratokForditasa-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tokeegyesitoJogelod-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tokeegyesitoJogutod-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vallalatTipusa-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vallalatIranyitasiForma-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozkeresetiTarsasagTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/betetiTarsasagBeltagja-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/betetiTarsasagKultagja-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/egyesulesTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozosVallalatTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kftTagokAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/uzletreszenJelzalog-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kftKozosTulajdonuUzletreszTulajdonosai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/uzletreszenAlzalog-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyesekAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyAtruhazas_r0310-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/bemutatoraSzoloReszvenyek-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/nevreSzoloReszvenyek-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/atvaltoztathatoKotvenyek-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/jegyzesiJogotBiztositoKotvenyek-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/hirdetmenyekKozzetetele-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/ugyvezetesTipusa-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyekSzamaNeverteke-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/cegtulajdonos-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasAdatai-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozastNyilvantartoHatosag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasKepviseloje-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vizgazdalkodasiTarsulatTipusa-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vizgazdalkodasiTarsulatEllenorzoBizottsagiTagokAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepAdatai-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepetNyilvantartoHatosag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepenekVezetoTisztsegviseloi-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vegrehajtoIrodaTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vegrehajtoIrodaOnalloBirosagiVegrehajtoTagjanakAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euGazdasagiEgyesulesTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtReszvenyesekAdatai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtReszveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtAtvaltoztathatoKotveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtJegyzesiKotveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtHirdetmenyekKozzetetele-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtUgyvezetesTipusa-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyAtruhazas_r1020-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozjegyzoiIrodaTagjai-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiSzekhelyuEuGazdasagiEgyesules-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiSzekhelyuEuGazdasagiEgyesulesKepviselete-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euSzovUgyvezetesTipusa-20210101.xsd"
+      ],
+      "roots": [
+        "VáltozásbejegyzésiKérelem"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/xmldsig-core-schema.xsd",
+      "bytes": 10226,
+      "sha256": "785fe8c9235b98e6e2fd77a39e345b4ca4878d6d9f7ade4da7555b3208318ee2",
+      "target_namespace": "http://www.w3.org/2000/09/xmldsig#",
+      "dependencies": [],
+      "roots": [
+        "Signature",
+        "SignatureValue",
+        "SignedInfo",
+        "CanonicalizationMethod",
+        "SignatureMethod",
+        "Reference",
+        "Transforms",
+        "Transform",
+        "DigestMethod",
+        "DigestValue",
+        "KeyInfo",
+        "KeyName",
+        "MgmtData",
+        "KeyValue",
+        "RetrievalMethod",
+        "X509Data",
+        "PGPData",
+        "SPKIData",
+        "Object",
+        "Manifest",
+        "SignatureProperties",
+        "SignatureProperty",
+        "DSAKeyValue",
+        "RSAKeyValue"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/XAdES.xsd",
+      "bytes": 18797,
+      "sha256": "3f98cc3b0d48b070ef618d526b8f7c1c172eae50bbeaac4dad365bc57a95f944",
+      "target_namespace": "http://uri.etsi.org/01903/v1.2.2#",
+      "dependencies": [
+        "https://www.e-cegjegyzek.hu/schema/2026/xmldsig-core-schema.xsd"
+      ],
+      "roots": [
+        "Any",
+        "ObjectIdentifier",
+        "EncapsulatedPKIData",
+        "TimeStamp",
+        "QualifyingProperties",
+        "SignedProperties",
+        "UnsignedProperties",
+        "SignedSignatureProperties",
+        "SignedDataObjectProperties",
+        "UnsignedSignatureProperties",
+        "UnsignedDataObjectProperties",
+        "QualifyingPropertiesReference",
+        "SigningTime",
+        "SigningCertificate",
+        "SignaturePolicyIdentifier",
+        "SPURI",
+        "SPUserNotice",
+        "CounterSignature",
+        "DataObjectFormat",
+        "CommitmentTypeIndication",
+        "SignatureProductionPlace",
+        "SignerRole",
+        "AllDataObjectsTimeStamp",
+        "IndividualDataObjectsTimeStamp",
+        "SignatureTimeStamp",
+        "CompleteCertificateRefs",
+        "CompleteRevocationRefs",
+        "SigAndRefsTimeStamp",
+        "RefsOnlyTimeStamp",
+        "CertificateValues",
+        "RevocationValues",
+        "ArchiveTimeStamp"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/metadata.xsd",
+      "bytes": 966,
+      "sha256": "360d94b248fd485096b91ef91c355ddcd478171268ab210533d59e071ca0b54a",
+      "target_namespace": "http://mireg.org/schema/1.0/",
+      "dependencies": [
+        "https://www.e-cegjegyzek.hu/schema/2026/mireg.xsd"
+      ],
+      "roots": [
+        "metadata"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+      "bytes": 643,
+      "sha256": "53a057680ee7e49cf3248ac57e9cf1c6f5ea4ac8094e0f118234b0e135db1439",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101#",
+      "dependencies": [],
+      "roots": [
+        "Cégjegyzékszám"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/cegformaKod-20210101.xsd",
+      "bytes": 1609,
+      "sha256": "513d27cdd58094b49987933fe7beb4792869497f277e4ae8c5417bce20f552db",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/cegformaKod-20210101#",
+      "dependencies": [],
+      "roots": []
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101.xsd",
+      "bytes": 448,
+      "sha256": "91388216525080d0dda80223a52f21a7b0c1dca13758dbf094470a32619078e1",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101#",
+      "dependencies": [],
+      "roots": []
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+      "bytes": 704,
+      "sha256": "0fc1d73e92339381a0dbecbbd710eee15071e13ac203466ef70e1c70c278c106",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "Név"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+      "bytes": 4316,
+      "sha256": "35458d7158be0af1a85fa45a6ee650abdabd6bab0170244ff86aca2628f413cc",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/orszag-20210101.xsd"
+      ],
+      "roots": [
+        "TagoltCím"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/atalakulasNapja-20210101.xsd",
+      "bytes": 909,
+      "sha256": "4b2645496099aaffbed4b74b2aaafbf4348289990a980ba311732c5dc56be8d8",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/atalakulasNapja-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101.xsd"
+      ],
+      "roots": [
+        "ÁtalakulásNapja"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/afaNyilatkozat-20240101.xsd",
+      "bytes": 11999,
+      "sha256": "7c739a82ccf309cd25051b08dedf4f40aee035949cfe53aec91a13ced941c361",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/afaNyilatkozat-20240101#",
+      "dependencies": [],
+      "roots": [
+        "ÁfaNyilatkozat"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/illetekOsszeg-20210101.xsd",
+      "bytes": 303,
+      "sha256": "3eaf8aab5bfadfbbb4577d7e756d2e5f0ac2ae022ab108b0c58cecd7eb7c77be",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/illetekOsszeg-20210101#",
+      "dependencies": [],
+      "roots": [
+        "IlletékÖsszeg"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/jogiKepviseloAdatai-20210101.xsd",
+      "bytes": 3568,
+      "sha256": "3ed220d97b0fde732500637c1a80550e55059b5647e7eaa85585dea79fd324e2",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/jogiKepviseloAdatai-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/email-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd"
+      ],
+      "roots": [
+        "JogiKépviselőAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/koltsegteritesOsszeg-20210101.xsd",
+      "bytes": 321,
+      "sha256": "e54f7fefb875911946ea21b1ac3acf0b9ca14cf5f2d2302846d9af42849627b6",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/koltsegteritesOsszeg-20210101#",
+      "dependencies": [],
+      "roots": [
+        "KöltségtérítésÖsszeg"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/mellekletek-20210101.xsd",
+      "bytes": 1179,
+      "sha256": "61cbfb900b147d0c373ff053660021f7b19ba6ccc8c3bd0c8b77e6b4f0a2a7f4",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/mellekletek-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "Mellékletek"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/nevfoglalasiHatarozat-20210401.xsd",
+      "bytes": 686,
+      "sha256": "24d300a406ed4315b8f2957ddc38650fa4f26fad5da2fb7186bdb6873a7aa249",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/nevfoglalasiHatarozat-20210401#",
+      "dependencies": [],
+      "roots": [
+        "NévfoglalásiHatározat"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/onlineEljaras-20220901.xsd",
+      "bytes": 822,
+      "sha256": "7f23fcb56c81acf93408df2a68373358864d90705f8a3a327a433d1d8f9e9012",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/onlineEljaras-20220901#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101.xsd"
+      ],
+      "roots": [
+        "OnlineEljárás"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegforma-20260101.xsd",
+      "bytes": 3382,
+      "sha256": "cc67395d9608102bea3f3b6b2a85096f616479f2aec74933986efc600d2fcaf3",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegforma-20260101#",
+      "dependencies": [],
+      "roots": [
+        "Cégforma"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegnev-20210101.xsd",
+      "bytes": 2991,
+      "sha256": "033b506224eb6ca74bcd97452beb3304009669e53b4355f973142ffe52e972e4",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegnev-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "Cégnév"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegRovidNeve-20210101.xsd",
+      "bytes": 2056,
+      "sha256": "35522486d611e13f742c3e0c6c70320a718964dfec3fba1e7fe8a53411b7966e",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegRovidNeve-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "CégRövidNeve"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegIdegenNeve-20230820.xsd",
+      "bytes": 2477,
+      "sha256": "634d14a5f26f2ac1d85d0d0ca7b5e5383af0eebcc0a93def0c0f867e859fb17a",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegIdegenNeve-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nyelv-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "CégIdegenNeve"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegSzekhelye-20210101.xsd",
+      "bytes": 2022,
+      "sha256": "735f5ddf93329941b325035c33f55f768ffd8b45b3da3457fa8bbb855ef28c7f",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegSzekhelye-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "CégSzékhelye"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegTelephelye-20210101.xsd",
+      "bytes": 2099,
+      "sha256": "cd74660ab0c1ea22b9fdbbc0fa7f291116c675f189f4dcaf12db00bcf4dff176",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegTelephelye-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "CégTelephelye"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegFioktelepe-20210101.xsd",
+      "bytes": 2089,
+      "sha256": "555ccfb3f025b68dbeaf0eae0c4690a7c628e9cc33e605cdee30b9561a644616",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegFioktelepe-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "CégFióktelepe"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/alapitoOkiratKelte-20210101.xsd",
+      "bytes": 1438,
+      "sha256": "a25928138399189fde453766e4711fd4b95667789f2fe0ab866bf9e6cfc76a68",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/alapitoOkiratKelte-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd"
+      ],
+      "roots": [
+        "AlapítóOkiratKelte"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegTevekenysegiKore-20250101.xsd",
+      "bytes": 3359,
+      "sha256": "3c97fbcecd5d63f38cbf6bde457e93e17c430b54fbfd70954eec23cf4caa8f64",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegTevekenysegiKore-20250101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/teaor25-20250101.xsd"
+      ],
+      "roots": [
+        "CégTevékenységiKöre"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegMukodesenekBefejezese-20210101.xsd",
+      "bytes": 1518,
+      "sha256": "f983fa95659da71d3df7922383418fd125c1d5aae297d274516f67c31a2eb07f",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegMukodesenekBefejezese-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd"
+      ],
+      "roots": [
+        "MűködésBefejezése"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jegyzettToke-20221001.xsd",
+      "bytes": 2183,
+      "sha256": "5b97c649e93923a5ea96e9de169db9607dc1c1dd759052c6d2368bbffdb62454",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jegyzettToke-20221001#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/penznem-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "JegyzettTőke"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kepviseletreJogosultak-20230820.xsd",
+      "bytes": 5923,
+      "sha256": "4047e96824b18f6a89c099c47fcc38c321d1068ebecda484813f89baa74c5385",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kepviseletreJogosultak-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tisztseg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KépviseletreJogosultak"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/konyvvizsgalok-20230820.xsd",
+      "bytes": 2758,
+      "sha256": "1f702b217f58bb2b7296160df243b836deb8a54d38092cbdf0c0069fd8dd52f7",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/konyvvizsgalok-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "Könyvvizsgálók"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/felugyelobizottsagiTagok-20230820.xsd",
+      "bytes": 3268,
+      "sha256": "be58a6a677c6abf98c2716fad2a1350822d5e511244f4bd8cb0bf72dc3ab0677",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/felugyelobizottsagiTagok-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "FelügyelőbizottságiTagok"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogelod-20240101.xsd",
+      "bytes": 3668,
+      "sha256": "3d64c61205fbb614a42cfd6b1cbffce8bfbe4af0d8947bb7015fd87343e6e3a7",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogelod-20240101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/euid-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogutodlasTipus-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/atalakulasDatuma-20210401.xsd"
+      ],
+      "roots": [
+        "Jogelőd"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kamaraiTagsag-20210101.xsd",
+      "bytes": 2233,
+      "sha256": "157abcc6116472869ff2455b4b95dd44c078d520ae73bb96c5a9ed124056754d",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kamaraiTagsag-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd"
+      ],
+      "roots": [
+        "KamaraiTagság"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/elektronikusElerhetoseg-20221001.xsd",
+      "bytes": 4051,
+      "sha256": "6c9e2046fb27485adba07431e0144ce7cfe5a4e36bf151e08ad06722299a9452",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/elektronikusElerhetoseg-20221001#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/email-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/email-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "ElektronikusElérhetőség"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vallalatcsoportiTagsag-20210101.xsd",
+      "bytes": 2412,
+      "sha256": "7bc7602c4a86fceb016cf36cc85f9d8c14ffa60d1f67804d6fd2cb8f9e29d265",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vallalatcsoportiTagsag-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "VállalatcsoportiTagság"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vallalatcsoportCegei-20210401.xsd",
+      "bytes": 1956,
+      "sha256": "0e6d6de8e97de8bfe4ac6ecdc2fbf3b11c515863e2c46ec4d22783d299c124e4",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vallalatcsoportCegei-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "VállalatcsoportCégei"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kozhasznusagiFokozat-20210101.xsd",
+      "bytes": 1389,
+      "sha256": "6fb543a5e67bdece78e497bf7c7cdad95edcc615f8b35031c422ce67a707d2d6",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kozhasznusagiFokozat-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd"
+      ],
+      "roots": [
+        "KözhasznúságiFokozat"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kozpontiUgyintezesHelye-20210101.xsd",
+      "bytes": 1945,
+      "sha256": "7655f08cf85e9d8e5e110314c6a0f270f5aefe4f3e6da8189564370bd9d7f46a",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/kozpontiUgyintezesHelye-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KözpontiÜgyintézésHelye"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/osszevontBeszamoloAdatai-20210101.xsd",
+      "bytes": 2932,
+      "sha256": "bf18988d9bb832611d0d3a0c5f8f2f69d12c64f046c9f45daa3a06928390cfc3",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/osszevontBeszamoloAdatai-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "ÖsszevontBeszámolóAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/osszevontBeszamoloCegei-20210401.xsd",
+      "bytes": 1994,
+      "sha256": "e52695725f37287c6e1c3e846529df99dbb9d18764d6a7e283cb39dd340ddbca",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/osszevontBeszamoloCegei-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "ÖsszevontBeszámolóCégei"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/merlegfordulonap-20210101.xsd",
+      "bytes": 5113,
+      "sha256": "9fef5433003e01e24ea388cee47cb2970643d17cf80ec9dc9e87b4f3681d359b",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/merlegfordulonap-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "Mérlegfordulónap"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tulajdonosiJoggyakorlo-20210101.xsd",
+      "bytes": 2278,
+      "sha256": "004ccc67740d88bef9a580112cd5370ce93b83f012264825783a006c1701b9d5",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tulajdonosiJoggyakorlo-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "TulajdonosiJoggyakorló"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegiratokForditasa-20210101.xsd",
+      "bytes": 3672,
+      "sha256": "e4215efce7c033f4a6193ad521b8409347a1113ac81adeae40199ab933ce9223",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/cegiratokForditasa-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "CégiratokFordítása"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tokeegyesitoJogelod-20221001.xsd",
+      "bytes": 4843,
+      "sha256": "486885f75324aa9181363436390b78a0f83e16aa412640a689a04a8545259f4d",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tokeegyesitoJogelod-20221001#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/euid-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/tokeegyesitoJogutodlasTipus-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiNyilvantartas-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/atalakulasDatuma-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/tarsasagElnevezese-20220901.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/tarsasagiForma-20220901.xsd"
+      ],
+      "roots": [
+        "TőkeegyesítőJogelőd"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozkeresetiTarsasagTagjai-20230820.xsd",
+      "bytes": 3252,
+      "sha256": "15b63c900bfcc06e1b90e7d37ff036705447cdf69f8b3208c2426488e53bbba4",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozkeresetiTarsasagTagjai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KözkeresetiTársaságTagjai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/betetiTarsasagBeltagja-20230820.xsd",
+      "bytes": 3247,
+      "sha256": "68207118cc388e2ebce6099657186b84f2eaaa68fe408241ce7692ca87e83de0",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/betetiTarsasagBeltagja-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "BetétiTársaságBeltagja"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/betetiTarsasagKultagja-20230820.xsd",
+      "bytes": 3250,
+      "sha256": "2dcda8893b8b48e42143c6995a3286964dc79620656f59bc8a501ddfcbde6f9c",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/betetiTarsasagKultagja-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "BetétiTársaságKültagja"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/egyesulesTagjai-20230820.xsd",
+      "bytes": 3996,
+      "sha256": "fbbb96cead05d4db4c503158946c5500a31885dc1f0df55156e60b23b151f1fc",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/egyesulesTagjai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/csatlakozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/felelossegKorlatozasa-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EgyesülésTagjai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozosVallalatTagjai-20230820.xsd",
+      "bytes": 3551,
+      "sha256": "85a395e3eced3bc381f2d0bdfd402f159cb3c006856e93a9be0abe152d356c4f",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozosVallalatTagjai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/csatlakozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/felelossegKorlatozasa-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KözösVállalatTagjai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kftTagokAdatai-20230820.xsd",
+      "bytes": 5092,
+      "sha256": "a362357573c2fe0fa21b03c9a733db78bdf27aa06e96175a6b69f5c98fb878fb",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kftTagokAdatai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/egyeniVallalkozoNyilvantartasiSzam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KftTagokAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/uzletreszenJelzalog-20240101.xsd",
+      "bytes": 5231,
+      "sha256": "003daca1f2bb9eb5b781fb0b810f25b2484eb707129f69be8b168a547a51d3fb",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/uzletreszenJelzalog-20240101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/penznem-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/uzletresztTerheloTilalomTipus-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "ÜzletrészenJelzálog"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kftKozosTulajdonuUzletreszTulajdonosai-20230820.xsd",
+      "bytes": 3205,
+      "sha256": "443a8bd964e3f2a61aab31f4be8643762cfa5335319364b9d609273cb3579f8c",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kftKozosTulajdonuUzletreszTulajdonosai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KftKözösTulajdonúÜzletrészTulajdonosai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/uzletreszenAlzalog-20240101.xsd",
+      "bytes": 4748,
+      "sha256": "0fac00561c2528ea52f182bb4b4afd40d9804bc49e07898c5fb6e293a4248daa",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/uzletreszenAlzalog-20240101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/uzletresztTerheloTilalomTipus-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "ÜzletrészenAlzálog"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyesekAdatai-20230820.xsd",
+      "bytes": 3619,
+      "sha256": "7d35bff0c4b009a45c1e6997a33dde14b0b0379b12ee459c39cafef59d893d98",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyesekAdatai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/szavazatiJogMerteke-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "RészvényesekAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyAtruhazas_r0310-20210401.xsd",
+      "bytes": 1982,
+      "sha256": "03916019bbb3e0320e86abfde98b0a83e5978387db04bd69901cdcf2a69e5315",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyAtruhazas_r0310-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/korlatozas-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "Részvényátruházás"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/atvaltoztathatoKotvenyek-20210401.xsd",
+      "bytes": 2151,
+      "sha256": "02866043f9b35af3e8799582bc15f137821594b4b2695d2288e428bb0b44f44f",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/atvaltoztathatoKotvenyek-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kotveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "ÁtváltoztathatóKötvények"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/jegyzesiJogotBiztositoKotvenyek-20210401.xsd",
+      "bytes": 2166,
+      "sha256": "2d417b62b334bf052da176ec4af64b025c0f82e2451ba31fc7f3ea54baf03ae9",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/jegyzesiJogotBiztositoKotvenyek-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kotveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "JegyzésiJogotBiztosítóKötvények"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/ugyvezetesTipusa-20210401.xsd",
+      "bytes": 2068,
+      "sha256": "5ccf1bcc450829770ba524b3678f5c3922f51342b5afb1d3b4b27bd786ccedd1",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/ugyvezetesTipusa-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/rtUgyvezetesTipus-20210401.xsd"
+      ],
+      "roots": [
+        "ÜgyvezetésTípusa"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyekSzamaNeverteke-20210401.xsd",
+      "bytes": 2118,
+      "sha256": "09b2c45ed7615e9b0584371a858f27bb7a72ba19da65ff335bba45b00404a285",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyekSzamaNeverteke-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/reszvenyAdatok-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "RészvényekSzámaNévértéke"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/cegtulajdonos-20210401.xsd",
+      "bytes": 3450,
+      "sha256": "935311eafa1c61ae14fcd91edc1370af0980158941cf2693899be3e1cf8f1146",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/cegtulajdonos-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/egyeniVallalkozoNyilvantartasiSzam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kezbesitesiMegbizott-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelymutato-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "Cégtulajdonos"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasAdatai-20210401.xsd",
+      "bytes": 3007,
+      "sha256": "efdf48e492135d01f7c20afc16120da0fb077d7788ecd64c367567d490cd873e",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasAdatai-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/nyilvantartoHatosag-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiCegforma-20210401.xsd"
+      ],
+      "roots": [
+        "KülföldiVállalkozásAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozastNyilvantartoHatosag-20210101.xsd",
+      "bytes": 2555,
+      "sha256": "918d4829e99e0511bac8cd546d13cc8fbaec0492b26c0a016695a84fe9478419",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozastNyilvantartoHatosag-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiVállalkozástNyilvántartóHatóság"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasKepviseloje-20230820.xsd",
+      "bytes": 2930,
+      "sha256": "cf1c2a04a3ff1505b6b0931fd7bfe1f2e221e11764cee0262b31437b9d5f521e",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasKepviseloje-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiVállalkozásKépviselője"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vizgazdalkodasiTarsulatTipusa-20210401.xsd",
+      "bytes": 2249,
+      "sha256": "9750b683cd6f8e95bc2095e2bf63012890547a2bc9b075cd3bd79b0228a27b0d",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vizgazdalkodasiTarsulatTipusa-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "VízgazdálkodásiTársulatTípusa"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vizgazdalkodasiTarsulatEllenorzoBizottsagiTagokAdatai-20230820.xsd",
+      "bytes": 2543,
+      "sha256": "a1ebd96c6597a44b0d88badb4bb71fecb0153e6e8ff335aa0c2816289af7e866",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vizgazdalkodasiTarsulatEllenorzoBizottsagiTagokAdatai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "VízgazdálkodásiTársulatEllenőrzőBizottságiTagokAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepAdatai-20210401.xsd",
+      "bytes": 3054,
+      "sha256": "4c05508576c5350da507e67cddd252ea34ac6eae9e958b5e2439c26fd73c523e",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepAdatai-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/nyilvantartoHatosag-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiCegforma-20210401.xsd"
+      ],
+      "roots": [
+        "KülföldiVállalkozásFióktelepeAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepetNyilvantartoHatosag-20210101.xsd",
+      "bytes": 2576,
+      "sha256": "8c896ec8114395d4de58dc00d0ec6e7622df12d1c132ebb80b8e806e44096783",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepetNyilvantartoHatosag-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiVállalkozásFióktelepétNyilvántartóHatóság"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepenekVezetoTisztsegviseloi-20230820.xsd",
+      "bytes": 2991,
+      "sha256": "7c6b695bb3a3ffef7024eac1ecc7e5de80a5cf7c07770029b0b31fe234016ab0",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepenekVezetoTisztsegviseloi-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiVállalkozásFióktelepénekVezetőTisztségviselői"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepSportfiokMegjeloles-20260101.xsd",
+      "bytes": 1689,
+      "sha256": "27247c6003bbd0833b6dc056452804926ad07b46400e5e00c3115df3f0da1e49",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiVallalkozasFioktelepSportfiokMegjeloles-20260101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiVállalkozásFióktelepSportfióktelepMegjelölés"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vegrehajtoIrodaOnalloBirosagiVegrehajtoTagjanakAdatai-20230820.xsd",
+      "bytes": 4654,
+      "sha256": "f6144dbc1f370c8290edeba5fd61a52fbf98d6952037295888f0a11b47ddc212",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vegrehajtoIrodaOnalloBirosagiVegrehajtoTagjanakAdatai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelymutato-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "VégrehajtóIrodaÖnállóBíróságiVégrehajtóTagjánakAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euGazdasagiEgyesulesTagjai-20230820.xsd",
+      "bytes": 3767,
+      "sha256": "cd8c17ba60cc62c2ea51fbc5e1265de5f1f7c857190cf61089586035d891e845",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euGazdasagiEgyesulesTagjai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/csatlakozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/felelossegKorlatozasa-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuGazdaságiEgyesülésTagjai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euGazdasagiEgyesulesElozoSzekhelyAdatai-20210401.xsd",
+      "bytes": 2436,
+      "sha256": "76bb713dd81b261209ab4710eb7dd2221b0ef34985268de3d4e6abcecb673ae3",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euGazdasagiEgyesulesElozoSzekhelyAdatai-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/nyilvantartoHatosag-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuGazdaságiEgyesülésElőzőSzékhelyAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtReszvenyesekAdatai-20230820.xsd",
+      "bytes": 3375,
+      "sha256": "f1e83370f9b6889cd043c76b4002f55c1a5ce9ec86be7e813b837598ea8a4c9a",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtReszvenyesekAdatai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/szavazatiJogMerteke-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuRtRészvényesekAdatai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtReszveny-20210401.xsd",
+      "bytes": 2089,
+      "sha256": "25561d2a453cdfce2e1737961de02d87683b2f75b26464ac2445e11d519b4094",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtReszveny-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/reszvenyAdatok-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuRtRészvény"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtAtvaltoztathatoKotveny-20210401.xsd",
+      "bytes": 2155,
+      "sha256": "df15b8ec46a9c2f49aec0db8ad6aa850ec8d4c452a37765c897c68594f8a5e35",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtAtvaltoztathatoKotveny-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kotveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuRtÁtváltoztathatóKötvény"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtJegyzesiKotveny-20210401.xsd",
+      "bytes": 2140,
+      "sha256": "36937fdd849a0d51f4ece8e6b11b0bd5529ede884dbe9a9b3ae2834d3a3cd0c5",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtJegyzesiKotveny-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kotveny-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuRtJegyzésiKötvény"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtHirdetmenyekKozzetetele-20210401.xsd",
+      "bytes": 2170,
+      "sha256": "50e9ae9df667157875c747533ff6cfac4e5ff1faa303c8421077786e6b67a187",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtHirdetmenyekKozzetetele-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kozzetetelModja-20210401.xsd"
+      ],
+      "roots": [
+        "EuRtHirdetményekKözzététele"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtElozoSzekhelySzerintiAdatok-20210401.xsd",
+      "bytes": 2634,
+      "sha256": "c823c52bb0ac50ac03a2868a521b8d519e175546cdc8d39c21b132cc6288bcc0",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtElozoSzekhelySzerintiAdatok-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/nyilvantartoHatosag-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuRtElőzőSzékhelySzerintiAdatok"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtUgyvezetesTipusa-20210401.xsd",
+      "bytes": 2104,
+      "sha256": "61c9a78c9ed328c09dd222e28cc7f7b508dc2cc370ac3919ede023118561753d",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euRtUgyvezetesTipusa-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/rtUgyvezetesTipus-20210401.xsd"
+      ],
+      "roots": [
+        "EuRtÜgyvezetésTípusa"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyAtruhazas_r1020-20210401.xsd",
+      "bytes": 2130,
+      "sha256": "f246700b4aa03aa8c42fc76c3e24748bd74d7289e605618fc0236b2748261e74",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/reszvenyAtruhazas_r1020-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/korlatozas-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "RészvényÁtruházás"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozjegyzoiIrodaTagjai-20230820.xsd",
+      "bytes": 3694,
+      "sha256": "a39f5f37d99b4b900bdf2b1cf6fdd9fb7d1a641017fb777230eb14405c0290b6",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kozjegyzoiIrodaTagjai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KözjegyzőiIrodaTagjai"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiSzekhelyuEuGazdasagiEgyesules-20210401.xsd",
+      "bytes": 2614,
+      "sha256": "5ee1039b39807f3f78bcf1c1450c55043683c476d41c92aa36672e99a9a05961",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiSzekhelyuEuGazdasagiEgyesules-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/nyilvantartoHatosag-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiSzékhelyűEuGazdaságiEgyesülés"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiSzekhelyuEuGazdasagiEgyesulesKepviselete-20230820.xsd",
+      "bytes": 2856,
+      "sha256": "3991c9c000f03a9b1cf5dd50c10b5ea8b01d7d99c7fe60117a37b401e53c263b",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/kulfoldiSzekhelyuEuGazdasagiEgyesulesKepviselete-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiSzékhelyűEuGazdaságiEgyesülésKépviselete"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euSzovSzekhelyAthelyezes-20210401.xsd",
+      "bytes": 2586,
+      "sha256": "9af6faa5b384a273ac043a9f6a3c092e164a17bfb2a5fdc20a706bb3150fd5ff",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euSzovSzekhelyAthelyezes-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/nyilvantartoHatosag-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuSzövSzékhelyÁthelyezés"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euSzovUgyvezetesTipusa-20210101.xsd",
+      "bytes": 2335,
+      "sha256": "5761f9734906f6d2ea5482aa94ffc57d1f5af1390e941c0e3724f2f610ef1e53",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/euSzovUgyvezetesTipusa-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "EuSzövÜgyvezetésTípusa"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+      "bytes": 632,
+      "sha256": "aa12abe027eb559de5a7d270398bac7c206b3d678c6c14e1901efd43417e4026",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101#",
+      "dependencies": [],
+      "roots": []
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogutod-20240101.xsd",
+      "bytes": 3973,
+      "sha256": "1b23ca4d7b016f8f9c3b7d407d9e8c1f18b63e02bdb5773c8f074a8bd8db43ed",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogutod-20240101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/euid-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogutodlasTipus-20240101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiNyilvantartas-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/atalakulasDatuma-20210401.xsd"
+      ],
+      "roots": [
+        "Jogutód"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogutodNelkuliMegszunes-20210101.xsd",
+      "bytes": 1442,
+      "sha256": "189d2dbdc426a6b18f464d319afe889190b6cad775d9fedf5934a3a8205bdd59",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/jogutodNelkuliMegszunes-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd"
+      ],
+      "roots": [
+        "JogutódNélküliMegszűnés"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vegelszamolas-20210101.xsd",
+      "bytes": 2616,
+      "sha256": "08136e3bcee07fff77d8c162355763b7172db5e5b784f4b1b785e6efa879c4c2",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/vegelszamolas-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101.xsd"
+      ],
+      "roots": [
+        "Végelszámolás"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tokeegyesitoJogutod-20230820.xsd",
+      "bytes": 5051,
+      "sha256": "b83081b701e3b5ed4a5dda32752c4861917ffb4143da9b4865daf5deaf8bd4fd",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/altalanosAdatok/tokeegyesitoJogutod-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/euid-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/tokeegyesitoJogutodlasTipus-20221001.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiNyilvantartas-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/atalakulasDatuma-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/tarsasagElnevezese-20220901.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/tarsasagiForma-20220901.xsd"
+      ],
+      "roots": [
+        "TőkeegyesítőJogutód"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vallalatTipusa-20210401.xsd",
+      "bytes": 2050,
+      "sha256": "3eb046c566f4018443891041531cbc8766ba13f4e65c16e465c9f6d87d542837",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vallalatTipusa-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "VállalatTípusa"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vallalatIranyitasiForma-20210101.xsd",
+      "bytes": 2089,
+      "sha256": "27e0e1cf76f2a01099fb82750cdc1aeda7dfdf9c8e39f284bcc14acd5c6c30f9",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vallalatIranyitasiForma-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "VállalatIrányításiForma"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/bemutatoraSzoloReszvenyek-20221001.xsd",
+      "bytes": 3665,
+      "sha256": "9901971a41b56600df37f152c719f586f70c527d7724b2026e586fad00067e09",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/bemutatoraSzoloReszvenyek-20221001#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/szovegesen-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/darab-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nevertek-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/penznem-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "BemutatóraSzólóRészvények"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/nevreSzoloReszvenyek-20221001.xsd",
+      "bytes": 3645,
+      "sha256": "f0e4191578ac0effe934b7b3d550fda5e178add55ccf4b830ec17b25fcf084fe",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/nevreSzoloReszvenyek-20221001#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/szovegesen-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/darab-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nevertek-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/penznem-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "NévreSzólóRészvények"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/hirdetmenyekKozzetetele-20210401.xsd",
+      "bytes": 2162,
+      "sha256": "f1c873791519237b34650c1375fc11cefccd7d831c8dd7ec4dbec5b7ce25ecc5",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/hirdetmenyekKozzetetele-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kozzetetelModja-20210401.xsd"
+      ],
+      "roots": [
+        "HirdetményekKözzététele"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vegrehajtoIrodaTagjai-20230820.xsd",
+      "bytes": 2931,
+      "sha256": "f6ed157c58c778b71d1fb5c4a3c54be4d6d0bd35144c917bec4cc06e71cb3149",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegformatolFuggoAdatok/vegrehajtoIrodaTagjai-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd"
+      ],
+      "roots": [
+        "VégrehajtóIrodaTagjai"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/mireg.xsd",
+      "bytes": 23643,
+      "sha256": "c49f1c0f2cfe551b612c240c1823656f096e5c56b68f3642e3ecf45ca26895a1",
+      "target_namespace": "http://mireg.org/schema/1.0/",
+      "dependencies": [
+        "https://www.e-cegjegyzek.hu/schema/2026/dcterms.xsd",
+        "https://www.e-cegjegyzek.hu/schema/2026/mireg_types.xsd"
+      ],
+      "roots": [
+        "mireg",
+        "spatial",
+        "temporal",
+        "accessRights",
+        "securityClassification",
+        "subject",
+        "disposal",
+        "availability",
+        "preservation",
+        "accessControlInformation",
+        "electronicSignatureCertificate",
+        "contact",
+        "person",
+        "enterprise",
+        "contributor",
+        "creator",
+        "owner",
+        "publisher",
+        "circulationList",
+        "version",
+        "aggregationLevel",
+        "category",
+        "keywords",
+        "review",
+        "status"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/orszag-20210101.xsd",
+      "bytes": 598,
+      "sha256": "a48ae4a8fc632742544ef593425e36935ec92f30e61c97acf3eca0c99fcde868",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/orszag-20210101#",
+      "dependencies": [],
+      "roots": [
+        "Ország"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/email-20221001.xsd",
+      "bytes": 692,
+      "sha256": "b4d497ed3c6d586e90571101ec9a70371453881e8805d50fdd60f8e5e1cd835d",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/email-20221001#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/email-20210101.xsd"
+      ],
+      "roots": [
+        "E-mail"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101.xsd",
+      "bytes": 872,
+      "sha256": "95333739a66252634523e99682c9532745960e2f0f9952c8a82d10d7f106aed7",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/attribute/alrovat-20210101#",
+      "dependencies": [],
+      "roots": []
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101.xsd",
+      "bytes": 316,
+      "sha256": "8233c7217e4a2eb33366ca4c5f6adfff5863f2d3fff0c94e562f264962663255",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/valtozasIdopontja-20210101#",
+      "dependencies": [],
+      "roots": [
+        "VáltozásIdőpontja"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nyelv-20230820.xsd",
+      "bytes": 591,
+      "sha256": "7186e184346a254728fbde7b20290cbc42d0f4c70726b17e53bf491580d63fe9",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nyelv-20230820#",
+      "dependencies": [],
+      "roots": [
+        "Nyelv"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/teaor25-20250101.xsd",
+      "bytes": 29705,
+      "sha256": "7908eef347019c5284ead9e981231389b2c4002d22c937935493e7a6aff6ae25",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/teaor25-20250101#",
+      "dependencies": [],
+      "roots": [
+        "TEÁOR25"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/penznem-20210101.xsd",
+      "bytes": 603,
+      "sha256": "e7f2557a78e5cb281ce255c93eecf9fd7bc2efaca1f49ee5d60a7d688773c13e",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/penznem-20210101#",
+      "dependencies": [],
+      "roots": [
+        "Pénznem"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401.xsd",
+      "bytes": 1226,
+      "sha256": "b956cbe778c1ac9dbc5815a153a0f834abf0674fdd7a9ddbde7aa433fe4533ce",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegmutato-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegAzonosito-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kezbesitesiMegbizott-20210401.xsd"
+      ],
+      "roots": [
+        "Cégmutató"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101.xsd",
+      "bytes": 1021,
+      "sha256": "71de9a82ad515a232d1bf40a4b1fd5a58f757703637b050636c95a352092ae16",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogviszony-20210101#",
+      "dependencies": [],
+      "roots": [
+        "Jogviszony"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tisztseg-20210101.xsd",
+      "bytes": 2555,
+      "sha256": "54701698bbc6db5ab4498542eeb19abff67ff84d16b9b740fcaa1baca3a9c848",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tisztseg-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "Tisztség"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820.xsd",
+      "bytes": 863,
+      "sha256": "e88389a0d58d724eb6d827c0e77c1a6ada364f830a264a4f0663c307f50423f9",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/termeszetesSzemely-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelyesAdatokTipus-20230820.xsd"
+      ],
+      "roots": [
+        "TermészetesSzemély"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/euid-20210101.xsd",
+      "bytes": 954,
+      "sha256": "add8d0d4de397359e54efe9fa52fc03dc78524514d9a0d8477f95d26849895b0",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/euid-20210101#",
+      "dependencies": [],
+      "roots": [
+        "EUID",
+        "NincsEUID"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogutodlasTipus-20240101.xsd",
+      "bytes": 958,
+      "sha256": "1afb1d296693db2282c259be3560125931c7f80f139b24cdbaa8d4091fe01430",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/jogutodlasTipus-20240101#",
+      "dependencies": [],
+      "roots": [
+        "JogutódlásTípus"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/atalakulasDatuma-20210401.xsd",
+      "bytes": 453,
+      "sha256": "73a7604c6b38bebd051a05496fe79e9f787153fdbb26ba2cdfc4d122cb854ac2",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/atalakulasDatuma-20210401#",
+      "dependencies": [],
+      "roots": [
+        "ÁtalakulásDátuma"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/email-20210101.xsd",
+      "bytes": 482,
+      "sha256": "960e3b1664856dafacd3518c92b0487ef5445170d9924a412d9e0daffcdd147c",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/email-20210101#",
+      "dependencies": [],
+      "roots": []
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/tokeegyesitoJogutodlasTipus-20221001.xsd",
+      "bytes": 1090,
+      "sha256": "9d98ec5d44d73928f43fa3d9ded7f7191d858fd330ea3fb39901e1c5d1af7fbe",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/tokeegyesitoJogutodlasTipus-20221001#",
+      "dependencies": [],
+      "roots": [
+        "TőkeegyesítőJogutódlásTípus"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiNyilvantartas-20210101.xsd",
+      "bytes": 1022,
+      "sha256": "7efead8a086373890a5f5171c56a88e4fef0baf3d214ec6c70ecdc50ac1e8f76",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiNyilvantartas-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiNyilvántartásiSzám",
+        "KülföldiNyilvántartóHatóságNeve"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/tarsasagElnevezese-20220901.xsd",
+      "bytes": 740,
+      "sha256": "cab970f5c70a91bbf03b2652cfe532b8ae1f83b4a7699347336e76fed9fbffc9",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/tarsasagElnevezese-20220901#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "TársaságElnevezése"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/tarsasagiForma-20220901.xsd",
+      "bytes": 728,
+      "sha256": "739f5c9e5beb61df59d28a31c917db383de2e5f3d9cdf95910bb9162cb8e44e9",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/tarsasagiForma-20220901#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "TársaságiForma"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101.xsd",
+      "bytes": 622,
+      "sha256": "4b62391d887a9427dbe1e8421242056a839b3261a6c59cfc0c53a386c7705358",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/bizalmiVagyonkezelo-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101.xsd"
+      ],
+      "roots": [
+        "BizalmiVagyonkezelő"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/csatlakozasIdopontja-20210101.xsd",
+      "bytes": 319,
+      "sha256": "010104ba604884742255d718f5e9084ad7b9f7315c62b02c31560b621f03050e",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/csatlakozasIdopontja-20210101#",
+      "dependencies": [],
+      "roots": [
+        "CsatlakozásIdőpontja"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/felelossegKorlatozasa-20210101.xsd",
+      "bytes": 617,
+      "sha256": "2cd2ba3bd7e51ff8af73cdd7d3d22c7b7b38a4974ab287e796af49dcb6ae4d4f",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/felelossegKorlatozasa-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "FelelősségKorlátozása"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/egyeniVallalkozoNyilvantartasiSzam-20210101.xsd",
+      "bytes": 652,
+      "sha256": "e2a59ae697e7a9b84eccb83728557b0327a502580c96d640c41269374eafd834",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/egyeniVallalkozoNyilvantartasiSzam-20210101#",
+      "dependencies": [],
+      "roots": [
+        "EgyéniVállalkozóiNyilvántartásiSzám"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/uzletresztTerheloTilalomTipus-20240101.xsd",
+      "bytes": 599,
+      "sha256": "7bb86b4a5d9982a88be4e8402157818ba4bfdd4636460d789e122aba4f857532",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/uzletresztTerheloTilalomTipus-20240101#",
+      "dependencies": [],
+      "roots": [
+        "ÜzletrésztTerhelőTilalomTípus"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/szavazatiJogMerteke-20210101.xsd",
+      "bytes": 711,
+      "sha256": "fd88b1dde11972b22deee1b9f04a134e562552a489f36829afbe22ac4a911a80",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/szavazatiJogMerteke-20210101#",
+      "dependencies": [],
+      "roots": [
+        "SzavazatiJogMértéke"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/korlatozas-20210401.xsd",
+      "bytes": 779,
+      "sha256": "d5de3db583d3ba28d226e489be88cd247766b6deeda89a3f85a4c1021ef9fa64",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/korlatozas-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/eldontendo-20210101.xsd"
+      ],
+      "roots": [
+        "Korlátozás"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kotveny-20210401.xsd",
+      "bytes": 1669,
+      "sha256": "8b258c9d13c2a2771f56d840f1ccb76d5873e7b787eb81dbaee71491d71f85f8",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kotveny-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/szovegesen-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nevertek-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/penznem-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/darab-20210401.xsd"
+      ],
+      "roots": [
+        "Kötvény"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/rtUgyvezetesTipus-20210401.xsd",
+      "bytes": 750,
+      "sha256": "69fc3b67549b2a7757577d6948e6e23510d9bde8ea89af11c19c23257f6f6950",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/rtUgyvezetesTipus-20210401#",
+      "dependencies": [],
+      "roots": [
+        "RtÜgyvezetésTípusa"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/reszvenyAdatok-20210401.xsd",
+      "bytes": 2746,
+      "sha256": "6d27589d12e40291518d103509011c57cdfc88f0b90347294d0df4d3baa683ec",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/reszvenyAdatok-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/szovegesen-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nevertek-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/penznem-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/darab-20210401.xsd"
+      ],
+      "roots": [
+        "RészvényAdatok"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kezbesitesiMegbizott-20210401.xsd",
+      "bytes": 1396,
+      "sha256": "5809b15d0084a4be1b8e014b88b89e2991dd18ce9c58c9f29da708f52fd74bbe",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kezbesitesiMegbizott-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelymutato-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegAzonosito-20210401.xsd"
+      ],
+      "roots": [
+        "KézbesítésiMegbízott"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelymutato-20210101.xsd",
+      "bytes": 4777,
+      "sha256": "87f689eda919cea89ee58a24c9d15914e8c5594135a3040e698f8bce690a3f44",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelymutato-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/adoazonositoJel-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/anyjaNeve-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nincsAdoazonositoJel-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/orszag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd"
+      ],
+      "roots": [
+        "Személymutató"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/nyilvantartoHatosag-20210401.xsd",
+      "bytes": 1289,
+      "sha256": "6cb5c7343cd2d7d65685f3f1ef51dd1c31290f2fd2abd4ea34fa1c9a2f72a41c",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/nyilvantartoHatosag-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nyilvantartasiSzam-20210401.xsd"
+      ],
+      "roots": [
+        "NyilvántartóHatóság"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiCegforma-20210401.xsd",
+      "bytes": 750,
+      "sha256": "7d64fe81f17089c2ce92e801172a620b9b704df40b7a3a1c75fd83495e9287df",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiCegforma-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "KülföldiCégforma"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kozzetetelModja-20210401.xsd",
+      "bytes": 733,
+      "sha256": "c6115bf502eaa490f9a219a74a347d0c963899c197e68fa86585a7d514250c9b",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kozzetetelModja-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "KözzétételMódja"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/szovegesen-20210401.xsd",
+      "bytes": 717,
+      "sha256": "b5a2ae338172b291f6ac76d9cbbedd2cad078c1cefc6f3cd4c9c4bd7e5abd4c2",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/szovegesen-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "Szövegesen"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/darab-20210401.xsd",
+      "bytes": 292,
+      "sha256": "f6f442e68bfe2b9159395511838f91492d2e2ecb80501ae0be4ed414d17e3999",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/darab-20210401#",
+      "dependencies": [],
+      "roots": [
+        "Darab"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nevertek-20210401.xsd",
+      "bytes": 451,
+      "sha256": "aa50399df8cc874474216d2b05336378e60cd1a0077dd49d0479039b60c18e44",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nevertek-20210401#",
+      "dependencies": [],
+      "roots": [
+        "Névérték"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/dcterms.xsd",
+      "bytes": 13416,
+      "sha256": "75e0b3974e935d80089cc73449f7a9a031585cf213e252e96f0fa8ad8f789b0f",
+      "target_namespace": "http://purl.org/dc/terms/",
+      "dependencies": [
+        "https://www.e-cegjegyzek.hu/schema/2026/xml.xsd",
+        "https://www.e-cegjegyzek.hu/schema/2026/dc.xsd",
+        "https://www.e-cegjegyzek.hu/schema/2026/dcmitype.xsd"
+      ],
+      "roots": [
+        "title",
+        "creator",
+        "subject",
+        "description",
+        "publisher",
+        "contributor",
+        "date",
+        "type",
+        "format",
+        "identifier",
+        "source",
+        "language",
+        "relation",
+        "coverage",
+        "rights",
+        "alternative",
+        "tableOfContents",
+        "abstract",
+        "created",
+        "valid",
+        "available",
+        "issued",
+        "modified",
+        "dateAccepted",
+        "dateCopyrighted",
+        "dateSubmitted",
+        "extent",
+        "medium",
+        "isVersionOf",
+        "hasVersion",
+        "isReplacedBy",
+        "replaces",
+        "isRequiredBy",
+        "requires",
+        "isPartOf",
+        "hasPart",
+        "isReferencedBy",
+        "references",
+        "isFormatOf",
+        "hasFormat",
+        "conformsTo",
+        "spatial",
+        "temporal",
+        "audience",
+        "accrualMethod",
+        "accrualPeriodicity",
+        "accrualPolicy",
+        "instructionalMethod",
+        "provenance",
+        "rightsHolder",
+        "mediator",
+        "educationLevel",
+        "accessRights",
+        "license",
+        "bibliographicCitation"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/mireg_types.xsd",
+      "bytes": 64904,
+      "sha256": "a347b6701bf3ad216794cd48699fa7f2813b2ee768eed78e01936651218537ac",
+      "target_namespace": "http://mireg.org/schema/1.0/",
+      "dependencies": [],
+      "roots": []
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegAzonosito-20210401.xsd",
+      "bytes": 5227,
+      "sha256": "80ed70ddb2c993c870b5779a856aa2a775a74b6dab9a2f4489a9f0e76a9cb978",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/cegAzonosito-20210401#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/euid-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/kulfoldiNyilvantartas-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/orszag-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nyilvantartasiSzam-20210401.xsd"
+      ],
+      "roots": [
+        "CégAzonosító"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelyesAdatokTipus-20230820.xsd",
+      "bytes": 5614,
+      "sha256": "c41d53ae165fbb008581d6830fbaa7d3316e2dd7165d60c0b8e0f137c1c9d0fe",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelyesAdatokTipus-20230820#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/adoazonositoJel-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/anyjaNeve-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/kezbesitesiMegbizott-20210401.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nincsAdoazonositoJel-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/szemelymutato-20210101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101.xsd"
+      ],
+      "roots": []
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/adoazonositoJel-20210101.xsd",
+      "bytes": 587,
+      "sha256": "69de1684dcd3556f61339714d9d4f3a4415be65b7fccbb8fe8d242e444787764",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/adoazonositoJel-20210101#",
+      "dependencies": [],
+      "roots": [
+        "AdóazonosítóJel"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/anyjaNeve-20210101.xsd",
+      "bytes": 716,
+      "sha256": "a388a9e940031b2cbc8c9b92201934bef1d3a3796e645da874559d19d90e27e6",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/anyjaNeve-20210101#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "AnyjaNeve"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nincsAdoazonositoJel-20210101.xsd",
+      "bytes": 517,
+      "sha256": "81967ced0952746798b6088fc1f9048131d357b1603ac7d7a390974f31227fc4",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/nincsAdoazonositoJel-20210101#",
+      "dependencies": [],
+      "roots": [
+        "NincsAdóazonosítóJel"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nyilvantartasiSzam-20210401.xsd",
+      "bytes": 883,
+      "sha256": "853ecc3193d6dff9b1c40b185b57f4f783bf2efff4db36700412aeba84a0f35e",
+      "target_namespace": "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nyilvantartasiSzam-20210401.xsd#",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cjszoveg-20210101.xsd"
+      ],
+      "roots": [
+        "NyilvántartásiSzám"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/xml.xsd",
+      "bytes": 4753,
+      "sha256": "068407b61c32b0d32d06ccadba349a8ba8523369eb9f0cbab1b026e8b88652df",
+      "target_namespace": "http://www.w3.org/XML/1998/namespace",
+      "dependencies": [],
+      "roots": []
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/dc.xsd",
+      "bytes": 4087,
+      "sha256": "e26f9bd8e069536825f71a3abd9adb5cf767e76e50c99894909cdef628d04f96",
+      "target_namespace": "http://purl.org/dc/elements/1.1/",
+      "dependencies": [
+        "https://www.e-cegjegyzek.hu/schema/2026/xml.xsd"
+      ],
+      "roots": [
+        "any",
+        "title",
+        "creator",
+        "subject",
+        "description",
+        "publisher",
+        "contributor",
+        "date",
+        "type",
+        "format",
+        "identifier",
+        "source",
+        "language",
+        "relation",
+        "coverage",
+        "rights"
+      ]
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/dcmitype.xsd",
+      "bytes": 1523,
+      "sha256": "8fe550cb58dcd1f18d594e1af8ea215a9fecf627539232108913b19661486c45",
+      "target_namespace": "http://purl.org/dc/dcmitype/",
+      "dependencies": [],
+      "roots": []
+    }
+  ]
+}

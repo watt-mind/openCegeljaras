@@ -1,0 +1,31 @@
+name: Bug report
+description: Report a reproducible defect using synthetic inputs only.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not post vulnerabilities or client material here. Read SECURITY.md
+        for private reporting. Never attach real dossiers, personal data,
+        signing keys, credentials, or unredacted diagnostics.
+        This project currently implements introspection only.
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and observed behavior
+      description: Include the command, version, operating system, and error code.
+    validations:
+      required: true
+  - type: textarea
+    id: reproducer
+    attributes:
+      label: Synthetic reproducer
+      description: Give minimal steps and independently constructed data, with no client-derived contents.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Public-data confirmation
+      options:
+        - label: This report contains no real client material, secrets, or private dossier data.
+          required: true

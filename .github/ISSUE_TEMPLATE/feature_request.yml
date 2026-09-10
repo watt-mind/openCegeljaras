@@ -1,0 +1,27 @@
+name: Feature request
+description: Describe an attorney workflow and the capability it needs.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use synthetic examples only. Consult docs/roadmap.md for planned work.
+        Do not include client data, credentials, or private documents.
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Workflow and problem
+      description: Describe the specific procedure and where the current tools cause friction.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Explain what a human or agent should be able to accomplish.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Relevant public specifications
+      description: Link official documents or schemas, including version dates where known.

@@ -1,0 +1,109 @@
+{
+  "reviewed_at": "2026-09-10",
+  "sources": [
+    {
+      "id": "overview",
+      "title": "Elektronikus cégeljárás",
+      "url": "https://ceginformaciosszolgalat.kormany.hu/elektronikus-cegeljaras",
+      "kind": "official_guidance",
+      "status": "indexed_guidance",
+      "notes": "Starting point; direct browser retrieval failed. Recheck before implementation."
+    },
+    {
+      "id": "developer-guidance",
+      "title": "Fejlesztőknek",
+      "url": "https://ceginformaciosszolgalat.kormany.hu/akadalymentes/fejlesztoknek/jogi-hatter",
+      "kind": "official_guidance",
+      "status": "indexed_guidance",
+      "notes": "Form versions, alternative form tools, and creationDocument XML-to-PDF API; not a submission API."
+    },
+    {
+      "id": "technical-profile",
+      "title": "Technikai feltételek",
+      "url": "https://ceginformaciosszolgalat.kormany.hu/technikai-feltetelek",
+      "kind": "official_guidance",
+      "status": "indexed_guidance",
+      "notes": "Dossier, signature, nested-document and attachment rules; separate from XSD conformance."
+    },
+    {
+      "id": "form-2026",
+      "title": "Cégnyomtatvány 20260101",
+      "url": "https://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101.xsd",
+      "kind": "official_schema",
+      "status": "downloaded_schema",
+      "notes": "Wrapper and dependency graph downloaded for research. No XSD validator or redistribution license established."
+    },
+    {
+      "id": "dossier-2026",
+      "title": "E-cégeljárás 2026 dossier schema",
+      "url": "https://www.e-cegjegyzek.hu/schema/2026/e-cegeljaras2026.xsd",
+      "kind": "official_schema",
+      "status": "downloaded_schema",
+      "notes": "Separate outer dossier profile. Namespace and cardinality alone do not prove authority acceptance."
+    },
+    {
+      "id": "dossier-2023",
+      "title": "E-cégeljárás 2023 dossier schema",
+      "url": "https://www.e-cegjegyzek.hu/schema/2023/e-cegeljaras2023.xsd",
+      "kind": "official_schema",
+      "status": "referenced_only",
+      "notes": "Also listed by technical guidance; not part of this scaffold dependency snapshot."
+    },
+    {
+      "id": "checks",
+      "title": "Elvégzett ellenőrzések",
+      "url": "https://ceginformaciosszolgalat.kormany.hu/elvegzett-ellenorzesek",
+      "kind": "official_guidance",
+      "status": "indexed_guidance",
+      "notes": "Authority checks include external records; local validation cannot claim those checks."
+    },
+    {
+      "id": "transport-notice",
+      "title": "Cégbírósági kérelmek benyújtása",
+      "url": "https://ceginformaciosszolgalat.kormany.hu/cegbirosagi-kerelmek-benyujtasa",
+      "kind": "official_guidance",
+      "status": "indexed_guidance",
+      "notes": "Autumn 2025 email requirements and dedicated portal alternative."
+    },
+    {
+      "id": "service-receipt",
+      "title": "Céginformációs Szolgálat visszajelzése",
+      "url": "https://ceginformaciosszolgalat.kormany.hu/ceginformacios-szolgalat-visszajelzese",
+      "kind": "official_guidance",
+      "status": "indexed_guidance",
+      "notes": "Distinguishes technical forwarding from faulty applications deemed unsubmitted."
+    },
+    {
+      "id": "court-service",
+      "title": "Cégbíróság visszajelzése / végzés átvétele",
+      "url": "https://ceginformaciosszolgalat.kormany.hu/cegbirosag-visszajelzese",
+      "kind": "official_guidance",
+      "status": "indexed_guidance",
+      "notes": "Service acknowledgment is a distinct action; legacy UI descriptions need live verification."
+    },
+    {
+      "id": "vendor-sdk",
+      "title": "Microsec e-Szignó SDK reference",
+      "url": "https://download.e-szigno.hu/eszigno/docs/eszigno3_ref.html",
+      "kind": "vendor_documentation",
+      "status": "directly_read",
+      "notes": "Existing CLI container tooling; do not claim openCegeljaras is the first automation. No SDK bundled."
+    },
+    {
+      "id": "reform-2025-lix",
+      "title": "2025. évi LIX. törvény",
+      "url": "https://njt.hu/jogszabaly/2025-59-00-00",
+      "kind": "legislation",
+      "status": "indexed_guidance",
+      "notes": "Indexed section 105 states 2027-01-01 commencement. Recheck amendments and implementing/transition rules; not operational API evidence."
+    },
+    {
+      "id": "reform-consolidated",
+      "title": "2025. évi LIX. törvény, consolidated text",
+      "url": "https://njt.jog.gov.hu/jogszabaly/2025-59-00-00.2",
+      "kind": "legislation",
+      "status": "directly_read",
+      "notes": "Section 105 states 2027-01-01 commencement; detailed technical/transition rules still require review."
+    }
+  ]
+}

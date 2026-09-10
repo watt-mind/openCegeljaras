@@ -1,0 +1,111 @@
+name: Security
+
+on:
+  push:
+    branches: [develop, master]
+  pull_request:
+    branches: [develop, master]
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gitleaks:
+    name: Gitleaks secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      # The free CLI is downloaded with its published checksum. The
+      # marketplace action requires a separate licence for organisations.
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: 8.30.1
+        run: |
+          set -euo pipefail
+          base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+          tarball="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          workdir=$(mktemp -d)
+          curl -sSfL -o "${workdir}/${tarball}" "${base}/${tarball}"
+          curl -sSfL -o "${workdir}/checksums.txt" \
+            "${base}/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          (cd "$workdir" && sha256sum --ignore-missing --check checksums.txt)
+          sudo tar -xzf "${workdir}/${tarball}" -C /usr/local/bin gitleaks
+          rm -rf "$workdir"
+          gitleaks version
+      - name: Scan the full history
+        run: gitleaks git --redact --no-banner --exit-code 1 .
+
+  actionlint:
+    name: Workflow lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install actionlint
+        env:
+          ACTIONLINT_VERSION: 1.7.12
+        run: |
+          set -euo pipefail
+          base="https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}"
+          tarball="actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          workdir=$(mktemp -d)
+          curl -sSfL -o "${workdir}/${tarball}" "${base}/${tarball}"
+          curl -sSfL -o "${workdir}/checksums.txt" \
+            "${base}/actionlint_${ACTIONLINT_VERSION}_checksums.txt"
+          (cd "$workdir" && sha256sum --ignore-missing --check checksums.txt)
+          tar -xzf "${workdir}/${tarball}" -C "$workdir" actionlint
+          install -m 0755 "${workdir}/actionlint" ./actionlint
+          rm -rf "$workdir"
+          ./actionlint -version
+      - run: ./actionlint -color
+        env:
+          SHELLCHECK_OPTS: "--severity=warning"
+
+  advisories:
+    name: Advisory scan (cargo-deny)
+    # CI runs the full dependency policy on code changes. This job exists so
+    # new advisories are detected even when the lockfile has not changed.
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+        with:
+          command: check advisories
+          arguments: --all-features
+
+  codeql:
+    name: CodeQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
+        with:
+          languages: rust
+          build-mode: none
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
+        with:
+          ram: 8192
