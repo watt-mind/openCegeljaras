@@ -73,9 +73,10 @@ index and the local source:
   option, which must stay `None`, rejects DTDs by default
   (`allow_dtd: false`), fails entity-reference loops, has a configurable
   `nodes_limit`, and has fixed internal attribute and namespace caps that
-  surface as `AttributesLimitReached` and `NamespacesLimitReached`. A unit test asserts the exact
-  `ParsingOptions` used. It builds the tree recursively without a nesting
-  limit, so depth must be enforced before it runs.
+  surface as `AttributesLimitReached` and `NamespacesLimitReached`. A unit
+  test asserts the exact `ParsingOptions` used. It builds the tree
+  recursively without a nesting limit, so depth must be enforced before it
+  runs.
 - `encoding_rs` 0.8.41: `(Apache-2.0 OR MIT) AND BSD-3-Clause`; declared
   MSRV 1.88. Its `ISO-8859-2` decoder is the WHATWG encoding of that name,
   which is byte-identical to IANA ISO-8859-2, unlike the `ISO-8859-1` case.
