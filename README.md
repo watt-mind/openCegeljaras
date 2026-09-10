@@ -78,3 +78,17 @@ See [contributing](CONTRIBUTING.md), [security](SECURITY.md), and the
 `samples/` is reserved for ignored private inputs and is never part of tests
 or diagnostic output. GitHub publishing, releases, and Factory dispatch are
 not configured by this scaffold.
+
+## Claude orchestration
+
+On the development server, start Claude in this checkout and ask it:
+
+```text
+Read ./orchestrator.md and begin the bounded run it describes.
+```
+
+The [orchestrator prompt](orchestrator.md) handles the initial local scaffold
+without requiring a remote or ticket queue. It starts with a reviewed form
+inspection contract, then bounded implementation and independent review.
+It also supports an already configured project workflow. Checkpoints remain
+in ignored `tmp/`; launching this prompt does not configure a background service.

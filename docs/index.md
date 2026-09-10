@@ -6,3 +6,4 @@
 - [Roadmap](roadmap.md): implementation order and acceptance gates.
 - [Testing](testing.md): checks and synthetic fixture requirements.
 - [Releasing](releasing.md): inactive release setup and prerequisites.
+- [Claude orchestrator](../orchestrator.md): server launch and bounded initial work.
