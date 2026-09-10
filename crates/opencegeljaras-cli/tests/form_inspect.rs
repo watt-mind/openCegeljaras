@@ -400,6 +400,29 @@ fn an_oversized_input_is_refused_from_its_metadata() {
 }
 
 #[test]
+fn an_input_exactly_at_the_byte_limit_is_accepted() {
+    let path = scratch("at-limit.xml");
+    let limit = 16 * 1024 * 1024;
+    let frame = "<a><!----></a>";
+    let mut text = String::from("<a><!--");
+    text.push_str(&"x".repeat(limit - frame.len()));
+    text.push_str("--></a>");
+    assert_eq!(text.len(), limit);
+    fs::write(&path, &text).expect("the scratch file should be writable");
+    let output = inspect(&path, true);
+    discard(&path);
+    assert_single_diagnostic(&output, "unrecognized_root", 4);
+    assert_eq!(body(&output)["data"]["input"]["bytes"], limit as u64);
+}
+
+#[test]
+fn a_single_dash_is_an_ordinary_file_name_not_standard_input() {
+    let output = run(&["form", "inspect", "-", "--json"]);
+    assert_single_diagnostic(&output, "input_unreadable", 1);
+    assert_eq!(body(&output)["error"]["code"], "input_unreadable");
+}
+
+#[test]
 fn depth_is_accepted_at_the_limit_and_refused_one_past_it() {
     let at_limit = "<a>".repeat(128) + &"</a>".repeat(128);
     let output = inspect_generated("depth-128.xml", &at_limit);
