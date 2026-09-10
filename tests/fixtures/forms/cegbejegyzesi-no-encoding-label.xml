@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<n:Nyomtatvány xmlns:n="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#" xmlns:ck="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegbejegyzesiKerelem-20260101#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101# cegnyomtatvany-20260101.xsd">
+  <ck:CégbejegyzésiKérelem>
+    <ck:Adatlap/>
+    <ck:ÁltalánosAdatok/>
+  </ck:CégbejegyzésiKérelem>
+</n:Nyomtatvány>

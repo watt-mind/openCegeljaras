@@ -18,9 +18,10 @@ dependencies at this stage.
 
 | Command | Behavior |
 | :--- | :--- |
-| `capabilities [--json]` | Reports scaffold status, empty document operations, introspection commands |
+| `capabilities [--json]` | Reports scaffold status, the implemented document operations, introspection commands |
 | `sources [--json]` | Prints bundled reference metadata; no fetching or freshness check |
 | `skill [--json]` | Prints the embedded agent instructions |
+| `form inspect <PATH> [--json]` | Recognises one local form document's format under fixed limits |
 | `--help`, `--version` | Prints CLI usage or package version |
 
 Successful JSON output is one object with `schema_version: 1`, `ok: true`,
@@ -28,9 +29,20 @@ Successful JSON output is one object with `schema_version: 1`, `ok: true`,
 The capability schema's `operations` contains implemented document/workflow
 operations only; its `introspection_commands` lists bootstrap commands.
 `ok` describes command execution, not a dossier, a filing, or legal compliance.
+`ok` is true only on exit 0; it never describes validity, filing, or legal
+compliance.
 
-Exit 0 denotes success (including help/version); exit 2 denotes usage errors;
-exit 3 denotes output/internal failure.
+Exit 0 denotes success (including help/version); exit 1 denotes a refused
+document input; exit 2 denotes usage errors; exit 3 denotes output/internal
+failure; exit 4 denotes a well-formed document that is not a recognised form.
+Exit 1 and exit 4 use an error envelope, additive within schema version 1:
+`schema_version`, `ok: false`, `command`, `error` with a fixed `code` and
+`message`, `data` holding the facts established before the failure, `verified`,
+and `submitted`. On exit 4 `error.code` equals `data.form.status`. Whenever the
+exit code is not 0, exactly one fixed stderr line names the code and the exit
+code, and it never contains the path, document bytes, a name, a namespace, a
+declared encoding label, or a parser position. The
+[form inspection contract](form-inspection.md) fixes the codes and messages.
 Usage errors emit fixed plain-text stderr diagnostics even when `--json` is
 present, without echoing rejected arguments. There is no JSON usage-error
 contract in this scaffold. Proposed document
@@ -88,8 +100,13 @@ remain unsupported rather than being renamed or silently converted.
 ## Resource and trust boundaries
 
 Before accepting input, implement limits for bytes, XML depth, node/text counts,
-archive entry count, expanded size, and compression ratio. Reject DTD/entity
-expansion and resolve XSD imports only from an audited local bundle. Preserve
+per-element attribute and namespace-declaration counts, archive entry count,
+expanded size, and compression ratio. A cap that only the parser would enforce
+is not enough when the parser's own handling of that construct is quadratic:
+`form inspect` caps both attributes and namespace declarations per element in
+its pre-parse scan for that reason, and re-checks them on the parsed tree.
+Reject DTD/entity expansion and resolve XSD imports only from an audited local
+bundle. Preserve
 original encoding and bytes where signatures depend on them. External XSLT
 and HTML content must not execute during inspection.
 

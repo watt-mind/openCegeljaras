@@ -4,10 +4,14 @@ A proposed local-first, agent-first Rust library and CLI for preparing and
 checking Hungarian electronic company-court filings (**e-cégeljárás**) and
 interpreting their receipts.
 
-**Status: scaffold.** Only `capabilities`, `sources`, `skill`, help, and version
-are implemented. There is no form parser, XSD validator, dossier builder,
-signature verifier, submission transport, or receipt parser yet. No release
-has been published. This independent project is not a government service.
+**Status: scaffold.** Alongside `capabilities`, `sources`, `skill`, help, and
+version there is one read-only document operation, `form inspect`. It decodes a
+local form file under fixed limits, checks that it is well-formed XML, and
+reports which company-form wrapper and variant it carries. It does not prove
+that the file is XSD-valid, signed, correctly filled in, currently accepted, or
+filed: there is still no XSD validator, dossier builder, signature verifier,
+submission transport, or receipt parser. No release has been published. This
+independent project is not a government service.
 
 ## Why this project
 
@@ -42,10 +46,15 @@ cargo run --locked -p opencegeljaras-cli -- --help
 cargo run --locked -p opencegeljaras-cli -- capabilities --json
 cargo run --locked -p opencegeljaras-cli -- sources --json
 cargo run --locked -p opencegeljaras-cli -- skill
+cargo run --locked -p opencegeljaras-cli -- form inspect \
+  tests/fixtures/forms/cegbejegyzesi-minimal-utf8.xml --json
 ```
 
-`capabilities` reports `stage: "scaffold"` and `operations: []`. Introspection
-commands are listed separately from document operations. A successful command
+`capabilities` reports `stage: "scaffold"` and `operations: ["form inspect"]`.
+Introspection commands are listed separately from document operations.
+`form inspect` exits 0 for a recognised 2026 form, 1 for an input it refuses,
+and 4 for a well-formed document that is not a supported form; recognition is
+format recognition only. A successful command
 reports `ok: true`, `verified: false`, and `submitted: false`: it has neither
 verified a signature nor filed a case. `sources` prints a bundled research
 catalog; it does not contact the listed sites or check whether guidance changed.

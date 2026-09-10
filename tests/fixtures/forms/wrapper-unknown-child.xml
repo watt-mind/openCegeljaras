@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<n:Nyomtatvány xmlns:n="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#">
+  <n:IsmeretlenKérelem>
+    <n:Adatlap/>
+  </n:IsmeretlenKérelem>
+</n:Nyomtatvány>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<n:Nyomtatvány xmlns:n="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#" xmlns:ck="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegbejegyzesiKerelem-20260101#" xmlns:nk="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/nevfoglalasiKerelem-20210401#">
+  <ck:CégbejegyzésiKérelem>
+    <ck:Adatlap/>
+  </ck:CégbejegyzésiKérelem>
+  <nk:NévfoglalásiKérelem>
+    <nk:Adatlap/>
+  </nk:NévfoglalásiKérelem>
+</n:Nyomtatvány>

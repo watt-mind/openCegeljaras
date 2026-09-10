@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<n:Nyomtatvány xmlns:n="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#" xmlns:ck="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegbejegyzesiKerelem-20260101#">
+  <ck:CégbejegyzésiKérelem>
+    <ck:Adatlap>
+      <ck:Azonosító>PLACEHOLDER-0001</ck:Azonosító>
+    </ck:Adatlap>
+    <ck:ÁltalánosAdatok>
+      <ck:CégNév>Példa Korlátolt Felelősségű Társaság</ck:CégNév>
+    </ck:ÁltalánosAdatok>
+    <ck:CégformátólFüggőAdatok/>
+  </ck:CégbejegyzésiKérelem>
+</n:Nyomtatvány>
