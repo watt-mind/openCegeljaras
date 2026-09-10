@@ -74,9 +74,9 @@ index and the local source:
   (`allow_dtd: false`), fails entity-reference loops, has a configurable
   `nodes_limit`, and has fixed internal attribute and namespace caps that
   surface as `AttributesLimitReached` and `NamespacesLimitReached`. A unit
-  test asserts the exact `ParsingOptions` used. It builds the tree
-  recursively without a nesting limit, so depth must be enforced before it
-  runs.
+  test asserts the exact `ParsingOptions` used. It has no nesting limit of
+  its own, so depth is enforced before it runs regardless of whether its
+  tree construction is recursive.
 - `encoding_rs` 0.8.41: `(Apache-2.0 OR MIT) AND BSD-3-Clause`; declared
   MSRV 1.88. Its `ISO-8859-2` decoder is the WHATWG encoding of that name,
   which is byte-identical to IANA ISO-8859-2, unlike the `ISO-8859-1` case.
@@ -150,10 +150,15 @@ Fixed constants in `opencegeljaras-core`, exposed as a `Limits` struct with
 | Parser nodes (`roxmltree` backstop) | 4 × elements | `limit_exceeded` |
 | Bytes in one text node (after `roxmltree` merges adjacent text and CDATA) | 1 MiB | `limit_exceeded` |
 | Attributes on one element, excluding namespace declarations | 64 | `limit_exceeded` |
+| Namespace declarations (`xmlns` and `xmlns:*`) on one element | 64 | `limit_exceeded` |
 
-Depth and element count are enforced by a linear pre-scan of the decoded
-text that skips comments, CDATA sections, and processing instructions, so a
-deeply nested document is rejected before the recursive parser sees it. A
+Depth, element count, and per-element namespace declarations are enforced
+by a linear pre-scan of the decoded text that skips comments, CDATA
+sections, and processing instructions, so a deeply nested document is
+rejected before the tree parser sees it. The namespace-declaration cap
+exists because the parser checks each new declaration against every earlier
+one on the same element, which is quadratic and was measured at tens of
+seconds for a 16 MiB file of declarations. A
 document nested 100 000 levels deep must be rejected without a stack
 overflow. Text and attribute limits are checked while walking the finished
 tree. The pre-scan only needs to be conservative for well-formed input;
