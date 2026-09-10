@@ -40,30 +40,44 @@ package 3 mirror) and its ten-resource closure:
   all four company-identity elements typed and carrying a fixed
   `Custom="true"` attribute.
 - `Document` holds a `DocumentProfile` with `Title` restricted by 194
-  patterns that name attachment roles, the first being
-  `A kérelem formanyomtatványa` (the application form); optional
-  `E-category`; `CreationDate`; `Format/MIME-Type` with required `type`,
-  `subtype`, `extension`; `SourceSize` with `sizeUnit` fixed to `B`;
-  `BaseTransform` with `Transform/@Algorithm` from `zip`, `encrypt`,
-  `base64`; optional `RecipientCertificateList` and `Metadata`; then one
-  `ds:Object` and optional signatures or timestamps.
+  XSD `pattern` facets that name attachment roles, the first being
+  `A kérelem formanyomtatványa` (the application form). They are regular
+  expressions, not literals: 29 contain `( … )` groups, two end in
+  `( - .*)?` (a fixed prefix plus an arbitrary suffix), and many contain
+  an unescaped `.`. Then an optional, untyped `E-category` (the six-value
+  enumeration `electronic data`, `electronic document`,
+  `electronic record`, `elektronikus adat`, `elektronikus dokumentum`,
+  `elektronikus irat` lives on an unreferenced global element and is not
+  enforced by the XSD on documents); `CreationDate`; `Format/MIME-Type`
+  with required `type`, `subtype`, `extension` and optional `charSet`;
+  optional `MimeChecked`; `SourceSize` with `sizeUnit` fixed to `B`;
+  `BaseTransform` with optional `Transform/@Algorithm` from `zip`,
+  `encrypt`, `base64`; optional `RecipientCertificateList` and
+  `Metadata`; then one `ds:Object` and optional signatures or timestamps.
 - The XSD permits zero documents and no signatures; the technical
   conditions add signature and timestamp requirements that this contract
   does not encode, because that page could not be re-read with verified
   TLS from the development server.
 - `xmllint` 2.9.14 loads the dossier closure offline, including the two
   resources that carry a DOCTYPE with an internal entity, and the Python
-  `xmlschema` 4.3.2 package agrees with it on a synthetic 2026 dossier
+  `xmlschema` 4.3.2 package (loaded with `allow='local'` and `base_url`
+  set to the mirror directory) agrees with it on a synthetic 2026 dossier
   built by rewriting an openSzigno-created container (namespace,
   `Object0`, procedure title, form-role title): conforming; and on the
-  same dossier with a procedure title outside the enumeration: rejected.
+  same dossier with a procedure title outside the enumeration: rejected
+  on the enumeration facet.
+- libxml2 without `--huge` refuses a single text node above 10 000 000
+  bytes (`xmlSAX2Characters: huge text node`, exit 1), so a dossier whose
+  base64 payload exceeds that cannot be validated through the package 4
+  adapter, which forbids `--huge`.
 - The sibling openSzigno 0.9.0 inspects that dossier only with
   `--allow-namespace` for the 2026 namespace (its allow-list stops at the
-  2014 profile), reports `valid_structure: true`, and its `create` writes
-  the default Microsec namespace, `Id="documents"`, and fixed categories,
-  confirming the integration gap the research recorded. openSzigno keeps
-  ownership of payload extraction beyond plain base64, of encrypted and
-  zipped transforms, and of all cryptographic verification.
+  2014 profile); its `inspect --json` then reports the 2026 namespace and
+  `capabilities.structural_validation: true`. Its `create` writes the
+  default Microsec namespace and fixed categories, and its signer writes
+  `Id="documents"`, confirming the integration gap the research recorded.
+  openSzigno keeps ownership of payload extraction beyond plain base64, of
+  encrypted and zipped transforms, and of all cryptographic verification.
 
 ## Scope
 
@@ -94,53 +108,101 @@ Recognition: the root must be `Dossier`. In
 `http://www.e-cegjegyzek.hu/2026/e-cegeljaras#` the profile is
 `dossier-2026` and status `recognized`. In
 `http://www.e-cegjegyzek.hu/<4 digits>/e-cegeljaras#` with another year
-the status is `unsupported_version`. Any other namespace, including the
-default Microsec namespace `https://www.microsec.hu/ds/e-szigno30#`, is
-`unrecognized_root`: a generic e-dossier is not a company filing.
-Structural lookups use the dossier's own namespace; `ds:Signature` and
-`ds:Object` use the XMLDSig namespace.
+(the 2014 namespace is a test case) the status is `unsupported_version`.
+Any other namespace, including the default Microsec namespace
+`https://www.microsec.hu/ds/e-szigno30#`, is `unrecognized_root`: a
+generic e-dossier is not a company filing. Structural lookups use the
+dossier's own namespace and take the first `DossierProfile` and first
+`Documents` child, leaving extras to `xsd_conformance`; `ds:Signature`
+and `ds:Object` use the XMLDSig namespace. `ds:Object` is associated with
+its `Document` by containment only; `OBJREF`, `Id`, `SIGREF`, and
+`SIGREFLIST` are never resolved.
+
+Fixed messages: `unsupported_version` → `the dossier namespace version is
+not supported`; `unrecognized_root` → `the root element is not a company
+dossier`; `input_too_large` → `the input exceeds the 64 MiB limit` (the
+message carries the active profile's limit); `preflight_failed` → `at
+least one preflight finding failed`;
+`payload_exceeds_validator_limit` → `a text node exceeds the validator's
+10 000 000-byte limit`.
+
+### Role and title matching
+
+The six procedure titles and the four dossier categories are compared by
+exact string equality. The 194 document-role patterns are compiled once,
+at build or first use, as anchored regular expressions with XSD
+semantics: the only constructs present are literal text, `( … )` groups,
+`.`, `.*`, `?`, and `\)`, and a unit test asserts that no other
+metacharacter occurs, that every pattern compiles, and that a literal
+title derived from each pattern (groups kept, `.*` removed) matches. The
+`regex` crate (MIT OR Apache-2.0) is used with a size limit and full
+anchoring; a role is matched against the whole title. `role` reports the
+pattern's fixed text: for the 192 patterns without `.*` that is the
+pattern with its group parentheses removed and escaped parentheses kept
+as literal `)`, and for the two `…( - .*)?` patterns it is the prefix
+before ` - `. The `regex` size limit is 1 MiB of compiled program per
+pattern. The title itself is
+never `role`. Reporting a matched enumeration or pattern value reveals
+only that the document contains that public value, which is accepted.
+
+The pattern texts are reproduced in the core as data: an excerpt of the
+role names the authority requires documents to carry literally, needed
+for interoperability. The schema itself is still not vendored, and the
+specification inventory's redistribution note is extended to say so.
 
 ## `dossier inspect`
 
 After recognition the inspector reads, never resolves, never decodes
 beyond what is stated:
 
-- `dossier`: `title` and `category` are reported verbatim only when they
-  are one of the enumerated values above, otherwise `null` with
+- `dossier`: `title` and `category` are reported only when they are one
+  of the enumerated values above, otherwise `null` with
   `title_known: false` or `category_known: false`; `creation_date` is
-  reported verbatim when it matches `xs:dateTime` lexically, otherwise
-  `null`; `ack_email_present` and `location_present` booleans; the
+  reported when it matches `xs:dateTime` lexically, otherwise `null`;
+  `ack_email_present` and `location_present` booleans; the
   company-identity block as presence booleans `cegforma`,
   `cegjegyzekszam`, `cegnev`, `cegszekhely`; `documents_id_fixed` true
-  when `Documents/@Id` is `Object0`.
+  when `Documents/@Id` is `Object0`; `receipt` true when the category is
+  `electronic acknowledgement` or `elektronikus átvételi elismervény`.
 - `documents[]`, in document order, at most 256 entries then
-  `documents_truncated`: `index`, `role` (the document title verbatim
-  when it matches one of the 194 role patterns compiled into the core,
-  else `null` with `role_known: false`), `category` (as above, with the
-  document category enumeration), `mime` (`type`, `subtype`, `extension`
-  as declared, each cut at 64 scalars; `charset` presence), `source_size`
-  (integer or null), `transforms` (the `Algorithm` values in order, only
-  the three known ones, else the entry is `unknown`), `object_present`,
+  `documents_truncated`: `index`, `role` (the matched pattern's fixed
+  text, else `null` with `role_known: false`), `category` (one of the six
+  document values or `null` with `category_known: false`; informative
+  only, since the XSD does not enforce it), `mime` (`type`, `subtype`,
+  `extension` as declared, each cut at 64 scalars, and `charset_present`
+  for the `charSet` attribute; these declared tokens are printed without
+  `--show-values` as a deliberate exception), `source_size` (integer or
+  null), `transforms` (the `Algorithm` values in order; a missing or
+  unknown value is the entry `unknown`), `object_present`,
   `nested_dossier` (true when the declared subtype is `nldossier2`
   case-insensitively or the extension is `dosszie`), `signatures` and
-  `timestamps` counts placed inside the document, and `form`.
-- `form` for a document is the result of running the complete
-  `form inspect` boundary over the payload when, and only when, the
-  transform chain is exactly `base64`, the declared type is `text/xml` or
-  `application/xml` or the extension is `xml`, and the base64 text decodes
-  (whitespace ignored, strict alphabet, padding required) to at most
-  16 MiB. Then `form` is `{ status, profile, variant, sections }` exactly
-  as `form inspect` would report, or a `rejected` object with the inspect
-  error code. Otherwise `form` is `null` and `payload` says why:
-  `not_xml`, `transform_not_plain_base64`, `base64_invalid`,
-  `payload_too_large`, or `object_missing`. Payloads are never written to
-  disk and never printed.
+  `timestamps` counts placed inside the document, `payload`, and `form`.
+- `payload` and `form`. `payload` is decided in this order and the first
+  applicable reason wins: `object_missing` (no `ds:Object` inside the
+  `Document`); `object_not_text` (the object has element children);
+  `transform_not_plain_base64` (the chain is not exactly `base64`);
+  `not_xml` (neither `text/xml` nor `application/xml` is declared and the
+  extension is not `xml`, case-insensitively); `payload_too_large` (after
+  removing XML whitespace in one pass, the base64 text is longer than
+  16 MiB × 4 / 3 + 4 characters, checked before any decoding);
+  `base64_invalid` (strict alphabet, padding required, decode failure);
+  otherwise `inspected`. When `inspected`, `form` is the `form inspect`
+  result over the decoded bytes: on a recognised form
+  `{ status: "recognized", profile, variant, sections }`; on exit-4
+  outcomes `{ status, profile, variant: null, sections: null }` with the
+  inspect status; on exit-1 outcomes `{ status: "rejected", code }` with
+  the inspect error code. Otherwise `form` is `null`. Payloads are never
+  written to disk and never printed.
 - `signatures_present` and `timestamps_present` count the elements at
   dossier level and inside documents; nothing is verified.
-- With `--show-values` the dossier title, category, creation date, and the
-  company-identity values, and each document's declared title, are
-  printed verbatim (cut at 256 scalars); without it only the enumerated
-  and pattern-matched values appear, and `values_redacted` is true.
+- Always shown: enumerated titles and categories, a lexically valid
+  `creation_date`, matched roles, declared MIME tokens, counts, and
+  presence flags. With `--show-values` each document's declared title and
+  the four company-identity values are added verbatim (cut at 256
+  scalars) as `title` on the document and `identity_values` on the
+  dossier (an object with the keys `cegforma`, `cegjegyzekszam`, `cegnev`,
+  `cegszekhely`, each a string or null), and `values_redacted` becomes
+  false.
 
 Every string that reaches the output is either an enumerated schema value,
 a pattern-matched role, a declared MIME token, or, with `--show-values`,
@@ -158,6 +220,7 @@ JSON `data` on exit 0 (alphabetical when emitted):
   "dossier": { "status": "recognized", "profile": "dossier-2026",
                "title": "Névfoglalási kérelem", "title_known": true,
                "category": "electronic dossier", "category_known": true,
+               "receipt": false,
                "creation_date": "2026-01-01T00:00:00Z",
                "ack_email_present": false, "location_present": false,
                "identity": { "cegforma": false, "cegjegyzekszam": false,
@@ -191,11 +254,30 @@ Exit codes: 0 recognised 2026 dossier; 1 input rejected with the
 `form inspect` codes; 2 usage; 3 output; 4 `unsupported_version` or
 `unrecognized_root` with the null rules of `form inspect` (`dossier`
 carries only `status`; `documents` null). Stderr line
-`opencegeljaras: dossier inspect: <code> (exit N)`. Human output: one
-fact per line in the order of the JSON keys, `documents:` followed by one
-indented block per document (`[N] role: …`, `mime: …`, `transforms: …`,
-`form: STATUS VARIANT`), then the four boundary lines, document-derived
-strings as escaped JSON literals.
+`opencegeljaras: dossier inspect: <code> (exit N)`.
+
+Human output lines, in order: the `input` and `root` lines as
+`form inspect` prints them, `status:`, `profile:`, `title:`,
+`category:`, `receipt:`, `creation date:`, `ack email:`, `location:`,
+`identity:` (the four names with `present` or `absent`),
+`documents id fixed:`, `documents: N` (the count followed by the word
+`truncated` in parentheses when cut),
+then per document the indented block `[N] role: ROLE|none`,
+`category: …|none`, `mime: TYPE/SUBTYPE EXT`, `transforms: a,b|none`,
+`payload: REASON`, `form: STATUS VARIANT|none`,
+`signatures: N timestamps: N`, and with `--show-values` `title: …`;
+then `signatures present:`, `timestamps present:`, and the four
+boundary lines. Document-derived strings are escaped JSON literals.
+
+### Cost
+
+The 64 MiB input bounds everything: the raw input is one buffer (64
+MiB), the decoded text is one copy (64 MiB), the whitespace-stripped
+base64 of one document is at most one more
+copy, the decoded payload is at most 16 MiB, and `form inspect` over it
+adds its own 16 MiB decode copy, so the worst case stays near 225 MiB and
+the total decoded payload across documents is under 48 MiB. Documents
+are processed one at a time and their buffers dropped before the next.
 
 ## `dossier preflight`
 
@@ -208,44 +290,63 @@ is a fixed string per code and status, never a document value.
 
 | Code | Rule | Source |
 | :--- | :--- | :--- |
-| `procedure_title` | `dossier.title_known` | `xsd-2026` |
-| `dossier_category` | `dossier.category_known` and the value is `electronic dossier` or `elektronikus akta`; `electronic acknowledgement` and its Hungarian form make every later finding `not_applicable` and set `receipt: true` | `xsd-2026` |
-| `documents_id` | `documents_id_fixed` | `xsd-2026` |
-| `form_document_present` | exactly one document whose role is `A kérelem formanyomtatványa`; zero or several fail | `xsd-2026` |
-| `form_recognized` | that document's `form.status` is `recognized`; `not_performed` when `payload` is not `inspected` | `form-2026` |
-| `form_matches_procedure` | the variant matches the title: `Névfoglalási kérelem` needs `nevfoglalasi-kerelem-20210401`; `Bejegyzési kérelem` and `Ismételt bejegyzési kérelem` need `cegbejegyzesi-kerelem-20260101`; `Változás bejegyzési kérelem` needs `valtozasbejegyzesi-kerelem-20240101`; `Egyéb beadvány` and `Hiánypótlás` are `not_applicable`; `not_performed` when the form is not recognised | `openCegeljaras` |
-| `document_roles_known` | every document has `role_known` | `xsd-2026` |
-| `transforms_supported` | every document's transform chain is one of `base64`, `zip,base64`, `encrypt,base64`, `zip,encrypt,base64` | `xsd-2026` |
-| `signature_present` | `signatures_present >= 1`; presence only, validity `not_performed` | `openCegeljaras` |
-| `timestamp_present` | `timestamps_present >= 1`; presence only | `openCegeljaras` |
-| `xsd_conformance` | the outer dossier XML conforms to the pinned dossier graph; `not_performed` without `--bundle` | `xsd-2026` |
+| `procedure_title` | `passed` when `title_known`, else `failed` | `xsd-2026` |
+| `dossier_category` | `passed` when the category is `electronic dossier` or `elektronikus akta`; `not_applicable` for a receipt; `failed` otherwise (the XSD allows all four; the filing rule is this project's) | `openCegeljaras` |
+| `documents_id` | `passed` when `documents_id_fixed`, else `failed` | `xsd-2026` |
+| `form_document_present` | `passed` when exactly one document has the role `A kérelem formanyomtatványa`; `failed` for zero or several (the XSD allows zero documents) | `openCegeljaras` |
+| `form_recognized` | `passed` when that document's `form.status` is `recognized`; `failed` when it is any other inspect status or `rejected`; `not_performed` when `payload` is not `inspected` or `form_document_present` failed | `form-2026` |
+| `form_matches_procedure` | `passed` when the variant matches the title: `Névfoglalási kérelem` needs `nevfoglalasi-kerelem-20210401`; `Bejegyzési kérelem` and `Ismételt bejegyzési kérelem` need `cegbejegyzesi-kerelem-20260101`; `Változás bejegyzési kérelem` needs `valtozasbejegyzesi-kerelem-20240101`; `failed` on a mismatch; `not_applicable` for `Egyéb beadvány` and `Hiánypótlás`; `not_performed` when `form_recognized` did not pass | `openCegeljaras` |
+| `document_roles_known` | `passed` when every listed document has `role_known`, else `failed`; `not_performed` when `documents_truncated` | `xsd-2026` |
+| `transforms_supported` | `passed` when every chain is one of `base64`, `zip,base64`, `encrypt,base64`, `zip,encrypt,base64`, else `failed` (the XSD permits any sequence; the chain rule is the e-dossier specification as openSzigno implements it) | `openCegeljaras` |
+| `signature_present` | `passed` when `signatures_present >= 1`, else `failed`; presence only, validity is never assessed | `openCegeljaras` |
+| `timestamp_present` | `passed` when `timestamps_present >= 1`, else `failed`; presence only | `openCegeljaras` |
+| `xsd_conformance` | `passed`/`failed` from the validator; `not_performed` without `--bundle` or on any exit-5 condition, including the new exit-5 code `payload_exceeds_validator_limit` when any text node exceeds 10 000 000 bytes, in which case the validator is not spawned and the code is both `error.code` and the finding's `detail` | `xsd-2026` |
+
+For a receipt (`dossier.receipt` true) every finding except
+`xsd_conformance` is `not_applicable`; `preflight.status` is `failed`
+with exit 4 when `xsd_conformance` failed, otherwise `not_applicable`
+with exit 0 (or 5 for the unperformed XSD cases when `--bundle` was
+given), and the notice gains "; receipt recognised, not acknowledged". `detail` is a fixed string per code and status, listed in
+the architecture document by the implementation, never a document value.
 
 With `--bundle`, preflight verifies the bundle with package 3 rules,
 requires `dossier_closure_verified` (every resource reachable from
 `roots[1]` digest-verified; the dossier closure's DOCTYPE resources are
-digest-only by contract), and runs the package 4 xmllint adapter with
-`ROOT` = the bundle path of `roots[1]` and the dossier bytes as
-`document.xml`, under the dossier `Limits`. Findings from the validator
-are reported as in `form validate` under `xsd_findings`, redacted by the
-same rules. `bundle_unverified`, `validator_unavailable`, and
-`validator_failed` keep their exit-5 meaning and leave `xsd_conformance`
-`not_performed`. Package 3 gains `dossier_closure_verified` in its verify
-output, computed like `form_closure_verified` over `roots[1]`, and the
-manifest unit test asserts the dossier closure has 10 resources.
+digest-only by contract; a manifest without a second root is
+`manifest_invalid`), and, unless a text node exceeds the validator limit,
+runs the package 4 xmllint adapter with `ROOT` = the bundle path of
+`roots[1]` and the dossier bytes as `document.xml`; that temporary write
+is therefore up to 64 MiB for dossiers, and the package 4 sentence is
+amended accordingly. The adapter's collection and redaction functions are
+exposed within the crate and reused unchanged. Validator findings are
+reported under `xsd_findings` with `xsd_findings_truncated`,
+`unparsed_lines`, `validator`, and `bundle` exactly as `form validate`
+defines them, null when the validator did not run. `bundle_unverified`,
+`validator_unavailable`, and `validator_failed` keep their exit-5 meaning
+and leave `xsd_conformance` `not_performed`. Package 3 gains
+`dossier_closure_verified` in its verify output, computed like
+`form_closure_verified` over `roots[1]`, and the manifest unit test
+asserts the dossier closure has 10 resources, disjoint from the form
+closure, including both DOCTYPE files.
 
 Verdict: `preflight.status` is `passed` when every finding is `passed` or
-`not_applicable` and at least `xsd_conformance` was performed; `failed`
-when any finding failed; `incomplete` when nothing failed but a finding
-is `not_performed`. There is no "ready to file" wording anywhere: the
-notice reads "deterministic preflight findings over one dossier; not the
-technical conditions, not signature validity, not acceptance".
+`not_applicable` and `xsd_conformance` was performed; `failed` when any
+finding failed; `incomplete` when nothing failed but some finding is
+`not_performed`; `not_applicable` for a receipt. There is no "ready to
+file" wording anywhere: the notice reads "deterministic preflight
+findings over one dossier; not the technical conditions, not signature
+validity, not acceptance". A `passed` status means those findings passed
+and the outer XML conforms, and nothing more.
 
-Exit codes: 0 when `preflight.status` is `passed` or `incomplete` with no
-failure; 4 when a finding failed (`error.code = "preflight_failed"`) or
-the dossier is not recognised (inspect codes); 5 for the unperformed
-XSD cases as in `form validate`; 1, 2, 3 as usual. `ok` is true only on
-exit 0. Human output: the inspect report, then `findings:` with one
-indented `CODE: STATUS (SOURCE)` line each, `xsd findings:` when present,
+Exit codes: 0 for `passed`, `incomplete`, and `not_applicable`; 4 when a
+finding failed (`error.code = "preflight_failed"`) or the dossier is not
+recognised (inspect codes); 5 for the unperformed XSD cases as in
+`form validate`; 1, 2, 3 as usual. `ok` is true only on exit 0. `data`
+carries the full inspect data plus `findings`, `preflight`, and the
+validator keys; on exit 4 and 5 all of these are present with the
+nullability of `form validate`. Human output: the inspect report, then
+`findings:` with one indented `CODE: STATUS (SOURCE)` line each,
+`xsd findings:` when present in the `form validate` line shape,
 `preflight: STATUS`, then the boundary lines.
 
 ## Determinism and safety
@@ -269,10 +370,9 @@ of the xmllint adapter apply unchanged.
 | `tests/fixtures/dossiers/` (new) | Synthetic fixtures |
 | `README.md`, `docs/architecture.md`, `docs/testing.md`, `CHANGELOG.md`, `SKILL.md` | Advertisement, last |
 
-One implementation worker. The 194 role patterns and the six procedure
-titles are copied into the core as string constants: they are enumerated
-values a document must literally contain, not schema text, and the
-redistribution note in the specification inventory records that reading.
+One implementation worker. The `regex` crate is the only new
+dependency; `deny.toml` needs no change if its licences are already
+allowed, which the worker verifies.
 
 ## Fixtures and tests
 
@@ -283,8 +383,13 @@ form):
 
 | Fixture | Purpose |
 | :--- | :--- |
-| `nevfoglalas-2026.es3` | Conforming 2026 dossier, one form document, no signature; both validators accepted it |
+| `nevfoglalas-2026.es3` | Conforming 2026 dossier, one form document, no signature; both validators accepted it; preflight exits 4 on `signature_present` and `timestamp_present` by construction |
 | `nevfoglalas-2026-bad-procedure-title.es3` | Same with a title outside the enumeration; both rejected it |
+| `nevfoglalas-2026-signed-shape.es3` | Same with a synthetic, unverifiable `ds:Signature` and `TimeStamp` element, for the exit-0 path |
+| `nested-dossier.es3` | A document declaring `application/nldossier2` |
+| `encrypted-form.es3` | Form document with `encrypt,base64` and a document with an unknown algorithm |
+| `iso-8859-2.es3` | The conforming dossier encoded in ISO-8859-2 |
+| `suffix-role.es3` | A document titled with one of the two suffix patterns plus a sentinel suffix, which must never be printed |
 | `microsec-default.es3` | Default-namespace container → `unrecognized_root` |
 | `dossier-2023.es3` | 2023 namespace → `unsupported_version` |
 | `mismatched-variant.es3` | `Bejegyzési kérelem` carrying the name-reservation form |
@@ -294,20 +399,21 @@ form):
 | `receipt.es3` | `electronic acknowledgement` category, findings `not_applicable` |
 | `bad-base64.es3` | Invalid base64 in the form object |
 
-Tests cover: recognition statuses; every `payload` reason; the `form`
-object equality with `form inspect` on the extracted synthetic form;
-`--show-values` gating with a sentinel title; each finding code in each
-reachable status; the receipt rule; `documents_truncated` and payload
-caps with generated dossiers; the 64 MiB text node accepted and 64 MiB
-plus one rejected under the dossier profile while the form profile still
-rejects 1 MiB plus one; determinism; human shapes; exit paths; with the
-fake validator, the preflight XSD path; `#[cfg_attr(not(target_os =
-"linux"), ignore)]` real-xmllint tests on the two evidence dossiers
-against the mini graph's dossier-style resource is not possible, so the
-real-validator test is `#[ignore]` on `OPENCEGELJARAS_SCHEMA_BUNDLE` and
-validates both evidence dossiers against the real dossier closure; that
-`capabilities` lists both operations; that nothing under `samples/` is
-referenced.
+Tests cover: recognition statuses including the 2014 namespace; every
+`payload` reason in precedence order; the `form` object equality with
+`form inspect` on the extracted synthetic form; `--show-values` gating
+with a sentinel title and the suffix-role sentinel; the pattern
+constraints and the literal-title match for all 194 roles; each finding
+code in each reachable status; the receipt rule; `documents_truncated`
+and payload caps with generated dossiers; the 10 000 000-byte validator
+ceiling reason; a text node accepted under the dossier profile that the
+form profile rejects; determinism; human shapes; exit paths; with the
+fake validator, the preflight XSD path. The mini graph's dossier-style
+resource carries a DOCTYPE and is not a usable schema, so no Linux
+real-xmllint test exists for preflight; one `#[ignore]` test validates
+the evidence dossiers against `OPENCEGELJARAS_SCHEMA_BUNDLE`. Also: that
+`capabilities` lists both operations and that nothing under `samples/`
+is referenced.
 
 ## Capability advertisement
 
@@ -339,8 +445,11 @@ cargo run --locked -p opencegeljaras-cli -- dossier preflight \
   beyond that. Everything cryptographic, every other transform, and
   extraction stay with openSzigno, to be composed through an explicit
   adapter in a later package (`dossier verify`).
-- **Role and title constants.** Literal enumerated values are reproduced
-  as constants; the schema text itself is still not vendored.
+- **Role patterns as data.** The 194 pattern texts and the enumerated
+  titles and categories are reproduced in the core as interoperability
+  data with a comment naming their source; the schema itself is still not
+  vendored, and the specification inventory's redistribution note is
+  extended in this package to record that excerpt.
 
 ## Unresolved questions
 
