@@ -40,14 +40,19 @@ re-executed through `std::env::current_exe()` with a marker test name by a
 launcher that `--xmllint` points at, and driven by a control file with a fixed
 name in the case directory. It exercises the version gate at both bounds, the
 fixed argument list, the working directory, the environment allowlist, the
-exit-code mapping, the timeout with a short `Duration`, the 1 MiB standard-error
-cap, and that the `document.xml` copy is byte-identical to the input. Line
+exit-code mapping, the timeout with a short `Duration`, a grandchild that keeps
+the standard-error pipe open past that timeout, the 1 MiB standard-error cap,
+the rule that a warning about the schema graph is a failure whatever the exit
+code, and that the `document.xml` copy is byte-identical to the input. Line
 parsing, value redaction, message and finding truncation are unit-tested
 without any child process. Real-validator tests run the installed `xmllint`
 over the synthetic mini graph for a conforming and a nonconforming instance and
-over a bundle directory whose path contains `#`, `?`, and `%`; they are ignored
-off Linux, fail rather than skip when `xmllint` is absent, and CI installs
-`libxml2-utils` on the Linux test job.
+over a bundle directory whose path contains `#`, `?`, and `%`. Those tests and
+the launcher-based ones compile only on Linux, with ignored stubs of the same
+names elsewhere, so the workspace still builds warning-free on macOS and
+Windows; on Linux they fail rather than skip when `xmllint` is absent, and CI
+installs `libxml2-utils` on the Linux test job. Every test scratch directory is
+removed when its test ends.
 
 Two tests marked `#[ignore]` use a real mirror named by
 `OPENCEGELJARAS_SCHEMA_BUNDLE`: one verifies the mirror, the other validates

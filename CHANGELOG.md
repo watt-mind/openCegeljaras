@@ -39,7 +39,10 @@
   check could not be performed (`bundle_unverified`, `validator_unavailable`,
   `validator_failed`); exit 4 reports a recognised form that is
   `nonconformant`. Findings carry every document value replaced by `'…'`
-  unless `--show-values` is passed.
+  unless `--show-values` is passed, and a quoted span survives only where
+  libxml2 never prints a value. Any warning that the schema graph did not load
+  completely is `validator_failed` whatever the exit code, and the
+  standard-error reader is bounded by the same deadline as the child.
 - Synthetic conforming and non-conforming name-reservation fixtures under
   `tests/fixtures/forms/`, recorded as agreeing with two independent XSD
   implementations on 2026-09-10.

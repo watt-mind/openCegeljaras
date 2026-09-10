@@ -42,10 +42,12 @@ denotes a required check that could not be performed. A performed check that
 failed is a well-formed document that is not a recognised form, a bundle that
 does not match its manifest, or a recognised form that does not conform to the
 pinned schema graph.
-Exit 1 and exit 4 use an error envelope, additive within schema version 1:
-`schema_version`, `ok: false`, `command`, `error` with a fixed `code` and
-`message`, `data` holding the facts established before the failure, `verified`,
-and `submitted`. On exit 4 `error.code` equals `data.form.status`. Whenever the
+Exit 1, exit 4, and exit 5 use an error envelope, additive within schema
+version 1: `schema_version`, `ok: false`, `command`, `error` with a fixed
+`code` and `message`, `data` holding the facts established before the failure,
+`verified`, and `submitted`. On exit 4 `error.code` equals `data.form.status`
+when the document is not a recognised form, and is `nonconformant` when a
+recognised form failed a check that was performed. Whenever the
 exit code is not 0, exactly one fixed stderr line names the code and the exit
 code, and it never contains the path, document bytes, a name, a namespace, a
 declared encoding label, or a parser position. The
@@ -89,9 +91,15 @@ bytes the inspect boundary accepted into a private temporary directory, spawns
 one child there with a cleared environment plus `PATH` (and `SystemRoot`,
 `SYSTEMROOT`, `TEMP`, `TMP`, and `PATHEXT` on Windows), passes exactly
 `--nonet --noout --schema ROOT document.xml`, discards stdout, and drains
-stderr under a 1 MiB cap. Document values in findings are replaced by `'…'`
-unless the operator passes `--show-values`. A conforming result is not the
-technical conditions, not a signature check, and not acceptance.
+stderr under a 1 MiB cap with a reader bounded by the same deadline as the
+child. `--nonet` only makes libxml2 warn when it skips an absolute location and
+it can still exit 0, so any stderr line reporting a network entity, a failed
+external entity, or a schema parser warning is `validator_failed` whatever the
+exit code. Document values in findings are replaced by `'…'` unless the
+operator passes `--show-values`; a quoted span survives only where libxml2
+never prints a value, and a span that could be either is refused by replacing
+the whole message. A conforming result is not the technical conditions, not a
+signature check, and not acceptance.
 
 Usage errors emit fixed plain-text stderr diagnostics even when `--json` is
 present, without echoing rejected arguments. There is no JSON usage-error

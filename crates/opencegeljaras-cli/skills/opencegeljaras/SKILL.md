@@ -85,9 +85,11 @@ Exit 5 means a required check could not be performed at all — `bundle_unverifi
 `validator_unavailable`, or `validator_failed` — and `xsd_conformance` stays
 `not_performed`; report it as "not checked", never as the form being wrong.
 
-Findings have every document value replaced by `'…'`, and `values_redacted` is
-`true`. Never pass `--show-values` unless the operator asked for the values:
-it keeps them and can expose personal data. `unparsed_lines` counts validator
+A message whose values cannot be removed unambiguously is reported as the
+fixed text `message redacted`. Findings otherwise have every document value
+replaced by `'…'`, and `values_redacted` is `true`. Never pass
+`--show-values` unless the operator asked for the values: it keeps them and
+can expose personal data. `unparsed_lines` counts validator
 output that did not match the expected format; that text is never echoed.
 
 Use `opencegeljaras sources --json` for a bundled, dated reference catalog.
