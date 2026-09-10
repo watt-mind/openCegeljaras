@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Synthetic fixture, CC0. The number below violates the shared pattern. -->
-<w:MiniNyomtatvany xmlns:w="urn:opencegeljaras:fixture:wrapper"
-                   xmlns:b="urn:opencegeljaras:fixture:variant-b">
-  <b:VariantB>
-    <b:Szam>nem-szam</b:Szam>
-  </b:VariantB>
-</w:MiniNyomtatvany>
+<b:VariantB xmlns:b="urn:opencegeljaras:fixture:variant-b">
+  <b:Szam>nem-szam</b:Szam>
+</b:VariantB>

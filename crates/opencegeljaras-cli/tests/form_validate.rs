@@ -12,17 +12,22 @@ use std::process::{Command, Output};
 
 use serde_json::Value;
 
-#[cfg(unix)]
+#[cfg(target_os = "linux")]
 #[allow(dead_code)]
 #[path = "support/fake.rs"]
 mod fake;
 
 /// The marker test the fake launcher re-executes. A no-op otherwise.
-#[cfg(unix)]
+#[cfg(target_os = "linux")]
 #[test]
 fn fake_validator_entry() {
     fake::dispatch();
 }
+
+#[cfg(not(target_os = "linux"))]
+#[test]
+#[ignore = "the launcher-based fake validator runs on Linux"]
+fn fake_validator_entry() {}
 
 /// A stored fixture path at the repository root.
 fn fixture(relative: &str) -> PathBuf {
@@ -220,7 +225,7 @@ fn identical_input_produces_identical_output() {
     assert_eq!(first.stderr, second.stderr);
 }
 
-#[cfg(unix)]
+#[cfg(target_os = "linux")]
 mod faked {
     use super::*;
 
@@ -321,7 +326,7 @@ mod faked {
     #[test]
     fn unexpected_stderr_lines_are_counted_and_never_echoed() {
         let script = format!(
-            "exit=3\nstderr=warning: failed to load external entity \"http://example.invalid/x\"\nstderr={VIOLATION}\n"
+            "exit=3\nstderr=xmllint: a note in an unexpected shape about example.invalid\nstderr={VIOLATION}\n"
         );
         let output = with_fake("cli-unparsed", &script, &["--json"]);
         assert_single_diagnostic(&output, "nonconformant", 4);
@@ -345,6 +350,20 @@ mod faked {
     }
 
     #[test]
+    fn a_warning_about_the_schema_graph_is_a_failed_validator() {
+        let output = with_fake(
+            "cli-warning",
+            "exit=0\nstderr=warning: failed to load external entity \"http://x\"\n",
+            &["--json"],
+        );
+        assert_single_diagnostic(&output, "validator_failed", 5);
+        let data = &body(&output)["data"];
+        assert_eq!(data["validator"]["exit_code"], 0);
+        assert_eq!(data["checks"]["xsd_conformance"], "not_performed");
+        assert!(!stdout(&output).contains("http://x"));
+    }
+
+    #[test]
     fn any_other_exit_code_is_a_failed_validator() {
         let output = with_fake("cli-failed", "exit=5\n", &["--json"]);
         assert_single_diagnostic(&output, "validator_failed", 5);
@@ -357,7 +376,6 @@ mod faked {
 }
 
 /// Validate one real fixture against an operator's own mirror.
-#[cfg(test)]
 fn validate_real(document: &str, bundle: &str) -> Output {
     Command::new(env!("CARGO_BIN_EXE_opencegeljaras"))
         .args([
@@ -411,4 +429,31 @@ fn every_stored_fixture_this_suite_names_exists() {
     ] {
         assert!(fs::metadata(fixture(relative)).is_ok(), "{relative}");
     }
+}
+
+#[cfg(not(target_os = "linux"))]
+mod faked {
+    //! Ignored stubs keeping the Linux test names visible off Linux.
+
+    macro_rules! stubs {
+        ($($name:ident),* $(,)?) => {
+            $(
+                #[test]
+                #[ignore = "the launcher-based fake validator runs on Linux"]
+                fn $name() {}
+            )*
+        };
+    }
+
+    stubs!(
+        a_conforming_document_reports_a_passed_check,
+        a_conforming_document_prints_the_bundle_and_validator_lines,
+        a_nonconforming_document_reports_redacted_findings,
+        a_nonconforming_document_prints_one_line_per_finding,
+        requested_values_are_kept_in_the_findings,
+        unexpected_stderr_lines_are_counted_and_never_echoed,
+        an_unsupported_version_reports_the_version_it_read,
+        any_other_exit_code_is_a_failed_validator,
+        a_warning_about_the_schema_graph_is_a_failed_validator,
+    );
 }

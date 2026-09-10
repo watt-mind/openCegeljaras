@@ -1,42 +1,37 @@
 //! Adapter tests: the fake validator for mechanics, real xmllint for results.
 //!
 //! Every bundle used here is the synthetic CC0 mini graph or a copy of it.
-//! Nothing private is read and nothing is fetched.
+//! Nothing private is read and nothing is fetched. The launcher-based and
+//! real-validator tests compile only on Linux; elsewhere the same test names
+//! exist as ignored stubs, so the test output stays comparable and the whole
+//! workspace still builds warning-free.
 
 use std::path::{Path, PathBuf};
 
 use super::*;
 
-#[cfg(unix)]
+#[cfg(target_os = "linux")]
 #[allow(dead_code)]
 #[path = "../../tests/support/fake.rs"]
 mod fake;
 
 /// The marker test the fake launcher re-executes. A no-op otherwise.
-#[cfg(unix)]
+#[cfg(target_os = "linux")]
 #[test]
 fn fake_validator_entry() {
     fake::dispatch();
 }
+
+#[cfg(not(target_os = "linux"))]
+#[test]
+#[ignore = "the launcher-based fake validator runs on Linux"]
+fn fake_validator_entry() {}
 
 /// The stored mini-graph fixture directory at the repository root.
 fn fixture(relative: &str) -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../../tests/fixtures/schemas")
         .join(relative)
-}
-
-/// The canonical path of the mini graph's form root inside a bundle.
-#[cfg(target_os = "linux")]
-fn mini_root(bundle: &Path) -> PathBuf {
-    std::fs::canonicalize(bundle.join("schema.e-cegjegyzek.hu/schema/mini/wrapper-20260101.xsd"))
-        .expect("the mini form root should be readable")
-}
-
-/// The real xmllint, which must be installed wherever these tests run.
-#[cfg(target_os = "linux")]
-fn real_xmllint() -> PathBuf {
-    locate(None).expect("xmllint must be installed for the real-validator tests")
 }
 
 #[test]
@@ -65,13 +60,15 @@ fn an_explicit_validator_path_must_name_a_regular_file() {
     );
 }
 
-#[cfg(unix)]
+#[cfg(target_os = "linux")]
 mod mechanics {
     use super::*;
     use std::time::Duration;
 
     /// A generous timeout for a case that is expected to finish at once.
     const PROMPT: Duration = Duration::from_secs(30);
+    /// A timeout short enough to reach while a child is still working.
+    const BRIEF: Duration = Duration::from_millis(2000);
 
     /// Run one prepared case over a fixed document and a dummy schema root.
     fn run_case(
@@ -80,7 +77,7 @@ mod mechanics {
         timeout: Duration,
     ) -> (fake::Case, Result<Run, AdapterError>) {
         let case = fake::case(name, script);
-        let root = case.directory.join("root.xsd");
+        let root = case.path().join("root.xsd");
         let outcome = run(&case.exe, &root, b"<document/>", timeout);
         (case, outcome)
     }
@@ -169,7 +166,7 @@ mod mechanics {
         outcome.expect("the fake conforms");
         assert_eq!(case.argv("version"), ["--version"]);
         let root = case
-            .directory
+            .path()
             .join("root.xsd")
             .to_str()
             .expect("test paths are UTF-8")
@@ -179,8 +176,8 @@ mod mechanics {
             ["--nonet", "--noout", "--schema", &root, DOCUMENT_NAME]
         );
         let cwd = case.cwd();
-        assert_ne!(cwd, case.directory);
-        assert!(!cwd.starts_with(&case.directory));
+        assert_ne!(cwd, case.path());
+        assert!(!cwd.starts_with(case.path()));
     }
 
     #[test]
@@ -210,7 +207,7 @@ mod mechanics {
                 .join("../../tests/fixtures/forms/nevfoglalasi-conforming.xml"),
         )
         .expect("the fixture should be readable");
-        let root = case.directory.join("root.xsd");
+        let root = case.path().join("root.xsd");
         run(&case.exe, &root, &bytes, PROMPT).expect("the fake conforms");
         assert_eq!(case.document(), bytes);
     }
@@ -235,11 +232,19 @@ mod mechanics {
 
     #[test]
     fn a_run_that_outlasts_its_timeout_is_killed() {
-        let (_, outcome) = run_case(
-            "timeout",
-            "sleep_ms=30000\nexit=0\n",
-            Duration::from_millis(2000),
+        let (_, outcome) = run_case("timeout", "sleep_ms=30000\nexit=0\n", BRIEF);
+        assert_eq!(
+            outcome.err(),
+            Some(AdapterError::Failed {
+                version: Some(MIN_LIBXML_VERSION),
+                exit_code: None,
+            })
         );
+    }
+
+    #[test]
+    fn a_grandchild_holding_standard_error_cannot_hold_the_run() {
+        let (_, outcome) = run_case("grandchild", "background_s=10\nexit=3\n", BRIEF);
         assert_eq!(
             outcome.err(),
             Some(AdapterError::Failed {
@@ -263,22 +268,107 @@ mod mechanics {
         assert_eq!(run.stderr, "first\nsecond\n");
         assert_eq!(run.exit_code, 3);
     }
+
+    #[test]
+    fn an_incompletely_loaded_graph_is_a_failure_whatever_the_exit_code() {
+        for (name, marker) in [
+            (
+                "network-entity",
+                "I/O error : Attempt to load network entity http://x",
+            ),
+            (
+                "external-entity",
+                "warning: failed to load external entity \"http://x\"",
+            ),
+            (
+                "parser-warning",
+                "x.xsd:9: element import: Schemas parser warning : skipped",
+            ),
+        ] {
+            for code in [0, 3] {
+                let (_, outcome) = run_case(
+                    &format!("{name}-{code}"),
+                    &format!("exit={code}\nstderr={marker}\n"),
+                    PROMPT,
+                );
+                assert_eq!(
+                    outcome.err(),
+                    Some(AdapterError::Failed {
+                        version: Some(MIN_LIBXML_VERSION),
+                        exit_code: Some(code),
+                    }),
+                    "{name} at exit {code}"
+                );
+            }
+        }
+    }
 }
 
+#[cfg(not(target_os = "linux"))]
+mod mechanics {
+    //! Ignored stubs keeping the Linux test names visible off Linux.
+
+    macro_rules! stubs {
+        ($($name:ident),* $(,)?) => {
+            $(
+                #[test]
+                #[ignore = "the launcher-based fake validator runs on Linux"]
+                fn $name() {}
+            )*
+        };
+    }
+
+    stubs!(
+        the_lowest_established_version_is_accepted,
+        one_below_the_lowest_established_version_is_refused,
+        the_highest_established_version_is_accepted,
+        the_first_unestablished_version_is_refused,
+        an_unreadable_version_line_is_refused,
+        a_missing_validator_is_never_spawned,
+        the_arguments_and_working_directory_are_fixed,
+        only_the_allowlisted_environment_survives,
+        the_document_copy_is_byte_identical_to_the_input,
+        exit_codes_are_mapped_to_conformance_or_failure,
+        a_run_that_outlasts_its_timeout_is_killed,
+        a_grandchild_holding_standard_error_cannot_hold_the_run,
+        a_flood_of_standard_error_is_capped,
+        chosen_standard_error_lines_are_returned,
+        an_incompletely_loaded_graph_is_a_failure_whatever_the_exit_code,
+    );
+}
+
+#[cfg(target_os = "linux")]
 mod real {
     use super::*;
     use std::time::Duration;
 
     /// The timeout used by every real-validator test.
     const TIMEOUT: Duration = Duration::from_secs(60);
+    /// Bundle-relative path of the schema root these tests validate against.
+    ///
+    /// The second variant is used rather than the wrapper because the first
+    /// variant's import is deliberately written with an `http` scheme, which
+    /// `--nonet` refuses; a run that skipped it would be reported as a failure
+    /// exactly as the adapter's warning rule requires.
+    const VARIANT_B: &str = "schema.e-cegjegyzek.hu/schema/mini/variant-b-20260101.xsd";
+
+    /// The real xmllint, which must be installed wherever these tests run.
+    fn real_xmllint() -> PathBuf {
+        locate(None).expect("xmllint must be installed for the real-validator tests")
+    }
+
+    /// The canonical schema root inside one mirrored mini bundle.
+    fn schema_root(bundle: &Path) -> PathBuf {
+        std::fs::canonicalize(bundle.join(VARIANT_B))
+            .expect("the mini schema root should be readable")
+    }
 
     /// Copy the stored good mini bundle into a fresh directory.
-    #[cfg(target_os = "linux")]
     fn mirror(into: &Path) {
         for relative in [
             "schema.e-cegjegyzek.hu/schema/mini/wrapper-20260101.xsd",
             "schema.e-cegjegyzek.hu/schema/mini/variant-a-20260101.xsd",
-            "schema.e-cegjegyzek.hu/schema/mini/variant-b-20260101.xsd",
+            VARIANT_B,
             "schema.e-cegjegyzek.hu/schema/mini/common/shared-20260101.xsd",
             "www.e-cegjegyzek.hu/schema/mini/dossier-20260101.xsd",
         ] {
@@ -291,81 +381,82 @@ mod real {
     }
 
     #[test]
-    #[cfg_attr(
-        not(target_os = "linux"),
-        ignore = "the pinned xmllint is checked on Linux"
-    )]
     fn the_real_validator_accepts_a_conforming_mini_instance() {
-        #[cfg(target_os = "linux")]
-        {
-            let bundle = fixture("good");
-            let document = std::fs::read(fixture("instance-conforming.xml"))
-                .expect("the fixture should be readable");
-            let run = run(&real_xmllint(), &mini_root(&bundle), &document, TIMEOUT)
-                .expect("the mini graph should load");
-            assert!(run.conforming);
-            assert_eq!(run.exit_code, 0);
-        }
+        let document = std::fs::read(fixture("instance-conforming.xml"))
+            .expect("the fixture should be readable");
+        let run = run(
+            &real_xmllint(),
+            &schema_root(&fixture("good")),
+            &document,
+            TIMEOUT,
+        )
+        .expect("the mini graph should load");
+        assert!(run.conforming);
+        assert_eq!(run.exit_code, 0);
     }
 
     #[test]
-    #[cfg_attr(
-        not(target_os = "linux"),
-        ignore = "the pinned xmllint is checked on Linux"
-    )]
     fn the_real_validator_rejects_a_nonconforming_mini_instance() {
-        #[cfg(target_os = "linux")]
-        {
-            let bundle = fixture("good");
-            let document = std::fs::read(fixture("instance-nonconforming.xml"))
-                .expect("the fixture should be readable");
-            let run = run(&real_xmllint(), &mini_root(&bundle), &document, TIMEOUT)
-                .expect("the mini graph should load");
-            assert!(!run.conforming);
-            assert_eq!(run.exit_code, 3);
-            assert!(
-                run.stderr.contains("Schemas validity error"),
-                "{}",
-                run.stderr
-            );
-        }
+        let document = std::fs::read(fixture("instance-nonconforming.xml"))
+            .expect("the fixture should be readable");
+        let run = run(
+            &real_xmllint(),
+            &schema_root(&fixture("good")),
+            &document,
+            TIMEOUT,
+        )
+        .expect("the mini graph should load");
+        assert!(!run.conforming);
+        assert_eq!(run.exit_code, 3);
+        assert!(
+            run.stderr.contains("Schemas validity error"),
+            "{}",
+            run.stderr
+        );
     }
 
     #[test]
-    #[cfg_attr(
-        not(target_os = "linux"),
-        ignore = "the pinned xmllint is checked on Linux"
-    )]
     fn a_bundle_path_with_uri_characters_still_resolves_its_imports() {
-        #[cfg(target_os = "linux")]
-        {
-            let directory = fake_scratch("uri-characters").join("bundle#?%dir");
-            std::fs::create_dir_all(&directory).expect("the odd directory should be creatable");
-            mirror(&directory);
-            let document = std::fs::read(fixture("instance-nonconforming.xml"))
-                .expect("the fixture should be readable");
-            let run = run(&real_xmllint(), &mini_root(&directory), &document, TIMEOUT)
-                .expect("the mini graph should load from an odd path");
-            assert_eq!(run.exit_code, 3);
-            assert!(
-                run.stderr.contains("[facet 'pattern']"),
-                "the shared import must have resolved: {}",
-                run.stderr
-            );
-        }
+        let scratch = tempfile::TempDir::with_prefix("opencegeljaras-xmllint-")
+            .expect("a scratch directory should be creatable");
+        let directory = scratch.path().join("bundle#?%dir");
+        std::fs::create_dir_all(&directory).expect("the odd directory should be creatable");
+        mirror(&directory);
+        let document = std::fs::read(fixture("instance-nonconforming.xml"))
+            .expect("the fixture should be readable");
+        let run = run(
+            &real_xmllint(),
+            &schema_root(&directory),
+            &document,
+            TIMEOUT,
+        )
+        .expect("the mini graph should load from an odd path");
+        assert_eq!(run.exit_code, 3);
+        assert!(
+            run.stderr.contains("[facet 'pattern']"),
+            "the shared import must have resolved: {}",
+            run.stderr
+        );
     }
 }
 
-/// A fresh per-process scratch directory for the real-validator tests.
-#[cfg(target_os = "linux")]
-fn fake_scratch(name: &str) -> PathBuf {
-    use std::sync::atomic::{AtomicU32, Ordering};
-    static COUNTER: AtomicU32 = AtomicU32::new(0);
-    let directory = std::env::temp_dir().join(format!(
-        "opencegeljaras-xmllint-{}-{}-{name}",
-        std::process::id(),
-        COUNTER.fetch_add(1, Ordering::Relaxed)
-    ));
-    std::fs::create_dir_all(&directory).expect("a scratch directory should be creatable");
-    directory
+#[cfg(not(target_os = "linux"))]
+mod real {
+    //! Ignored stubs keeping the Linux test names visible off Linux.
+
+    macro_rules! stubs {
+        ($($name:ident),* $(,)?) => {
+            $(
+                #[test]
+                #[ignore = "the pinned xmllint is checked on Linux"]
+                fn $name() {}
+            )*
+        };
+    }
+
+    stubs!(
+        the_real_validator_accepts_a_conforming_mini_instance,
+        the_real_validator_rejects_a_nonconforming_mini_instance,
+        a_bundle_path_with_uri_characters_still_resolves_its_imports,
+    );
 }

@@ -15,10 +15,11 @@
 
 use std::fs;
 use std::io::Write;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
-use std::sync::atomic::{AtomicU32, Ordering};
 use std::time::Duration;
+
+use tempfile::TempDir;
 
 /// Environment variable naming the control file, set by the launcher.
 const SCRIPT_VARIABLE: &str = "OPENCEGELJARAS_FAKE_SCRIPT";
@@ -34,17 +35,25 @@ pub const MARKER: &str = "fake_validator_entry";
 pub const DEFAULT_VERSION: &str = "xmllint: using libxml version 20914";
 
 /// One prepared fake-validator case.
+///
+/// The case directory is removed when the case is dropped, so a test run
+/// leaves nothing behind in the system temporary directory.
 pub struct Case {
     /// The case directory holding the control file and the recordings.
-    pub directory: PathBuf,
+    directory: TempDir,
     /// The launcher to pass to `--xmllint`.
     pub exe: PathBuf,
 }
 
 impl Case {
+    /// The case directory.
+    pub fn path(&self) -> &Path {
+        self.directory.path()
+    }
+
     /// The arguments of one recorded invocation: `version` or `run`.
     pub fn argv(&self, which: &str) -> Vec<String> {
-        let recorded = fs::read_to_string(self.directory.join(format!("argv-{which}")))
+        let recorded = fs::read_to_string(self.path().join(format!("argv-{which}")))
             .unwrap_or_else(|_| panic!("the fake should have recorded its {which} arguments"));
         recorded.lines().map(str::to_owned).collect()
     }
@@ -52,49 +61,49 @@ impl Case {
     /// The working directory the fake was spawned in.
     pub fn cwd(&self) -> PathBuf {
         PathBuf::from(
-            fs::read_to_string(self.directory.join("cwd"))
+            fs::read_to_string(self.path().join("cwd"))
                 .expect("the fake should have recorded its working directory"),
         )
     }
 
     /// The environment variable names the fake inherited, sorted.
     pub fn environment(&self) -> Vec<String> {
-        let recorded = fs::read_to_string(self.directory.join("environment"))
+        let recorded = fs::read_to_string(self.path().join("environment"))
             .expect("the fake should have recorded its environment");
         recorded.lines().map(str::to_owned).collect()
     }
 
     /// The bytes of the document copy the fake was handed.
     pub fn document(&self) -> Vec<u8> {
-        fs::read(self.directory.join("document"))
+        fs::read(self.path().join("document"))
             .expect("the fake should have recorded the document it was given")
     }
 }
 
-/// A fresh per-process scratch directory.
-pub fn scratch(name: &str) -> PathBuf {
-    static COUNTER: AtomicU32 = AtomicU32::new(0);
-    let directory = std::env::temp_dir().join(format!(
-        "opencegeljaras-fake-{}-{}-{name}",
-        std::process::id(),
-        COUNTER.fetch_add(1, Ordering::Relaxed)
-    ));
-    fs::create_dir_all(&directory).expect("a scratch directory should be creatable");
-    directory
-}
-
 /// The one launcher shared by every case in this process.
 ///
-/// It is written once and then hard-linked into each case directory. Writing
-/// one executable per case raced with the fork of another case's child, which
-/// inherited the open write descriptor and made the `exec` fail with
-/// `ETXTBSY`; the settle below closes that window for good, because once the
-/// write descriptor is closed no later child can inherit it.
+/// It is written once beside the test executable, so nothing is left in the
+/// system temporary directory, and then hard-linked into each case directory.
+/// Writing one executable per case raced with the fork of another case's
+/// child, which inherited the open write descriptor and made the `exec` fail
+/// with `ETXTBSY`; writing once, through a rename, and settling afterwards
+/// closes that window, because once the write descriptor is closed no later
+/// child can inherit it.
 fn launcher() -> &'static PathBuf {
     static LAUNCHER: OnceLock<PathBuf> = OnceLock::new();
     LAUNCHER.get_or_init(|| {
         let current = std::env::current_exe().expect("the test executable should have a path");
-        let path = scratch("launcher").join("fake-xmllint");
+        let beside = current
+            .parent()
+            .expect("the test executable should have a directory")
+            .to_owned();
+        let name = current
+            .file_name()
+            .expect("the test executable should have a name")
+            .to_string_lossy()
+            .into_owned();
+        let path = beside.join(format!("fake-xmllint-{name}"));
+        let staged = beside.join(format!("fake-xmllint-{name}.staged"));
         let script = format!(
             "#!/bin/sh\n\
              D=\"$(cd \"$(dirname \"$0\")\" && pwd)\"\n\
@@ -107,8 +116,9 @@ fn launcher() -> &'static PathBuf {
              exec \"{}\" --nocapture --test-threads=1 {MARKER}\n",
             current.display()
         );
-        fs::write(&path, script).expect("the launcher should be writable");
-        make_executable(&path);
+        fs::write(&staged, script).expect("the launcher should be writable");
+        make_executable(&staged);
+        fs::rename(&staged, &path).expect("the launcher should be renamable");
         std::thread::sleep(Duration::from_millis(100));
         path
     })
@@ -116,15 +126,17 @@ fn launcher() -> &'static PathBuf {
 
 /// Prepare one case directory, its control file, and its launcher link.
 pub fn case(name: &str, script: &str) -> Case {
-    let directory = scratch(name);
-    fs::write(directory.join(SCRIPT_NAME), script).expect("the control file should be writable");
-    let exe = directory.join("fake-xmllint");
+    let directory = TempDir::with_prefix(format!("opencegeljaras-fake-{name}-"))
+        .expect("a case directory should be creatable");
+    fs::write(directory.path().join(SCRIPT_NAME), script)
+        .expect("the control file should be writable");
+    let exe = directory.path().join("fake-xmllint");
     fs::hard_link(launcher(), &exe).expect("the launcher should be linkable");
     Case { directory, exe }
 }
 
 /// Give the launcher the executable bit it needs to be spawned.
-fn make_executable(path: &std::path::Path) {
+fn make_executable(path: &Path) {
     use std::os::unix::fs::PermissionsExt;
     let mut permissions = fs::metadata(path)
         .expect("the launcher should exist")
@@ -150,6 +162,7 @@ pub fn dispatch() {
     let mut exit = 0;
     let mut sleep = 0;
     let mut flood = 0;
+    let mut background = 0;
     for entry in control.lines() {
         let Some((key, value)) = entry.split_once('=') else {
             continue;
@@ -160,6 +173,7 @@ pub fn dispatch() {
             "exit" => exit = value.parse().expect("exit must be a number"),
             "sleep_ms" => sleep = value.parse().expect("sleep_ms must be a number"),
             "flood" => flood = value.parse().expect("flood must be a number"),
+            "background_s" => background = value.parse().expect("background_s must be a number"),
             _ => {}
         }
     }
@@ -168,14 +182,28 @@ pub fn dispatch() {
         report(&[version], 0, 0);
     }
     record_invocation(&record);
+    if background > 0 {
+        leave_a_sleeper(background);
+    }
     if sleep > 0 {
         std::thread::sleep(Duration::from_millis(sleep));
     }
     report(&lines, flood, exit);
 }
 
+/// Leave a grandchild holding the inherited standard error and exit anyway.
+///
+/// This is what a wrapper script that backgrounds work does, and it is why the
+/// adapter bounds its reader instead of joining it.
+fn leave_a_sleeper(seconds: u32) {
+    let _ = std::process::Command::new("sh")
+        .arg("-c")
+        .arg(format!("sleep {seconds}"))
+        .spawn();
+}
+
 /// Record what the child was given, so that a case can assert on it.
-fn record_invocation(record: &std::path::Path) {
+fn record_invocation(record: &Path) {
     let cwd = std::env::current_dir().expect("the fake should have a working directory");
     fs::write(record.join("cwd"), cwd.as_os_str().as_encoded_bytes())
         .expect("the working directory should be recordable");
