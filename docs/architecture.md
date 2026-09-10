@@ -42,15 +42,18 @@ denotes a required check that could not be performed. A performed check that
 failed is a well-formed document that is not a recognised form, a bundle that
 does not match its manifest, or a recognised form that does not conform to the
 pinned schema graph.
-Exit 1, exit 4, and exit 5 use an error envelope, additive within schema
-version 1: `schema_version`, `ok: false`, `command`, `error` with a fixed
-`code` and `message`, `data` holding the facts established before the failure,
-`verified`, and `submitted`. On exit 4 `error.code` equals `data.form.status`
-when the document is not a recognised form, and is `nonconformant` when a
-recognised form failed a check that was performed. Whenever the
+Exit 1, exit 4, exit 5, and a `--json` usage error on exit 2 use an error
+envelope, additive within schema version 1: `schema_version`, `ok: false`,
+`command`, `error` with a fixed `code` and `message`, `data` holding the facts
+established before the failure, `verified`, and `submitted`. On exit 4
+`error.code` equals `data.form.status` when the document is not a recognised
+form, and is `nonconformant` when a recognised form failed a check that was
+performed. On a `--json` usage error `error.code` is `usage.arguments`,
+shared by every command because no command was selected. Whenever the
 exit code is not 0, exactly one fixed stderr line names the code and the exit
-code, and it never contains the path, document bytes, a name, a namespace, a
-declared encoding label, or a parser position. The
+code — except a `--json` usage error, which reports on stdout and leaves
+stderr empty — and it never contains the path, document bytes, a name, a
+namespace, a declared encoding label, or a parser position. The
 [form inspection contract](form-inspection.md) fixes the codes and messages.
 `schemas verify` uses the same envelope with these fixed codes and messages:
 
@@ -101,10 +104,27 @@ never prints a value, and a span that could be either is refused by replacing
 the whole message. A conforming result is not the technical conditions, not a
 signature check, and not acceptance.
 
-Usage errors emit fixed plain-text stderr diagnostics even when `--json` is
-present, without echoing rejected arguments. There is no JSON usage-error
-contract in this scaffold. Proposed document
+A usage error is any rejected command line: an unknown command, a missing or
+extra argument, or conflicting options such as `schemas list --urls --json`.
+Since 2026-09-10 it answers in the caller's requested form, as the reviewed
+sibling CLI does. When the raw arguments contain the exact option `--json`
+before any `--` terminator, the rejection is one newline-terminated envelope on
+stdout with nothing on stderr, exit 2: `ok: false`, `command: "usage"`,
+`error.code` `usage.arguments`, `error.message` `Unsupported invocation. Run
+opencegeljaras --help.`, and `data: null`. `--json` is detected by scanning the
+raw arguments, because the parse itself has already failed; after `--` it is a
+value, not an option, and does not select JSON. Without it the rejection stays
+the fixed stderr line `opencegeljaras: invalid command line; run
+opencegeljaras --help (exit 2)` with empty stdout. Neither form echoes a
+rejected argument, and a failed write of the envelope is the usual exit 3.
+`--help`, `-h`, `--version`, and `-V` stay plain text on stdout with exit 0
+even alongside `--json`; the `help` subcommand is disabled, so `help` is a
+usage error like any other unknown command. Proposed document
 commands are rejected as unknown commands. Do not add permissive stubs.
+
+| Code | Exit | Message |
+| :--- | :--- | :--- |
+| `usage.arguments` | 2 | Unsupported invocation. Run opencegeljaras --help. |
 
 Additive JSON fields can retain schema version 1; removing, renaming, retyping,
 or changing a field's meaning requires an explicit compatibility decision.

@@ -72,6 +72,10 @@ format recognition only. A successful command
 reports `ok: true`, `verified: false`, and `submitted: false`: it has neither
 verified a signature nor filed a case. `sources` prints a bundled research
 catalog; it does not contact the listed sites or check whether guidance changed.
+A rejected command line exits 2: with `--json` before any `--` terminator it
+writes one `usage.arguments` error object on stdout and nothing on stderr,
+otherwise one fixed stderr line. Neither form repeats a rejected argument, and
+`--help` and `--version` stay plain text on exit 0.
 
 No official schema is vendored here. `schemas list --urls` prints the pinned
 URLs so that you can mirror them yourself with your own tool; `schemas verify`

@@ -32,6 +32,14 @@ limit, or malformed XML). Exit 2 is a usage error and exit 3 an output
 failure. Diagnostics are fixed lines; do not add the path or file content to
 them when relaying a failure.
 
+Branch on the exit status first, then on `ok`, then on `error.code`; never on
+the wording of a message. Exit 2 with `error.code` `usage.arguments` means the
+invocation itself was wrong — an unknown command, a missing or extra argument,
+or conflicting options — not that the document or bundle was bad: fix the
+command line and run `opencegeljaras --help`. That envelope appears on stdout
+only when `--json` is in the arguments before any `--` terminator; otherwise
+exit 2 is one fixed stderr line and stdout is empty.
+
 ## Checking a schema bundle
 
 Run `opencegeljaras schemas list --json` to see the pinned schema manifest

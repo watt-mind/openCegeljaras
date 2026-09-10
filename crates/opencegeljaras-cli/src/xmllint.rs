@@ -244,6 +244,20 @@ fn supported_version(exe: &Path, directory: &Path, timeout: Duration) -> Result<
     }
 }
 
+/// Whether one standard-error line reports an incompletely loaded graph.
+///
+/// A validity-error line quotes the document, so an operator's own value can
+/// contain a marker's text verbatim and must not turn a finding into a
+/// failure. The marker rule therefore applies only to lines that are not
+/// `document.xml:LINE: element NAME: Schemas validity error : TEXT`, matched
+/// by the same parser that turns such a line into a finding.
+fn reports_incomplete_graph(line: &str) -> bool {
+    crate::validate::parse_line(line).is_none()
+        && INCOMPLETE_GRAPH_MARKERS
+            .iter()
+            .any(|mark| line.contains(mark))
+}
+
 /// Validate one document's bytes against one canonical schema root.
 ///
 /// The bytes are the ones the `form inspect` boundary already accepted; they
@@ -276,11 +290,7 @@ pub(crate) fn run(
         .arg(root)
         .arg(DOCUMENT_NAME);
     let (code, stderr) = execute(&mut command, timeout).ok_or_else(|| failed(None))?;
-    if stderr.lines().any(|line| {
-        INCOMPLETE_GRAPH_MARKERS
-            .iter()
-            .any(|mark| line.contains(mark))
-    }) {
+    if stderr.lines().any(reports_incomplete_graph) {
         return Err(failed(code));
     }
     match code {

@@ -247,7 +247,7 @@ Exit codes extend the existing contract without changing existing meanings:
 | ---: | :--- | :--- |
 | 0 | Recognised, supported form; inspection data complete | stdout |
 | 1 | Input rejected: unreadable, too large, encoding, malformed, limits, prohibited | JSON on stdout with `--json`; otherwise stderr only |
-| 2 | Usage error, unchanged fixed diagnostic | stderr |
+| 2 | Usage error: fixed stderr diagnostic, or since 2026-09-10 a `usage.arguments` envelope on stdout when `--json` is present (see architecture) | stderr or stdout |
 | 3 | Output or internal failure, unchanged | stderr |
 | 4 | Well-formed within limits but not a recognised form (`unrecognized_variant`, `unsupported_version`, `unrecognized_root`); inspection data with null form fields | as exit 0 |
 
@@ -288,7 +288,9 @@ verbatim. `data` holds the safe facts established before the failure:
 `input_too_large`; `input` as far as established for encoding, pre-scan, and
 parser failures with the other objects `null`; the full structure with the
 null form fields described above for exit 4, where `error.code` equals
-`data.form.status`. Usage errors still produce no JSON.
+`data.form.status`. Usage errors still produce no JSON. (Since 2026-09-10 a
+usage error with `--json` produces the `usage.arguments` envelope instead; see
+the [architecture](architecture.md). Nothing else in this contract changes.)
 
 | Code | Message |
 | :--- | :--- |
@@ -398,6 +400,10 @@ described in the [schema conformance contract](schema-conformance.md); it is
 still a usage error without its required `--bundle`, so this milestone's
 statement and its test continue to hold.) `--json` keeps its meaning. No
 `--limit`, `--schema`, or `--profile` options exist in this milestone.
+(Since 2026-09-10 a usage error whose raw arguments carry `--json` before any
+`--` terminator answers with one `usage.arguments` envelope on stdout instead
+of the stderr line, per the [architecture](architecture.md); exit 2 and the
+fixed, argument-free wording are unchanged.)
 
 ## Ownership for package 2
 

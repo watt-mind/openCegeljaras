@@ -529,7 +529,11 @@ fn collect(stderr: &str, show_values: bool) -> Findings {
 }
 
 /// Match one `document.xml:LINE: element NAME: Schemas validity error : TEXT`.
-fn parse_line(line: &str) -> Option<(u64, &str, &str)> {
+///
+/// The [`xmllint`] adapter shares this matcher so that the
+/// incomplete-graph markers are never looked for inside a line that quotes
+/// the operator's own document.
+pub(crate) fn parse_line(line: &str) -> Option<(u64, &str, &str)> {
     let rest = line.strip_prefix(DOCUMENT_NAME)?.strip_prefix(':')?;
     let (number, rest) = rest.split_once(':')?;
     let number = number.parse::<u64>().ok()?;
