@@ -150,7 +150,7 @@ Fixed constants in `opencegeljaras-core`, exposed as a `Limits` struct with
 | Parser nodes (`roxmltree` backstop) | 4 × elements | `limit_exceeded` |
 | Bytes in one text node (after `roxmltree` merges adjacent text and CDATA) | 1 MiB | `limit_exceeded` |
 | Attributes on one element, excluding namespace declarations | 64 | `limit_exceeded` |
-| Namespace declarations (`xmlns` and `xmlns:*`) on one element | 64 | `limit_exceeded` |
+| Namespace declarations (`xmlns` and `xmlns:*`) on one element | 256 | `limit_exceeded` |
 
 Depth, element count, and per-element attribute and namespace-declaration
 counts are enforced by a linear pre-scan of the decoded text that skips
@@ -158,7 +158,10 @@ comments, CDATA sections, and processing instructions, so a deeply nested
 document is rejected before the tree parser sees it. The namespace-declaration cap
 exists because the parser checks each new declaration against every earlier
 one on the same element, which is quadratic and was measured at tens of
-seconds for a 16 MiB file of declarations. The parser's duplicate-attribute
+seconds for a 16 MiB file of declarations. The cap is 256 rather than 64
+because the official variant schemas declare 82 and 85 prefixes on their
+root element and generated forms may do the same; at 256 the quadratic
+cost is negligible. The parser's duplicate-attribute
 check is quadratic in the same way, so the attribute cap is also enforced in
 the pre-scan; the tree walk re-checks both as defence in depth. A document
 nested 100 000 levels deep must be rejected without a stack overflow. Text

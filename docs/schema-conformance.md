@@ -154,8 +154,10 @@ manifest resource, in manifest order:
 4. Compare the byte count and SHA-256 (`sha2` 0.11, MIT OR Apache-2.0,
    MSRV 1.85). Mismatch: status `mismatch`. Match: status `verified`.
 5. For a verified resource **in the form closure only**, parse it through
-   the shared bounded entry point (same `Limits`, same prohibited
-   constructs, no network). Failure is status `unparseable`. Otherwise
+   the shared bounded entry point (the same default `Limits` as
+   `form inspect`, whose namespace-declaration cap of 256 accommodates the
+   82 and 85 prefixes the two large variant schemas declare; same
+   prohibited constructs; no network). Failure is status `unparseable`. Otherwise
    collect every `import` and `include` element in the XSD namespace and
    resolve its `schemaLocation` against the resource URL with plain
    RFC 3986 relative resolution, then normalise `http://` to `https://`
