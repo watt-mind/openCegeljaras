@@ -8,6 +8,16 @@ Run `./scripts/check.sh` and `cargo build --release --locked`. CI targets Linux,
 macOS, Windows, and the declared minimum Rust version. Local verification only
 covers environments actually run; configured CI jobs are not proof of success.
 
+The `cli` contract tests cover the usage-error contract in both forms: a
+rejected command line carrying `--json` writes exactly the one-line
+`usage.arguments` envelope on stdout with empty stderr and exit 2, for an
+unknown command, an unknown option, `schemas list --urls --json`, and
+`form validate` without its `--bundle`; the same lines without `--json`, and
+`--json` after a `--` terminator, keep the fixed stderr diagnostic with empty
+stdout; a sentinel argument reaches neither stream in either form; `--help`,
+`-h`, `--version`, and `-V` stay plain text on exit 0 even alongside `--json`;
+and an unwritable stdout turns the envelope into exit 3.
+
 The `form inspect` contract tests run the built binary against the synthetic
 fixtures in `tests/fixtures/forms/` and against generated oversized, over-deep,
 over-wide, and long-text inputs, a missing file, and a directory. They assert

@@ -123,23 +123,109 @@ fn proposed_domain_commands_are_rejected() {
     }
 }
 
+/// The one JSON object a rejected command line writes on standard output.
+const USAGE_JSON: &str = concat!(
+    r#"{"schema_version":1,"ok":false,"command":"usage","#,
+    r#""error":{"code":"usage.arguments","#,
+    r#""message":"Unsupported invocation. Run opencegeljaras --help."},"#,
+    r#""data":null,"verified":false,"submitted":false}"#,
+    "\n"
+);
+
+/// The one stderr line a rejected command line writes without `--json`.
+const USAGE_DIAGNOSTIC: &str =
+    "opencegeljaras: invalid command line; run opencegeljaras --help (exit 2)\n";
+
 #[test]
-fn usage_errors_are_fixed_diagnostics_even_when_json_is_requested() {
+fn a_rejected_command_line_with_json_writes_one_usage_envelope() {
+    for arguments in [
+        vec!["preflight", "--json"],
+        vec!["capabilities", "--json", "--bogus"],
+        vec!["schemas", "list", "--urls", "--json"],
+        vec!["form", "validate", "--json"],
+        vec!["--json"],
+    ] {
+        let output = run(&arguments);
+        assert_eq!(output.status.code(), Some(2), "arguments: {arguments:?}");
+        assert!(output.stderr.is_empty(), "arguments: {arguments:?}");
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout),
+            USAGE_JSON,
+            "arguments: {arguments:?}"
+        );
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout).lines().count(),
+            1,
+            "arguments: {arguments:?}"
+        );
+        let body = json_stdout(&output);
+        assert_eq!(body["ok"], false);
+        assert_eq!(body["command"], "usage");
+        assert_eq!(body["error"]["code"], "usage.arguments");
+        assert_eq!(body["data"], Value::Null);
+        assert_eq!(body["verified"], false);
+        assert_eq!(body["submitted"], false);
+    }
+}
+
+#[test]
+fn an_unknown_command_without_json_keeps_the_fixed_diagnostic() {
+    for arguments in [
+        vec!["preflight"],
+        vec!["preflight", "--", "--json"],
+        vec!["capabilities", "--bogus"],
+        vec!["schemas", "list", "--urls", "--", "--json"],
+    ] {
+        let output = run(&arguments);
+        assert_eq!(output.status.code(), Some(2), "arguments: {arguments:?}");
+        assert!(output.stdout.is_empty(), "arguments: {arguments:?}");
+        assert_eq!(
+            String::from_utf8_lossy(&output.stderr),
+            USAGE_DIAGNOSTIC,
+            "arguments: {arguments:?}"
+        );
+    }
+}
+
+#[test]
+fn a_rejected_argument_never_reaches_either_stream_in_either_mode() {
     let sentinel = "private-path-sentinel";
-    let output = run(&["preflight", sentinel, "--json"]);
-    assert_eq!(output.status.code(), Some(2));
-    assert!(output.stdout.is_empty());
-    assert!(!output.stderr.is_empty());
-    assert!(!String::from_utf8_lossy(&output.stderr).contains(sentinel));
+    for arguments in [
+        vec!["preflight", sentinel, "--json"],
+        vec!["preflight", sentinel],
+        vec!["--json", sentinel],
+    ] {
+        let output = run(&arguments);
+        assert_eq!(output.status.code(), Some(2), "arguments: {arguments:?}");
+        assert!(
+            !String::from_utf8_lossy(&output.stdout).contains(sentinel),
+            "arguments: {arguments:?}"
+        );
+        assert!(
+            !String::from_utf8_lossy(&output.stderr).contains(sentinel),
+            "arguments: {arguments:?}"
+        );
+    }
 }
 
 #[test]
 fn help_and_version_are_plain_text_successes() {
-    for argument in ["--help", "--version"] {
-        let output = run(&[argument]);
-        assert_eq!(output.status.code(), Some(0), "argument: {argument}");
-        assert!(!output.stdout.is_empty(), "argument: {argument}");
-        assert!(output.stderr.is_empty(), "argument: {argument}");
+    for arguments in [
+        vec!["--help"],
+        vec!["-h"],
+        vec!["--version"],
+        vec!["-V"],
+        vec!["--help", "--json"],
+        vec!["--version", "--json"],
+    ] {
+        let output = run(&arguments);
+        assert_eq!(output.status.code(), Some(0), "arguments: {arguments:?}");
+        assert!(!output.stdout.is_empty(), "arguments: {arguments:?}");
+        assert!(output.stderr.is_empty(), "arguments: {arguments:?}");
+        assert!(
+            !String::from_utf8_lossy(&output.stdout).starts_with('{'),
+            "arguments: {arguments:?}"
+        );
     }
 }
 
@@ -155,6 +241,25 @@ fn output_failure_exits_three_without_panicking() {
         .expect("/dev/full should exist on Unix test hosts");
     let output = Command::new(env!("CARGO_BIN_EXE_opencegeljaras"))
         .args(["capabilities", "--json"])
+        .stdout(Stdio::from(full))
+        .output()
+        .expect("CLI should run");
+    assert_eq!(output.status.code(), Some(3));
+    assert!(String::from_utf8_lossy(&output.stderr).contains("failed to write output"));
+}
+
+#[cfg(target_os = "linux")]
+#[test]
+fn an_unwritable_usage_envelope_exits_three() {
+    use std::fs::File;
+    use std::process::Stdio;
+
+    let full = File::options()
+        .write(true)
+        .open("/dev/full")
+        .expect("/dev/full should exist on Unix test hosts");
+    let output = Command::new(env!("CARGO_BIN_EXE_opencegeljaras"))
+        .args(["preflight", "--json"])
         .stdout(Stdio::from(full))
         .output()
         .expect("CLI should run");

@@ -279,9 +279,16 @@ fn urls_prints_only_the_pinned_urls_and_refuses_json() {
 
     let refused = run(&["schemas", "list", "--urls", "--json"]);
     assert_eq!(refused.status.code(), Some(2));
-    assert!(refused.stdout.is_empty());
+    assert!(refused.stderr.is_empty());
+    let body: Value = serde_json::from_slice(&refused.stdout).expect("one JSON object");
+    assert_eq!(body["command"], "usage");
+    assert_eq!(body["error"]["code"], "usage.arguments");
+
+    let plain = run(&["schemas", "list", "--urls", "--", "--json"]);
+    assert_eq!(plain.status.code(), Some(2));
+    assert!(plain.stdout.is_empty());
     assert_eq!(
-        stderr(&refused),
+        stderr(&plain),
         "opencegeljaras: invalid command line; run opencegeljaras --help (exit 2)\n"
     );
 }

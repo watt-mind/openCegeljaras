@@ -51,6 +51,13 @@
   reads.
 - `BSD-3-Clause` added to the licence allowlist for the `encoding_rs`
   ISO-8859-2 decoder.
+- A JSON usage-error contract, matching the reviewed sibling CLI: a rejected
+  command line whose raw arguments carry the exact option `--json` before any
+  `--` terminator writes one `usage.arguments` error envelope on stdout, with
+  `command: "usage"` and `data: null`, nothing on stderr, and exit 2. Without
+  `--json`, and with `--json` only after `--`, the existing fixed stderr line
+  and empty stdout are unchanged, as are plain-text `--help` and `--version` on
+  exit 0. No rejected argument is echoed in either form.
 - The incomplete-graph markers that make an `xmllint` run `validator_failed`
   are now looked for only on standard-error lines that are not themselves
   `document.xml:LINE: element NAME: Schemas validity error :` findings, so a

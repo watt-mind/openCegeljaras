@@ -6,20 +6,25 @@ mod schemas;
 mod validate;
 mod xmllint;
 
+use std::ffi::OsString;
 use std::process::ExitCode;
 
 use clap::{Args, Parser, Subcommand};
 use opencegeljaras_core::{INTROSPECTION_COMMANDS, OPERATIONS, PROJECT, STAGE, source_catalog};
-use serde_json::json;
+use serde_json::{Value, json};
 
 use crate::form::InspectArgs;
 use crate::output::{
-    CommandError, CommandResult, output, success, write_diagnostic, write_json, write_text,
+    CommandError, CommandResult, failure, output, success, write_diagnostic, write_json, write_text,
 };
 use crate::schemas::SchemasCommand;
 use crate::validate::ValidateArgs;
 
 const SKILL: &str = include_str!("../skills/opencegeljaras/SKILL.md");
+/// The exact option that selects JSON output.
+const JSON_OPTION: &str = "--json";
+/// The argument that ends option parsing; a later `--json` is a value.
+const OPTION_TERMINATOR: &str = "--";
 
 #[derive(Debug, Parser)]
 #[command(
@@ -135,6 +140,43 @@ fn skill(args: &OutputArgs) -> CommandResult {
     }
 }
 
+/// Whether the raw arguments select JSON output for a rejected command line.
+///
+/// The parse already failed, so clap cannot answer this: the raw arguments are
+/// scanned instead. Only the exact option before any `--` terminator counts,
+/// and the program name is never one of them. Nothing read here is echoed.
+fn json_requested(raw_args: &[OsString]) -> bool {
+    raw_args
+        .iter()
+        .skip(1)
+        .take_while(|argument| argument.as_os_str() != OPTION_TERMINATOR)
+        .any(|argument| argument.as_os_str() == JSON_OPTION)
+}
+
+/// Report a rejected command line, in JSON when `--json` asked for it.
+///
+/// Both forms are fixed text: no rejected argument, path, or value is echoed,
+/// and the JSON form writes one object on stdout and nothing on stderr.
+fn usage_error(raw_args: &[OsString]) -> u8 {
+    if !json_requested(raw_args) {
+        write_diagnostic(
+            "opencegeljaras: invalid command line; run opencegeljaras --help (exit 2)\n",
+        );
+        return 2;
+    }
+    let envelope = failure(
+        "usage",
+        "usage.arguments",
+        "Unsupported invocation. Run opencegeljaras --help.",
+        Value::Null,
+    );
+    if write_json(&envelope).is_ok() {
+        return 2;
+    }
+    write_diagnostic("opencegeljaras: failed to write output (exit 3)\n");
+    3
+}
+
 fn run() -> u8 {
     let raw_args: Vec<_> = std::env::args_os().collect();
     let cli = match Cli::try_parse_from(&raw_args) {
@@ -142,12 +184,7 @@ fn run() -> u8 {
         Err(error) if error.exit_code() == 0 => {
             return if error.print().is_ok() { 0 } else { 3 };
         }
-        Err(_) => {
-            write_diagnostic(
-                "opencegeljaras: invalid command line; run opencegeljaras --help (exit 2)\n",
-            );
-            return 2;
-        }
+        Err(_) => return usage_error(&raw_args),
     };
 
     let result = match cli.command {
