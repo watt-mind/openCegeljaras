@@ -14,8 +14,9 @@ over-wide, and long-text inputs, a missing file, and a directory. They assert
 each fixture's exit code, `error.code`, and `error.message`, the JSON and human
 shapes for exit 0 and exit 4, that stderr is empty on exit 0 and exactly one
 line otherwise, that no path ever reaches stdout or stderr, that every limit
-holds at the limit and one past it, including per-element attribute and
-namespace declaration counts, and that output is byte-identical across runs.
+holds at the limit and one past it, including the per-element caps of 64
+attributes and 256 namespace declarations, and that output is byte-identical
+across runs.
 Core unit tests cover decoding, the pre-parse scan, and classification without
 the binary. None of this establishes XSD conformance or acceptance.
 

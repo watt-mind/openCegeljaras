@@ -128,11 +128,10 @@ is not enough when the parser's own handling of that construct is quadratic:
 its pre-parse scan for that reason, and re-checks them on the parsed tree.
 One shared entry point, "parse bytes under `Limits` into a bounded tree",
 serves both the form classifier and the schema import audit, so both refuse the
-same encodings, declarations, and limits. The audit runs under the same limits
-with one documented exception: two form-closure resources of the pinned 2026
-graph declare 82 and 85 namespace prefixes on their root element, so the
-64-declaration form cap is raised to 256 for schema resources only, and never
-for a form document.
+same encodings, declarations, and limits under one default `Limits`. The
+per-element namespace-declaration cap is 256, not 64, because the official
+variant schemas declare 82 and 85 prefixes on their root element and generated
+forms may do the same; the per-element attribute cap stays 64.
 Reject DTD/entity expansion and resolve XSD imports only from an audited local
 bundle. Preserve
 original encoding and bytes where signatures depend on them. External XSLT

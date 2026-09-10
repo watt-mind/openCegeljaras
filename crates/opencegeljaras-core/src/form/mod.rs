@@ -39,7 +39,10 @@ pub struct Limits {
     pub attributes: usize,
     /// Largest accepted number of `xmlns` and `xmlns:*` declarations on one
     /// element. The parser compares each declaration against every earlier
-    /// one on the same element, so an uncapped element is quadratic work.
+    /// one on the same element, so an uncapped element is quadratic work. The
+    /// cap is 256 rather than 64 because the official variant schemas declare
+    /// 82 and 85 prefixes on their root element and generated forms may do the
+    /// same; at 256 the quadratic cost is still negligible.
     pub namespace_declarations: usize,
 }
 
@@ -51,30 +54,12 @@ impl Default for Limits {
             elements: 200_000,
             text_bytes: 1024 * 1024,
             attributes: 64,
-            namespace_declarations: 64,
+            namespace_declarations: 256,
         }
     }
 }
 
 impl Limits {
-    /// The limits applied to one pinned schema resource during the import
-    /// audit.
-    ///
-    /// These are the form limits with a single documented exception. Two
-    /// form-closure resources of the pinned 2026 graph declare 82 and 85
-    /// namespace prefixes on their root element, so the 64-declaration form
-    /// cap would refuse the real schemas outright. The cap is raised for
-    /// schema resources only, and it stays bounded because the parser compares
-    /// each declaration against every earlier one on the same element. No
-    /// other limit differs, and a form document is never parsed under these.
-    #[must_use]
-    pub fn for_schema_resource() -> Self {
-        Self {
-            namespace_declarations: 256,
-            ..Self::default()
-        }
-    }
-
     /// The parser's own node backstop, four times the element limit.
     #[must_use]
     pub fn parser_nodes(&self) -> u32 {

@@ -12,9 +12,11 @@
   parsing, 2026 wrapper and variant recognition, and a new error envelope with
   exit code 1 for refused inputs and 4 for unrecognised documents.
 - Synthetic company-form fixtures under `tests/fixtures/forms/`.
-- Pre-parse caps of 64 attributes and 64 namespace declarations per element,
+- Pre-parse caps of 64 attributes and 256 namespace declarations per element,
   because the tree parser compares each attribute and each declaration against
-  every earlier one on the same element.
+  every earlier one on the same element. The declaration cap is 256 rather than
+  64 because the official variant schemas declare 82 and 85 prefixes on their
+  root element.
 - Reviewed contract and implementation of the read-only `schemas list` and
   `schemas verify` operations: the pinned 149-resource schema manifest compiled
   into the binary, strict manifest path and digest rules, the 139-resource form
@@ -23,8 +25,8 @@
   resolution. Exit 4 reports a bundle that does not match its manifest; exit 1
   reports an unreadable bundle or an unreadable or invalid manifest.
 - A shared "parse bytes under `Limits` into a bounded tree" entry point in the
-  core, used by both the form classifier and the schema import audit, with a
-  raised namespace-declaration cap for schema resources only.
+  core, used by both the form classifier and the schema import audit under one
+  default `Limits`.
 - Synthetic CC0 schema fixtures under `tests/fixtures/schemas/`.
 - `sha2` 0.11 added for digesting already-read bytes.
 - `BSD-3-Clause` added to the licence allowlist for the `encoding_rs`

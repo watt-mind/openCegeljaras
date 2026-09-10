@@ -337,7 +337,7 @@ fn read_bounded(path: &Path) -> Option<Vec<u8>> {
 
 /// Check every manifest resource against the bundle, in manifest order.
 fn audit_bundle(bundle: &Path, manifest: &SchemaManifest) -> Audit {
-    let limits = Limits::for_schema_resource();
+    let limits = Limits::default();
     let closure = manifest.form_closure();
     let mut audit = Audit {
         verified_count: 0,
