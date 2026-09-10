@@ -42,11 +42,15 @@ pub(crate) fn inspect(args: &InspectArgs) -> CommandResult {
 
 /// Read the named file under the byte limit, following symlinks.
 ///
-/// The type and size are taken from the opened handle rather than from the
-/// path, so that nothing swapped in between a look and an open is read.
+/// The path is checked before it is opened, because opening a FIFO blocks
+/// until a writer appears and would hang the command on a path that is not a
+/// regular file at all. The type and size are then taken again from the opened
+/// handle rather than from the path, so that nothing swapped in between the
+/// look and the open is read.
 ///
 /// The failure reason is never distinguished: an absent file, a directory, a
-/// permission error, and a mid-read error all produce `input_unreadable`.
+/// named pipe, a permission error, and a mid-read error all produce
+/// `input_unreadable`.
 pub(crate) fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
     let unreadable = || Failure {
         code: Rejection::InputUnreadable,
@@ -57,6 +61,9 @@ pub(crate) fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failur
         input: Some(PartialInput::sized(bytes)),
     };
 
+    if !fs::metadata(path).is_ok_and(|metadata| metadata.is_file()) {
+        return Err(unreadable());
+    }
     let file = fs::File::open(path).map_err(|_| unreadable())?;
     let metadata = file.metadata().map_err(|_| unreadable())?;
     if !metadata.is_file() {
