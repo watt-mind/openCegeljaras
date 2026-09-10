@@ -19,6 +19,10 @@ run, and it is not the technical conditions, not a signature check, and not
 acceptance by any authority. Nothing here establishes signature validity,
 filing, or acceptance.
 
+`fields-repeated-siblings.xml` carries the placeholder value
+`SENTINEL-VALUE-7731`, which the tests use to prove that a field value reaches
+standard output only with `--show-values` and standard error never.
+
 Like the rest of `tests/fixtures`, they are released under [CC0](../LICENSE).
 
 Oversized, over-deep, over-wide, and long-text inputs, a missing file, a
@@ -27,6 +31,9 @@ than stored here.
 
 | Fixture | Purpose |
 | :--- | :--- |
+| `fields-repeated-siblings.xml` | Name reservation exercising the field walk: three `Névfoglalás` entries, root and indexed-element attributes, two same-local-name attributes in different namespaces, same-named siblings in different namespaces, empty, whitespace-only, CDATA and comment-split leaves, a mixed element, an XSI attribute, and a comment |
+| `fields-repeated-siblings-edited.xml` | The same with the first `Névfoglalás` removed, one value changed, and one attribute added |
+| `fields-other-variant.xml` | A registration variant sharing the first paths, for `same_variant: false` with a non-empty `unchanged` |
 | `nevfoglalasi-conforming.xml` | Name-reservation instance recorded as XSD-conforming on 2026-09-10 |
 | `nevfoglalasi-bad-registry-number.xml` | The same with a registry number violating the `cegjegyzekszam` pattern |
 | `cegbejegyzesi-minimal-utf8.xml` | Recognised registration variant, declaration, no BOM |

@@ -62,6 +62,24 @@
   are now looked for only on standard-error lines that are not themselves
   `document.xml:LINE: element NAME: Schemas validity error :` findings, so a
   document value quoting a marker's text stays an ordinary finding.
+- Reviewed contract and implementation of the read-only `form fields` and
+  `form diff` operations: the `form inspect` boundary followed by a bounded
+  walk of the variant root that lists every leaf element, attribute, and mixed
+  element as a positional path, and a comparison of two such listings by their
+  untruncated paths. Paths carry a 1-based index on every component with a
+  same-named sibling, are cut at 128 scalars per component and 1024 per path,
+  and at most 10 000 fields are listed. Values are cut at 4096 scalars, are
+  emitted only with `--show-values`, and never reach standard error; value
+  lengths are always reported. `form diff` reads OLD first, never opens NEW
+  when OLD fails, exits 4 with `old_not_recognized` or `new_not_recognized`,
+  and exits 0 whenever both sides are recognised, with the difference in
+  `data.identical` rather than in the exit code.
+- A field is keyed internally by one index into a component arena rather than
+  by an owned joined path, so a deep chain of long names over many leaves
+  costs the arena rather than the product of depth and field count, and
+  siblings are counted once per parent so that a very wide parent stays
+  linear.
+- Synthetic field-walk fixtures under `tests/fixtures/forms/`.
 
 No signature verification, submission, or receipt handling is implemented.
 Recognising a form establishes none of them, verifying a schema bundle is a

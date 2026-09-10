@@ -23,6 +23,8 @@ dependencies at this stage.
 | `skill [--json]` | Prints the embedded agent instructions |
 | `form inspect <PATH> [--json]` | Recognises one local form document's format under fixed limits |
 | `form validate <PATH> --bundle DIR [--manifest FILE] [--xmllint EXE] [--show-values] [--json]` | Checks XSD conformance against a verified local bundle through an external `xmllint` |
+| `form fields <PATH> [--show-values] [--json]` | Lists one recognised form's fields as stable positional paths |
+| `form diff OLD NEW [--show-values] [--json]` | Compares two recognised forms field by field |
 | `schemas list [--json \| --urls]` | Prints the pinned schema manifest compiled into the binary; fetches nothing |
 | `schemas verify --bundle DIR [--manifest FILE] [--json]` | Digest-checks a local schema mirror and audits the form graph's imports |
 | `--help`, `--version` | Prints CLI usage or package version |
@@ -47,9 +49,10 @@ envelope, additive within schema version 1: `schema_version`, `ok: false`,
 `command`, `error` with a fixed `code` and `message`, `data` holding the facts
 established before the failure, `verified`, and `submitted`. On exit 4
 `error.code` equals `data.form.status` when the document is not a recognised
-form, and is `nonconformant` when a recognised form failed a check that was
-performed. On a `--json` usage error `error.code` is `usage.arguments`,
-shared by every command because no command was selected. Whenever the
+form or, for `form diff`, names the unrecognised side, and is `nonconformant`
+when a recognised form failed a check that was performed. On a `--json` usage
+error `error.code` is `usage.arguments`, shared by every command because no
+command was selected. Whenever the
 exit code is not 0, exactly one fixed stderr line names the code and the exit
 code — except a `--json` usage error, which reports on stdout and leaves
 stderr empty — and it never contains the path, document bytes, a name, a
@@ -103,6 +106,28 @@ operator passes `--show-values`; a quoted span survives only where libxml2
 never prints a value, and a span that could be either is refused by replacing
 the whole message. A conforming result is not the technical conditions, not a
 signature check, and not acceptance.
+
+`form fields` and `form diff` run that same boundary first and return its
+exit 1 and exit 4 outcomes unchanged except for the reported `command`. Field
+paths are the element local names from the variant root down, with a 1-based
+positional index on every component that has a same-named sibling and
+attributes as `@name`; they follow the `form inspect` escaping rule, are cut at
+128 scalars per component and 1024 scalars per path, and at most 10 000 fields
+are listed. Values are cut at 4096 scalars, are reported only with
+`--show-values`, and never reach standard error; `value_length` is structure
+and is always reported. `form diff` reads OLD first, never opens NEW when OLD
+fails, compares the two listings on their untruncated paths, and exits 0
+whenever both sides are recognised, identical or not: the difference is in
+`data.identical`, not in the exit code. It adds these fixed codes and messages:
+
+| Code | Exit | Message |
+| :--- | :--- | :--- |
+| `old_not_recognized` | 4 | the OLD document is not a recognised form |
+| `new_not_recognized` | 4 | the NEW document is not a recognised form |
+
+The [form fields and diff contract](form-fields.md) fixes the path model, both
+output shapes, and the caps. Listing or comparing fields is neither
+validation, verification, nor acceptance.
 
 A usage error is any rejected command line: an unknown command, a missing or
 extra argument, or conflicting options such as `schemas list --urls --json`.
