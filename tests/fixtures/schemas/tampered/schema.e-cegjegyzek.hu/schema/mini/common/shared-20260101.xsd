@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture, CC0. Not an official schema and not derived from one. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="urn:opencegeljaras:fixture:shared"
+           elementFormDefault="qualified">
+  <xs:simpleType name="NevTipus">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="64"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SzamTipus">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{2}-[0-9]{2}-[0-9]{6}"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

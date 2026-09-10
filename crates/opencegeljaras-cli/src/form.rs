@@ -16,7 +16,7 @@ use opencegeljaras_core::form::{
 use serde_json::{Map, Value, json};
 
 use crate::output::{CommandError, CommandResult, failure, output, success, write_diagnostic};
-use crate::output::{write_json, write_text};
+use crate::output::{quoted, write_json, write_text};
 
 /// The command name reported in envelopes and diagnostics.
 const COMMAND: &str = "form inspect";
@@ -42,6 +42,9 @@ pub(crate) fn inspect(args: &InspectArgs) -> CommandResult {
 
 /// Read the named file under the byte limit, following symlinks.
 ///
+/// The type and size are taken from the opened handle rather than from the
+/// path, so that nothing swapped in between a look and an open is read.
+///
 /// The failure reason is never distinguished: an absent file, a directory, a
 /// permission error, and a mid-read error all produce `input_unreadable`.
 fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
@@ -54,7 +57,8 @@ fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
         input: Some(PartialInput::sized(bytes)),
     };
 
-    let metadata = fs::metadata(path).map_err(|_| unreadable())?;
+    let file = fs::File::open(path).map_err(|_| unreadable())?;
+    let metadata = file.metadata().map_err(|_| unreadable())?;
     if !metadata.is_file() {
         return Err(unreadable());
     }
@@ -63,9 +67,7 @@ fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
     }
 
     let mut bytes = Vec::new();
-    fs::File::open(path)
-        .map_err(|_| unreadable())?
-        .take(limits.input_bytes + 1)
+    file.take(limits.input_bytes + 1)
         .read_to_end(&mut bytes)
         .map_err(|_| unreadable())?;
     let read = bytes.len() as u64;
@@ -209,32 +211,6 @@ fn inspection_data(inspection: &Inspection) -> Value {
         },
         "notice": NOTICE,
     })
-}
-
-/// Quote a document-derived string as an all-ASCII JSON string literal.
-///
-/// XML names and namespace URIs admit line separators and bidirectional
-/// format characters, so they are never printed raw: only printable ASCII
-/// survives, and everything else becomes a `\\uXXXX` escape, in surrogate
-/// pairs above the basic multilingual plane.
-fn quoted(text: &str) -> String {
-    let mut quoted = String::with_capacity(text.len() + 2);
-    quoted.push('"');
-    for character in text.chars() {
-        match character {
-            '"' => quoted.push_str("\\\""),
-            '\\' => quoted.push_str("\\\\"),
-            ' '..='~' => quoted.push(character),
-            _ => {
-                let mut units = [0u16; 2];
-                for unit in character.encode_utf16(&mut units) {
-                    quoted.push_str(&format!("\\u{unit:04x}"));
-                }
-            }
-        }
-    }
-    quoted.push('"');
-    quoted
 }
 
 /// One fact per line, in the order fixed by the form inspection contract.

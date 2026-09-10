@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture, CC0. Not an official schema and not derived from one. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:s="urn:opencegeljaras:fixture:shared"
+           targetNamespace="urn:opencegeljaras:fixture:variant-b"
+           elementFormDefault="qualified">
+  <xs:import namespace="urn:opencegeljaras:fixture:shared"
+             schemaLocation="common/shared-20260101.xsd"/>
+  <xs:element name="VariantB">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Szam" type="s:SzamTipus"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

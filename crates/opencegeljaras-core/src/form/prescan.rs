@@ -318,7 +318,10 @@ mod tests {
         assert!(prescan(&at_limit, &limits).is_ok());
         let past = format!("<a{}/>", declarations(limits.namespace_declarations + 1));
         assert_eq!(prescan(&past, &limits), Err(Rejection::LimitExceeded));
-        let default_form = format!("<a{} xmlns='urn:x'/>", declarations(64));
+        let default_form = format!(
+            "<a{} xmlns='urn:x'/>",
+            declarations(limits.namespace_declarations)
+        );
         assert_eq!(
             prescan(&default_form, &limits),
             Err(Rejection::LimitExceeded)

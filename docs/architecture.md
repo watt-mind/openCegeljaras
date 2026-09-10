@@ -22,6 +22,8 @@ dependencies at this stage.
 | `sources [--json]` | Prints bundled reference metadata; no fetching or freshness check |
 | `skill [--json]` | Prints the embedded agent instructions |
 | `form inspect <PATH> [--json]` | Recognises one local form document's format under fixed limits |
+| `schemas list [--json \| --urls]` | Prints the pinned schema manifest compiled into the binary; fetches nothing |
+| `schemas verify --bundle DIR [--manifest FILE] [--json]` | Digest-checks a local schema mirror and audits the form graph's imports |
 | `--help`, `--version` | Prints CLI usage or package version |
 
 Successful JSON output is one object with `schema_version: 1`, `ok: true`,
@@ -33,8 +35,10 @@ operations only; its `introspection_commands` lists bootstrap commands.
 compliance.
 
 Exit 0 denotes success (including help/version); exit 1 denotes a refused
-document input; exit 2 denotes usage errors; exit 3 denotes output/internal
-failure; exit 4 denotes a well-formed document that is not a recognised form.
+document or bundle input; exit 2 denotes usage errors; exit 3 denotes
+output/internal failure; exit 4 denotes a performed check that failed: a
+well-formed document that is not a recognised form, or a bundle that does not
+match its manifest.
 Exit 1 and exit 4 use an error envelope, additive within schema version 1:
 `schema_version`, `ok: false`, `command`, `error` with a fixed `code` and
 `message`, `data` holding the facts established before the failure, `verified`,
@@ -43,6 +47,23 @@ exit code is not 0, exactly one fixed stderr line names the code and the exit
 code, and it never contains the path, document bytes, a name, a namespace, a
 declared encoding label, or a parser position. The
 [form inspection contract](form-inspection.md) fixes the codes and messages.
+`schemas verify` uses the same envelope with these fixed codes and messages:
+
+| Code | Exit | Message |
+| :--- | :--- | :--- |
+| `bundle_unreadable` | 1 | the bundle directory could not be read |
+| `manifest_unreadable` | 1 | the manifest could not be read as a regular file |
+| `manifest_invalid` | 1 | the manifest does not satisfy the pinned schema rules |
+| `bundle_unverified` | 4 | the bundle does not match the pinned manifest |
+
+Verifying a bundle is a digest comparison plus an import audit of the form
+closure. It is not a redistribution licence, not XSD validation, and not
+acceptance: `checks.xsd_conformance` stays `not_performed`. The bundle
+directory never appears in any output, and bundle-derived strings follow the
+`form inspect` escaping rule and 128-scalar cut.
+The [schema conformance contract](schema-conformance.md) fixes the manifest
+rules, the resource statuses, and both output shapes.
+
 Usage errors emit fixed plain-text stderr diagnostics even when `--json` is
 present, without echoing rejected arguments. There is no JSON usage-error
 contract in this scaffold. Proposed document
@@ -105,6 +126,12 @@ expanded size, and compression ratio. A cap that only the parser would enforce
 is not enough when the parser's own handling of that construct is quadratic:
 `form inspect` caps both attributes and namespace declarations per element in
 its pre-parse scan for that reason, and re-checks them on the parsed tree.
+One shared entry point, "parse bytes under `Limits` into a bounded tree",
+serves both the form classifier and the schema import audit, so both refuse the
+same encodings, declarations, and limits under one default `Limits`. The
+per-element namespace-declaration cap is 256, not 64, because the official
+variant schemas declare 82 and 85 prefixes on their root element and generated
+forms may do the same; the per-element attribute cap stays 64.
 Reject DTD/entity expansion and resolve XSD imports only from an audited local
 bundle. Preserve
 original encoding and bytes where signatures depend on them. External XSLT

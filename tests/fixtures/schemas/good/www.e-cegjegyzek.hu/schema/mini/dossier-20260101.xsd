@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xs:schema [
+  <!ENTITY dossier "urn:opencegeljaras:fixture:dossier">
+]>
+<!-- Synthetic fixture, CC0. It carries a DOCTYPE and an entity on purpose, so
+     that a dossier-graph resource stays digest-checked and is never parsed. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="&dossier;"
+           elementFormDefault="qualified">
+  <xs:element name="MiniDosszie" type="xs:string"/>
+</xs:schema>

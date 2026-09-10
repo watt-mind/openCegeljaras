@@ -1,0 +1,66 @@
+{
+  "snapshot_version": 1,
+  "retrieved_at": "2026-09-10",
+  "purpose": "Synthetic CC0 fixture graph for schemas verify tests. Not an official schema manifest and not a claim about any published schema.",
+  "roots": [
+    "https://schema.e-cegjegyzek.hu/schema/mini/wrapper-20260101.xsd",
+    "https://www.e-cegjegyzek.hu/schema/mini/dossier-20260101.xsd"
+  ],
+  "resources": [
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/mini/wrapper-20260101.xsd",
+      "bytes": 860,
+      "sha256": "b301735db22a890129bf4ca006ef131425fdc5c62511168b90a425be0b136e6b",
+      "target_namespace": "urn:opencegeljaras:fixture:wrapper",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/mini/variant-a-20260101.xsd",
+        "https://schema.e-cegjegyzek.hu/schema/mini/variant-b-20260101.xsd"
+      ],
+      "roots": [
+        "MiniNyomtatvany"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/mini/variant-a-20260101.xsd",
+      "bytes": 768,
+      "sha256": "4ebbc067fcf0743ebc5f263a31137ddad5dcecd985f0710e0131758dde8f6891",
+      "target_namespace": "urn:opencegeljaras:fixture:variant-a",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/mini/common/shared-20260101.xsd"
+      ],
+      "roots": [
+        "VariantA"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/mini/variant-b-20260101.xsd",
+      "bytes": 655,
+      "sha256": "59a2f6d80decaac56c63e85175acf53c2b4aa3f62690b379bc62040cc5050fe2",
+      "target_namespace": "urn:opencegeljaras:fixture:variant-b",
+      "dependencies": [
+        "https://schema.e-cegjegyzek.hu/schema/mini/common/shared-20260101.xsd"
+      ],
+      "roots": [
+        "VariantB"
+      ]
+    },
+    {
+      "url": "https://schema.e-cegjegyzek.hu/schema/mini/common/shared-20260101.xsd",
+      "bytes": 610,
+      "sha256": "2f86825045a31ca5981f4d20f736a7934ed7a287984f4a8f9d37e2f1262559b3",
+      "target_namespace": "urn:opencegeljaras:fixture:shared",
+      "dependencies": [],
+      "roots": []
+    },
+    {
+      "url": "https://www.e-cegjegyzek.hu/schema/mini/dossier-20260101.xsd",
+      "bytes": 483,
+      "sha256": "b916f4969593dd016c1a81fc67f0ac3219e1fb87a019eee9ce9ab25a8076e576",
+      "target_namespace": "urn:opencegeljaras:fixture:dossier",
+      "dependencies": [],
+      "roots": [
+        "MiniDosszie"
+      ]
+    }
+  ]
+}

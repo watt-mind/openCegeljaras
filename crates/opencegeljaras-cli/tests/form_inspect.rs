@@ -507,10 +507,10 @@ fn namespace_declarations_are_capped_per_element() {
             .map(|index| format!(" xmlns:n{index}=\"urn:x:{index}\""))
             .collect::<String>()
     };
-    let output = inspect_generated("xmlns-64.xml", &format!("<a{}/>", declarations(64)));
+    let output = inspect_generated("xmlns-256.xml", &format!("<a{}/>", declarations(256)));
     assert_eq!(output.status.code(), Some(4));
 
-    let output = inspect_generated("xmlns-65.xml", &format!("<a{}/>", declarations(65)));
+    let output = inspect_generated("xmlns-257.xml", &format!("<a{}/>", declarations(257)));
     assert_single_diagnostic(&output, "limit_exceeded", 1);
 }
 

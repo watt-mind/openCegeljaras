@@ -27,7 +27,7 @@ fn the_default_limits_are_the_contract_values() {
     assert_eq!(limits.elements, 200_000);
     assert_eq!(limits.text_bytes, 1024 * 1024);
     assert_eq!(limits.attributes, 64);
-    assert_eq!(limits.namespace_declarations, 64);
+    assert_eq!(limits.namespace_declarations, 256);
     assert_eq!(limits.parser_nodes(), 800_000);
 }
 

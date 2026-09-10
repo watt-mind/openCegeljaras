@@ -2,6 +2,7 @@
 
 mod form;
 mod output;
+mod schemas;
 
 use std::process::ExitCode;
 
@@ -13,6 +14,7 @@ use crate::form::InspectArgs;
 use crate::output::{
     CommandError, CommandResult, output, success, write_diagnostic, write_json, write_text,
 };
+use crate::schemas::SchemasCommand;
 
 const SKILL: &str = include_str!("../skills/opencegeljaras/SKILL.md");
 
@@ -40,6 +42,11 @@ enum Command {
     Form {
         #[command(subcommand)]
         command: FormCommand,
+    },
+    /// Read-only operations on the pinned schema manifest and a local mirror.
+    Schemas {
+        #[command(subcommand)]
+        command: SchemasCommand,
     },
 }
 
@@ -145,6 +152,7 @@ fn run() -> u8 {
         Command::Form {
             command: FormCommand::Inspect(args),
         } => form::inspect(&args),
+        Command::Schemas { command } => schemas::run(&command),
     };
 
     match result {
