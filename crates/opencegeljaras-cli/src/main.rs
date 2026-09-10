@@ -1,10 +1,18 @@
-use std::io::{self, Write};
+//! Command-line entry point for the openCegeljaras scaffold.
+
+mod form;
+mod output;
+
 use std::process::ExitCode;
 
 use clap::{Args, Parser, Subcommand};
 use opencegeljaras_core::{INTROSPECTION_COMMANDS, OPERATIONS, PROJECT, STAGE, source_catalog};
-use serde::Serialize;
-use serde_json::{Value, json};
+use serde_json::json;
+
+use crate::form::InspectArgs;
+use crate::output::{
+    CommandError, CommandResult, output, success, write_diagnostic, write_json, write_text,
+};
 
 const SKILL: &str = include_str!("../skills/opencegeljaras/SKILL.md");
 
@@ -28,6 +36,17 @@ enum Command {
     Sources(OutputArgs),
     /// Print the embedded agent skill.
     Skill(OutputArgs),
+    /// Read-only operations on one local company-form document.
+    Form {
+        #[command(subcommand)]
+        command: FormCommand,
+    },
+}
+
+#[derive(Debug, Subcommand)]
+enum FormCommand {
+    /// Recognise the format of one local form file. Not validation.
+    Inspect(InspectArgs),
 }
 
 #[derive(Debug, Args)]
@@ -35,57 +54,6 @@ struct OutputArgs {
     /// Emit one stable JSON object on stdout.
     #[arg(long)]
     json: bool,
-}
-
-#[derive(Debug, Serialize)]
-struct Envelope<'a> {
-    schema_version: u8,
-    ok: bool,
-    command: &'a str,
-    data: Value,
-    verified: bool,
-    submitted: bool,
-}
-
-fn success(command: &str, data: Value) -> Envelope<'_> {
-    Envelope {
-        schema_version: 1,
-        ok: true,
-        command,
-        data,
-        verified: false,
-        submitted: false,
-    }
-}
-
-fn write_bytes(bytes: &[u8]) -> Result<(), io::Error> {
-    let mut stdout = io::stdout().lock();
-    stdout.write_all(bytes)
-}
-
-fn write_text(text: &str) -> Result<(), io::Error> {
-    write_bytes(text.as_bytes())
-}
-
-fn write_json(envelope: &Envelope<'_>) -> Result<(), io::Error> {
-    let mut bytes = serde_json::to_vec(envelope).map_err(io::Error::other)?;
-    bytes.push(b'\n');
-    write_bytes(&bytes)
-}
-
-enum CommandError {
-    Output,
-    InternalReported,
-}
-
-type CommandResult = Result<(), CommandError>;
-
-fn output(result: Result<(), io::Error>) -> CommandResult {
-    result.map_err(|_| CommandError::Output)
-}
-
-fn write_diagnostic(message: &str) {
-    let _ = io::stderr().lock().write_all(message.as_bytes());
 }
 
 fn capabilities(args: &OutputArgs) -> CommandResult {
@@ -99,8 +67,13 @@ fn capabilities(args: &OutputArgs) -> CommandResult {
         return output(write_json(&success("capabilities", data)));
     }
 
+    let operations = if OPERATIONS.is_empty() {
+        String::from("none")
+    } else {
+        OPERATIONS.join(", ")
+    };
     output(write_text(&format!(
-        "{PROJECT}\nstage: {STAGE}\nimplemented operations: none\nintrospection commands: {}\nverification: not performed\nsubmission: not performed\n",
+        "{PROJECT}\nstage: {STAGE}\nimplemented operations: {operations}\nintrospection commands: {}\nverification: not performed\nsubmission: not performed\n",
         INTROSPECTION_COMMANDS.join(", ")
     )))
 }
@@ -110,7 +83,7 @@ fn sources(args: &OutputArgs) -> CommandResult {
         Ok(catalog) => catalog,
         Err(_) => {
             write_diagnostic("opencegeljaras: internal source catalogue error (exit 3)\n");
-            return Err(CommandError::InternalReported);
+            return Err(CommandError::Reported(3));
         }
     };
 
@@ -169,6 +142,9 @@ fn run() -> u8 {
         Command::Capabilities(args) => capabilities(&args),
         Command::Sources(args) => sources(&args),
         Command::Skill(args) => skill(&args),
+        Command::Form {
+            command: FormCommand::Inspect(args),
+        } => form::inspect(&args),
     };
 
     match result {
@@ -177,7 +153,7 @@ fn run() -> u8 {
             write_diagnostic("opencegeljaras: failed to write output (exit 3)\n");
             3
         }
-        Err(CommandError::InternalReported) => 3,
+        Err(CommandError::Reported(code)) => code,
     }
 }
 
