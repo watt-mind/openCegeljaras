@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<es:Dossier xmlns:es="http://www.e-cegjegyzek.hu/2026/e-cegeljaras#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <es:DossierProfile Id="dossier" OBJREF="Object0">
+    <es:Title>Névfoglalási kérelem</es:Title>
+    <es:E-category>electronic dossier</es:E-category>
+    <es:CreationDate>2026-01-01T00:00:00Z</es:CreationDate>
+  </es:DossierProfile>
+  <es:Documents Id="Object0">
+    <es:Document>
+      <es:DocumentProfile Id="profile0" OBJREF="obj0">
+        <es:Title>A kérelem formanyomtatványa</es:Title>
+        <es:E-category>electronic data</es:E-category>
+        <es:CreationDate>2026-01-01T00:00:00Z</es:CreationDate>
+        <es:Format><es:MIME-Type type="text" subtype="xml" extension="xml"/></es:Format>
+        <es:SourceSize sizeValue="1209" sizeUnit="B"/>
+        <es:BaseTransform><es:Transform Algorithm="encrypt"/><es:Transform Algorithm="base64"/></es:BaseTransform>
+      </es:DocumentProfile>
+      <ds:Object Id="obj0">PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPE55b210YXR2w6FueSB4bWxucz0iaHR0cDovL3NjaGVtYS5lLWNlZ2plZ3l6ZWsuaHUvc2NoZW1hL2NlZ255b210YXR2YW55L2NlZ255b210YXR2YW55LTIwMjYwMTAxIyIKICB4bWxuczpuaz0iaHR0cDovL3NjaGVtYS5lLWNlZ2plZ3l6ZWsuaHUvc2NoZW1hL2NlZ255b210YXR2YW55L25ldmZvZ2xhbGFzaUtlcmVsZW0tMjAyMTA0MDEjIgogIHhtbG5zOnRjPSJodHRwOi8vc2NoZW1hLmUtY2VnamVneXplay5odS9zY2hlbWEvY2VnbnlvbXRhdHZhbnkvY29tbW9uL2NvbXBsZXgvdGFnb2x0Q2ltLTIwMjEwMTAxIyIKICB4bWxuczpqa2E9Imh0dHA6Ly9zY2hlbWEuZS1jZWdqZWd5emVrLmh1L3NjaGVtYS9jZWdueW9tdGF0dmFueS9hZGF0bGFwL2pvZ2lLZXB2aXNlbG9BZGF0YWktMjAyMTAxMDEjIgogIHhtbG5zOm5ldj0iaHR0cDovL3NjaGVtYS5lLWNlZ2plZ3l6ZWsuaHUvc2NoZW1hL2NlZ255b210YXR2YW55L2NvbW1vbi9zaW1wbGUvbmV2LTIwMjEwMTAxIyIKICB4bWxuczplbWFpbD0iaHR0cDovL3NjaGVtYS5lLWNlZ2plZ3l6ZWsuaHUvc2NoZW1hL2NlZ255b210YXR2YW55L2NvbW1vbi9zaW1wbGUvZW1haWwtMjAyMjEwMDEjIj4KICA8bms6TsOpdmZvZ2xhbMOhc2lLw6lyZWxlbT4KICAgIDxuazpBZGF0bGFwPgogICAgICA8dGM6VGFnb2x0Q8OtbT48dGM6SGVseT5Qw6lsZGF2w6Fyb3M8L3RjOkhlbHk+PC90YzpUYWdvbHRDw61tPgogICAgICA8amthOkpvZ2lLw6lwdmlzZWzFkUFkYXRhaT4KICAgICAgICA8bmV2Ok7DqXY+TWludGEgw5xneXbDqWQ8L25ldjpOw6l2PgogICAgICAgIDx0YzpUYWdvbHRDw61tPjx0YzpIZWx5PlDDqWxkYXbDoXJvczwvdGM6SGVseT48L3RjOlRhZ29sdEPDrW0+CiAgICAgICAgPGVtYWlsOkUtbWFpbD5taW50YUBleGFtcGxlLmNvbTwvZW1haWw6RS1tYWlsPgogICAgICA8L2prYTpKb2dpS8OpcHZpc2VsxZFBZGF0YWk+CiAgICA8L25rOkFkYXRsYXA+CiAgICA8bms6TsOpdmZvZ2xhbMOhc29rPgogICAgICA8bms6TsOpdmZvZ2xhbMOhcz48bmV2Ok7DqXY+UMOpbGRhIEtvcmzDoXRvbHQgRmVsZWzFkXNzw6lnxbEgVMOhcnNhc8OhZzwvbmV2Ok7DqXY+PC9uazpOw6l2Zm9nbGFsw6FzPgogICAgPC9uazpOw6l2Zm9nbGFsw6Fzb2s+CiAgPC9uazpOw6l2Zm9nbGFsw6FzaUvDqXJlbGVtPgo8L055b210YXR2w6FueT4K</ds:Object>
+    </es:Document>
+    <es:Document>
+      <es:DocumentProfile Id="profile0" OBJREF="obj0">
+        <es:Title>A létesítő okirat</es:Title>
+        <es:E-category>electronic data</es:E-category>
+        <es:CreationDate>2026-01-01T00:00:00Z</es:CreationDate>
+        <es:Format><es:MIME-Type type="application" subtype="pdf" extension="pdf"/></es:Format>
+        <es:SourceSize sizeValue="1209" sizeUnit="B"/>
+        <es:BaseTransform><es:Transform Algorithm="rot13"/><es:Transform/></es:BaseTransform>
+      </es:DocumentProfile>
+      <ds:Object Id="obj1">UExBQ0VIT0xERVI=</ds:Object>
+    </es:Document>
+  </es:Documents>
+  <ds:Signature Id="SENTINEL-SIGNATURE-0001"/>
+  <es:TimeStamp/>
+</es:Dossier>

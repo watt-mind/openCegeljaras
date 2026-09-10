@@ -31,7 +31,9 @@ fn capabilities_reports_the_read_only_domain_surface() {
             "form fields",
             "form diff",
             "schemas list",
-            "schemas verify"
+            "schemas verify",
+            "dossier inspect",
+            "dossier preflight"
         ])
     );
     assert_eq!(
