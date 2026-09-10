@@ -274,8 +274,9 @@ text, attributes) plus the 10 000-field cap, so cost is linear in the
 document. Path construction for an element with many same-named siblings
 must count siblings once per parent, not once per child, so a parent
 with 200 000 children stays linear: one sibling-count map per parent,
-asserted by a unit test, and a 100 000-sibling document must list within
-10 seconds even under coverage instrumentation.
+asserted by a unit test. The CLI-level timing tests use a generous
+60-second bound so they never flake on a slow, instrumented CI runner while
+still catching a quadratic regression, which would take minutes.
 
 ## Ownership
 

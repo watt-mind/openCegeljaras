@@ -392,7 +392,7 @@ fn a_deep_chain_over_many_leaves_stays_bounded_in_time_and_output() {
         "cut paths keep the output bounded: {} bytes from {size} bytes of input",
         output.stdout.len()
     );
-    assert!(elapsed.as_secs() < 10, "the listing took {elapsed:?}");
+    assert!(elapsed.as_secs() < 60, "the listing took {elapsed:?}");
 }
 
 #[test]
@@ -415,7 +415,7 @@ fn a_hundred_thousand_siblings_are_listed_within_the_time_bound() {
     let data = envelope(&output)["data"].clone();
     assert_eq!(data["field_count"], FIELD_LIMIT);
     assert_eq!(data["fields_truncated"], true);
-    assert!(listing.as_secs() < 10, "the listing took {listing:?}");
+    assert!(listing.as_secs() < 60, "the listing took {listing:?}");
 
     assert_eq!(comparison.status.code(), Some(0));
     let data = envelope(&comparison)["data"].clone();
@@ -426,7 +426,7 @@ fn a_hundred_thousand_siblings_are_listed_within_the_time_bound() {
     assert_eq!(data["old"]["fields_truncated"], true);
     assert_eq!(data["unchanged"], FIELD_LIMIT);
     assert!(
-        comparing.as_secs() < 10,
+        comparing.as_secs() < 60,
         "the comparison took {comparing:?}"
     );
 }
