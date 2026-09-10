@@ -533,6 +533,21 @@ fn a_document_of_many_declarations_is_refused_quickly() {
 }
 
 #[test]
+fn an_element_of_many_attributes_is_refused_quickly() {
+    let attributes = (0..700_000)
+        .map(|index| format!(" a{index}=\"1\""))
+        .collect::<String>();
+    let started = std::time::Instant::now();
+    let output = inspect_generated("attributes-700000.xml", &format!("<a{attributes}/>"));
+    let elapsed = started.elapsed();
+    assert_single_diagnostic(&output, "limit_exceeded", 1);
+    assert!(
+        elapsed < std::time::Duration::from_secs(10),
+        "the cap must stop the quadratic parser path: {elapsed:?}"
+    );
+}
+
+#[test]
 fn an_unterminated_declaration_value_is_malformed() {
     let output = inspect_generated(
         "unterminated-label.xml",

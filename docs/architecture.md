@@ -103,9 +103,10 @@ Before accepting input, implement limits for bytes, XML depth, node/text counts,
 per-element attribute and namespace-declaration counts, archive entry count,
 expanded size, and compression ratio. A cap that only the parser would enforce
 is not enough when the parser's own handling of that construct is quadratic:
-`form inspect` caps namespace declarations per element in its pre-parse scan
-for that reason. Reject DTD/entity
-expansion and resolve XSD imports only from an audited local bundle. Preserve
+`form inspect` caps both attributes and namespace declarations per element in
+its pre-parse scan for that reason, and re-checks them on the parsed tree.
+Reject DTD/entity expansion and resolve XSD imports only from an audited local
+bundle. Preserve
 original encoding and bytes where signatures depend on them. External XSLT
 and HTML content must not execute during inspection.
 
