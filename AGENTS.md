@@ -48,9 +48,12 @@ cargo build --release --locked
 ./scripts/check.sh
 ```
 
-Use Conventional Commits and `codex/` branches. The intended hosted workflow
-uses `develop` for integration and `master` for stable releases. No remote or
-Linear project has been configured. Do not copy another project's IDs or
-register external resources implicitly. Before future issue filing, consult
+Use Conventional Commits and `codex/` branches. The hosted repository is
+`github.com/watt-mind/openCegeljaras` (private since 2026-09-10), with
+`develop` as the default integration branch and `master` reserved for stable
+releases. Pull requests target `develop`. No issue tracker project has been
+configured. Do not copy another project's IDs or register further external
+resources implicitly; making the repository public, tags, and releases need
+an explicit decision. Before future issue filing, consult
 the operator's applicable issue-tracking protocol; keep private routing out
 of public artifacts.

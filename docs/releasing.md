@@ -1,8 +1,10 @@
 # Releasing
 
-There is no published release, remote repository, or automated release job in
-this scaffold. Both crates set `publish = false`. GitHub workflow files are
-prepared for a future repository using `develop` and `master` branches.
+There is no published release or automated release job. Both crates set
+`publish = false`. The repository is hosted privately at
+`github.com/watt-mind/openCegeljaras` since 2026-09-10, with `develop` as the
+default branch and `master` reserved for stable releases; the CI and security
+workflows run there on every push and pull request.
 
 Before hosting, set the actual repository URL, enable private vulnerability
 reporting, configure branch protection/required checks and public intake, and

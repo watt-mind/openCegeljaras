@@ -9,9 +9,9 @@ Conventional Commit hooks, and `./scripts/check.sh` before review. The check
 script also uses Python 3, Node/npm, cargo-machete, cargo-deny, and actionlint.
 
 Use small branches named `codex/<topic>` and Conventional Commit subjects
-such as `feat(core): inspect a pinned form profile`. The intended PR target is
-`develop`; `master` is reserved for stable releases once hosting is configured.
-No Linear team/project mapping or remote repository is established yet.
+such as `feat(core): inspect a pinned form profile`. Pull requests target
+`develop` on `github.com/watt-mind/openCegeljaras`; `master` is reserved for
+stable releases. No issue-tracker project mapping is established yet.
 
 Changes involving parsing need malformed-input and resource-limit tests.
 Validation rules need source references and positive/negative synthetic
