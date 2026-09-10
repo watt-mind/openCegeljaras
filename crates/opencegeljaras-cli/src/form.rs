@@ -211,12 +211,30 @@ fn inspection_data(inspection: &Inspection) -> Value {
     })
 }
 
-/// Quote a document-derived string as a JSON string literal.
+/// Quote a document-derived string as an all-ASCII JSON string literal.
 ///
 /// XML names and namespace URIs admit line separators and bidirectional
-/// format characters, so they are never printed raw.
+/// format characters, so they are never printed raw: only printable ASCII
+/// survives, and everything else becomes a `\\uXXXX` escape, in surrogate
+/// pairs above the basic multilingual plane.
 fn quoted(text: &str) -> String {
-    serde_json::to_string(text).unwrap_or_else(|_| String::from("\"\""))
+    let mut quoted = String::with_capacity(text.len() + 2);
+    quoted.push('"');
+    for character in text.chars() {
+        match character {
+            '"' => quoted.push_str("\\\""),
+            '\\' => quoted.push_str("\\\\"),
+            ' '..='~' => quoted.push(character),
+            _ => {
+                let mut units = [0u16; 2];
+                for unit in character.encode_utf16(&mut units) {
+                    quoted.push_str(&format!("\\u{unit:04x}"));
+                }
+            }
+        }
+    }
+    quoted.push('"');
+    quoted
 }
 
 /// One fact per line, in the order fixed by the form inspection contract.

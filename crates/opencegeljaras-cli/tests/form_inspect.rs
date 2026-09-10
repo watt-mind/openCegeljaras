@@ -276,7 +276,7 @@ fn the_human_report_lists_the_contract_lines_in_order() {
     assert_eq!(lines[2], "variant: cegbejegyzesi-kerelem-20260101");
     assert_eq!(
         lines[3],
-        "root: \"Nyomtatvány\" in \
+        "root: \"Nyomtatv\\u00e1ny\" in \
          \"http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#\""
     );
     assert_eq!(lines[4], "encoding: UTF-8");
@@ -290,7 +290,8 @@ fn the_human_report_lists_the_contract_lines_in_order() {
     assert_eq!(lines[12], "text bytes: 105");
     assert_eq!(
         lines[13],
-        "sections: \"Adatlap\"×1, \"ÁltalánosAdatok\"×1, \"CégformátólFüggőAdatok\"×1"
+        "sections: \"Adatlap\"×1, \"\\u00c1ltal\\u00e1nosAdatok\"×1, \
+         \"C\\u00e9gform\\u00e1t\\u00f3lF\\u00fcgg\\u0151Adatok\"×1"
     );
     assert_eq!(lines[14], "namespaces:");
     assert_eq!(
@@ -310,7 +311,7 @@ fn an_unrecognized_document_prints_the_report_with_null_form_fields() {
     assert_single_diagnostic(&output, "unrecognized_root", 4);
     let text = String::from_utf8(output.stdout).expect("output should be UTF-8");
     assert!(text.starts_with("status: unrecognized_root\nprofile: none\nvariant: none\n"));
-    assert!(text.contains("root: \"Nyomtatvány\" in none\n"));
+    assert!(text.contains("root: \"Nyomtatv\\u00e1ny\" in none\n"));
     assert!(text.contains("sections: none\n"));
     assert!(text.contains("well-formed: passed\n"));
 
@@ -323,6 +324,25 @@ fn an_unrecognized_document_prints_the_report_with_null_form_fields() {
     assert!(data["form"]["sections"].is_null());
     assert!(data["root"]["namespace"].is_null());
     assert_eq!(data["checks"]["well_formed"], "passed");
+}
+
+#[test]
+fn human_output_never_prints_a_raw_non_ascii_document_string() {
+    let text = "<r xmlns=\"urn:\u{202e}nofdp\u{2028}x\"/>";
+    let path = scratch("bidirectional.xml");
+    fs::write(&path, text).expect("the scratch file should be writable");
+    let output = inspect(&path, false);
+    discard(&path);
+    assert_single_diagnostic(&output, "unrecognized_root", 4);
+    assert!(
+        output.stdout.iter().all(u8::is_ascii),
+        "human output must stay ASCII"
+    );
+    let report = String::from_utf8(output.stdout).expect("output should be UTF-8");
+    assert!(report.contains("\\u202e"));
+    assert!(report.contains("\\u2028"));
+    assert!(!report.contains('\u{202e}'));
+    assert!(!report.contains('\u{2028}'));
 }
 
 #[test]
@@ -478,6 +498,47 @@ fn text_and_attribute_limits_apply_at_the_limit_and_one_past_it() {
 
     let output = inspect_generated("attributes-65.xml", &format!("<a{attributes} b=\"1\"/>"));
     assert_single_diagnostic(&output, "limit_exceeded", 1);
+}
+
+#[test]
+fn namespace_declarations_are_capped_per_element() {
+    let declarations = |count: usize| {
+        (0..count)
+            .map(|index| format!(" xmlns:n{index}=\"urn:x:{index}\""))
+            .collect::<String>()
+    };
+    let output = inspect_generated("xmlns-64.xml", &format!("<a{}/>", declarations(64)));
+    assert_eq!(output.status.code(), Some(4));
+
+    let output = inspect_generated("xmlns-65.xml", &format!("<a{}/>", declarations(65)));
+    assert_single_diagnostic(&output, "limit_exceeded", 1);
+}
+
+#[test]
+fn a_document_of_many_declarations_is_refused_quickly() {
+    let declarations = (0..65_000)
+        .map(|index| format!(" xmlns:n{index}=\"u\""))
+        .collect::<String>();
+    let text = (0..10)
+        .map(|_| format!("<a{declarations}/>"))
+        .collect::<String>();
+    let started = std::time::Instant::now();
+    let output = inspect_generated("xmlns-650000.xml", &format!("<r>{text}</r>"));
+    let elapsed = started.elapsed();
+    assert_single_diagnostic(&output, "limit_exceeded", 1);
+    assert!(
+        elapsed < std::time::Duration::from_secs(10),
+        "the cap must stop the quadratic parser path: {elapsed:?}"
+    );
+}
+
+#[test]
+fn an_unterminated_declaration_value_is_malformed() {
+    let output = inspect_generated(
+        "unterminated-label.xml",
+        "<?xml version=\"1.0\" encoding=\"?>windows-1250\"?><a/>",
+    );
+    assert_single_diagnostic(&output, "malformed_xml", 1);
 }
 
 #[test]
