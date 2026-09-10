@@ -42,6 +42,9 @@ pub(crate) fn inspect(args: &InspectArgs) -> CommandResult {
 
 /// Read the named file under the byte limit, following symlinks.
 ///
+/// The type and size are taken from the opened handle rather than from the
+/// path, so that nothing swapped in between a look and an open is read.
+///
 /// The failure reason is never distinguished: an absent file, a directory, a
 /// permission error, and a mid-read error all produce `input_unreadable`.
 fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
@@ -54,7 +57,8 @@ fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
         input: Some(PartialInput::sized(bytes)),
     };
 
-    let metadata = fs::metadata(path).map_err(|_| unreadable())?;
+    let file = fs::File::open(path).map_err(|_| unreadable())?;
+    let metadata = file.metadata().map_err(|_| unreadable())?;
     if !metadata.is_file() {
         return Err(unreadable());
     }
@@ -63,9 +67,7 @@ fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
     }
 
     let mut bytes = Vec::new();
-    fs::File::open(path)
-        .map_err(|_| unreadable())?
-        .take(limits.input_bytes + 1)
+    file.take(limits.input_bytes + 1)
         .read_to_end(&mut bytes)
         .map_err(|_| unreadable())?;
     let read = bytes.len() as u64;

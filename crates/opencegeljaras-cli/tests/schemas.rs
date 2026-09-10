@@ -363,8 +363,18 @@ fn the_stored_tampered_bundle_reports_mismatch_and_missing_by_url() {
     assert_eq!(
         data["problems"],
         json!([
-            { "url": url(VARIANT_A), "status": "mismatch", "locations": [] },
-            { "url": url(VARIANT_B), "status": "missing", "locations": [] },
+            {
+                "url": url(VARIANT_A),
+                "status": "mismatch",
+                "locations": [],
+                "locations_truncated": false,
+            },
+            {
+                "url": url(VARIANT_B),
+                "status": "missing",
+                "locations": [],
+                "locations_truncated": false,
+            },
         ])
     );
 }
@@ -391,6 +401,7 @@ fn a_form_closure_resource_importing_something_unpinned_lists_the_location() {
             "url": url(VARIANT_A),
             "status": "unpinned_import",
             "locations": ["https://schema.e-cegjegyzek.hu/schema/elsewhere/shared-20260101.xsd"],
+            "locations_truncated": false,
         }])
     );
 }
@@ -439,6 +450,36 @@ fn a_form_closure_resource_the_parser_refuses_is_unparseable() {
     assert_eq!(data["checks"]["import_audit"], "failed");
     assert_eq!(data["problems"][0]["status"], "unparseable");
     assert_eq!(data["problems"][0]["locations"], json!([]));
+}
+
+#[test]
+fn more_offending_locations_than_the_cap_are_reported_as_truncated() {
+    let mut imports = String::new();
+    for index in 0..70 {
+        imports.push_str(&format!(
+            r#"<xs:import namespace="urn:opencegeljaras:fixture:shared" schemaLocation="/unpinned-{index}.xsd"/>"#
+        ));
+    }
+    let variant = format!(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="urn:opencegeljaras:fixture:variant-a"
+           elementFormDefault="qualified">{imports}</xs:schema>
+"#
+    );
+    let mini = Mini::new(&[(VARIANT_A, Some(&variant))]);
+    let output = mini.verify();
+    assert_single_diagnostic(&output, "bundle_unverified", 4);
+    let problem = &body(&output)["data"]["problems"][0];
+    assert_eq!(problem["status"], "unpinned_import");
+    assert_eq!(problem["locations_truncated"], true);
+    assert_eq!(
+        problem["locations"]
+            .as_array()
+            .expect("locations is an array")
+            .len(),
+        64
+    );
 }
 
 #[test]

@@ -16,7 +16,7 @@ use clap::{Args, Subcommand};
 use opencegeljaras_core::form::Limits;
 use opencegeljaras_core::schema::{
     self, LIST_NOTICE, MAX_RESOURCE_BYTES, ResourceStatus, SchemaManifest,
-    UNPINNED_MANIFEST_NOTICE, VERIFY_NOTICE,
+    UNPINNED_MANIFEST_NOTICE, UnpinnedLocations, VERIFY_NOTICE,
 };
 use serde_json::{Value, json};
 
@@ -141,6 +141,7 @@ struct Problem {
     url: String,
     status: ResourceStatus,
     locations: Vec<String>,
+    locations_truncated: bool,
 }
 
 /// What a whole bundle turned out to be.
@@ -318,18 +319,21 @@ fn read_manifest(path: &Path) -> Result<SchemaManifest, VerifyError> {
 
 /// Read at most the resource cap from a regular file, following symlinks.
 ///
-/// `None` covers every reason a file is not readable, and `Some` of more than
-/// the cap is impossible: an oversized file is reported by its caller from the
-/// returned length.
+/// The file type is taken from the opened handle rather than from the path, so
+/// that nothing swapped in between a look and an open is read. Symlinks are
+/// followed, which is what mirrors laid out by hand need; a bundle directory
+/// therefore has to be one the caller trusts.
+///
+/// `None` covers every reason a file is not readable. A `Some` longer than the
+/// cap is possible by one byte, which is how the caller detects an oversized
+/// file without reading it all.
 fn read_bounded(path: &Path) -> Option<Vec<u8>> {
-    let metadata = fs::metadata(path).ok()?;
-    if !metadata.is_file() {
+    let file = fs::File::open(path).ok()?;
+    if !file.metadata().ok()?.is_file() {
         return None;
     }
     let mut bytes = Vec::new();
-    fs::File::open(path)
-        .ok()?
-        .take(MAX_RESOURCE_BYTES + 1)
+    file.take(MAX_RESOURCE_BYTES + 1)
         .read_to_end(&mut bytes)
         .ok()?;
     Some(bytes)
@@ -366,7 +370,8 @@ fn audit_bundle(bundle: &Path, manifest: &SchemaManifest) -> Audit {
         audit.problems.push(Problem {
             url: resource.url.clone(),
             status,
-            locations,
+            locations: locations.locations,
+            locations_truncated: locations.truncated,
         });
     }
     audit
@@ -379,31 +384,32 @@ fn check_resource(
     resource: &schema::SchemaResource,
     in_closure: bool,
     limits: &Limits,
-) -> (ResourceStatus, Vec<String>) {
+) -> (ResourceStatus, UnpinnedLocations) {
+    let clean = UnpinnedLocations::default;
     let Some(path) = resource_path(bundle, &resource.url) else {
-        return (ResourceStatus::Missing, Vec::new());
+        return (ResourceStatus::Missing, clean());
     };
     let Some(bytes) = read_bounded(&path) else {
-        return (ResourceStatus::Missing, Vec::new());
+        return (ResourceStatus::Missing, clean());
     };
     if bytes.len() as u64 > MAX_RESOURCE_BYTES {
-        return (ResourceStatus::Oversize, Vec::new());
+        return (ResourceStatus::Oversize, clean());
     }
     if bytes.len() as u64 != resource.bytes || schema::sha256_hex(&bytes) != resource.sha256 {
-        return (ResourceStatus::Mismatch, Vec::new());
+        return (ResourceStatus::Mismatch, clean());
     }
     if !in_closure {
-        return (ResourceStatus::Verified, Vec::new());
+        return (ResourceStatus::Verified, clean());
     }
 
     let Ok(edges) = schema::edges(&bytes, &resource.url, limits) else {
-        return (ResourceStatus::Unparseable, Vec::new());
+        return (ResourceStatus::Unparseable, clean());
     };
-    let locations = schema::unpinned_locations(manifest, &edges);
-    if locations.is_empty() {
-        (ResourceStatus::Verified, Vec::new())
+    let unpinned = schema::unpinned_locations(manifest, &edges);
+    if unpinned.locations.is_empty() {
+        (ResourceStatus::Verified, clean())
     } else {
-        (ResourceStatus::UnpinnedImport, locations)
+        (ResourceStatus::UnpinnedImport, unpinned)
     }
 }
 
@@ -430,6 +436,7 @@ fn verify_data(manifest: &SchemaManifest, audit: &Audit, source: &str, unpinned:
                 "url": problem.url,
                 "status": problem.status.code(),
                 "locations": problem.locations,
+                "locations_truncated": problem.locations_truncated,
             })
         })
         .collect();
@@ -491,6 +498,9 @@ fn verify_report(manifest: &SchemaManifest, audit: &Audit, source: &str) -> Stri
             for location in &problem.locations {
                 report.push(' ');
                 report.push_str(&quoted(location));
+            }
+            if problem.locations_truncated {
+                report.push_str(" …");
             }
             report.push('\n');
         }

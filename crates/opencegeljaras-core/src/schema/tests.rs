@@ -220,8 +220,14 @@ fn audit_manifest() -> SchemaManifest {
     .expect("the audit manifest is valid")
 }
 
-/// The edges of one schema body, audited against [`audit_manifest`].
+/// The offending locations of one schema body, audited against
+/// [`audit_manifest`].
 fn audit(body: &str) -> Vec<String> {
+    audit_all(body).locations
+}
+
+/// The full audit result of one schema body, including its truncation flag.
+fn audit_all(body: &str) -> UnpinnedLocations {
     let manifest = audit_manifest();
     let text = format!(
         r#"<?xml version="1.0" encoding="UTF-8"?>
@@ -269,6 +275,40 @@ fn an_unpinned_or_mismatched_import_lists_its_resolved_location() {
         ["https://schema.e-cegjegyzek.hu/schema/b.xsd"],
         "one offending location is listed once"
     );
+}
+
+#[test]
+fn more_offending_locations_than_the_cap_are_truncated() {
+    let mut body = String::new();
+    for index in 0..70 {
+        body.push_str(&format!(
+            r#"<xs:import namespace="urn:b" schemaLocation="/unpinned-{index}.xsd"/>"#
+        ));
+    }
+    // The same offender repeated must not consume a slot or set the flag.
+    body.push_str(r#"<xs:import namespace="urn:b" schemaLocation="/unpinned-0.xsd"/>"#);
+    let found = audit_all(&body);
+    assert_eq!(found.locations.len(), LOCATION_CAP);
+    assert!(found.truncated);
+    assert_eq!(
+        found.locations[0], "https://schema.e-cegjegyzek.hu/unpinned-0.xsd",
+        "the first offender is listed first"
+    );
+    assert_eq!(
+        found.locations[LOCATION_CAP - 1],
+        "https://schema.e-cegjegyzek.hu/unpinned-63.xsd",
+        "the listed offenders keep first-appearance order"
+    );
+
+    let mut body = String::new();
+    for index in 0..LOCATION_CAP {
+        body.push_str(&format!(
+            r#"<xs:import namespace="urn:b" schemaLocation="/unpinned-{index}.xsd"/>"#
+        ));
+    }
+    let found = audit_all(&body);
+    assert_eq!(found.locations.len(), LOCATION_CAP);
+    assert!(!found.truncated, "exactly the cap is not a truncation");
 }
 
 #[test]

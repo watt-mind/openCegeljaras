@@ -5,11 +5,13 @@
 //! with the namespace the manifest records? Nothing is fetched, and no
 //! location the resource names is ever opened.
 
+use std::collections::BTreeSet;
+
 use roxmltree::{Document, Node};
 
 use crate::form::{self, Failure, Limits};
 use crate::schema::manifest::{SchemaManifest, normalise_scheme};
-use crate::schema::{LOCATION_LIMIT, uri};
+use crate::schema::{LOCATION_CAP, LOCATION_LIMIT, uri};
 
 /// The XML Schema namespace whose import and include elements are audited.
 const XSD_NAMESPACE: &str = "http://www.w3.org/2001/XMLSchema";
@@ -21,6 +23,15 @@ pub enum EdgeKind {
     Import,
     /// An `xs:include`, which has no namespace of its own.
     Include,
+}
+
+/// The offending locations of one resource, cut to the reported maximum.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub struct UnpinnedLocations {
+    /// The distinct offending locations, in first-appearance order.
+    pub locations: Vec<String>,
+    /// Whether more distinct offending locations were found than are listed.
+    pub truncated: bool,
 }
 
 /// One `xs:import` or `xs:include` edge of a schema resource.
@@ -83,33 +94,35 @@ fn collect(document: &Document<'_>, base_url: &str) -> Vec<ImportEdge> {
 /// not a pinned resource, or when an import's namespace is not the namespace
 /// the manifest records for the resource it resolves to. Locations are
 /// bundle-derived strings, so each is cut to a fixed number of Unicode scalar
-/// values before it is reported.
+/// values, de-duplicated, and reported at most 64 to one entry.
 #[must_use]
-pub fn unpinned_locations(manifest: &SchemaManifest, edges: &[ImportEdge]) -> Vec<String> {
-    let mut offending: Vec<String> = Vec::new();
+pub fn unpinned_locations(manifest: &SchemaManifest, edges: &[ImportEdge]) -> UnpinnedLocations {
+    let mut found = UnpinnedLocations::default();
+    let mut seen: BTreeSet<String> = BTreeSet::new();
     for edge in edges {
-        let Some(location) = edge.resolved.as_deref() else {
-            push_once(&mut offending, String::new());
-            continue;
+        let location = match edge.resolved.as_deref() {
+            // An edge without a `schemaLocation` pins nothing at all; it is
+            // reported as the empty location, which no resolution produces.
+            None => String::new(),
+            Some(location) => {
+                let target = manifest.resource(location);
+                if target.is_some_and(|resource| {
+                    edge.kind == EdgeKind::Include
+                        || resource.target_namespace.as_deref() == edge.namespace.as_deref()
+                }) {
+                    continue;
+                }
+                crate::truncate_scalars(location, LOCATION_LIMIT)
+            }
         };
-        let target = manifest.resource(location);
-        let pinned = target.is_some_and(|resource| {
-            edge.kind == EdgeKind::Include
-                || resource.target_namespace.as_deref() == edge.namespace.as_deref()
-        });
-        if !pinned {
-            push_once(
-                &mut offending,
-                crate::truncate_scalars(location, LOCATION_LIMIT),
-            );
+        if !seen.insert(location.clone()) {
+            continue;
+        }
+        if found.locations.len() < LOCATION_CAP {
+            found.locations.push(location);
+        } else {
+            found.truncated = true;
         }
     }
-    offending
-}
-
-/// Append a location unless it is already listed.
-fn push_once(offending: &mut Vec<String>, location: String) {
-    if !offending.contains(&location) {
-        offending.push(location);
-    }
+    found
 }

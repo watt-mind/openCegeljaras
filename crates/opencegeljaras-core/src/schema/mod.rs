@@ -13,7 +13,7 @@ mod uri;
 
 use sha2::{Digest, Sha256};
 
-pub use imports::{EdgeKind, ImportEdge, edges, unpinned_locations};
+pub use imports::{EdgeKind, ImportEdge, UnpinnedLocations, edges, unpinned_locations};
 pub use manifest::{
     ALLOWED_HOSTS, BundlePath, ManifestProblem, SchemaManifest, SchemaResource, bundle_path,
     compiled_manifest, normalise_scheme,
@@ -33,6 +33,8 @@ pub const UNPINNED_MANIFEST_NOTICE: &str = "; unpinned manifest";
 pub const MAX_RESOURCE_BYTES: u64 = 4 * 1024 * 1024;
 /// The largest number of Unicode scalar values kept from a bundle string.
 const LOCATION_LIMIT: usize = 128;
+/// The largest number of offending locations reported for one resource.
+const LOCATION_CAP: usize = 64;
 
 /// What one bundle resource turned out to be.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
