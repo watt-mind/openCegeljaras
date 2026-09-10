@@ -30,6 +30,26 @@ across runs.
 Core unit tests cover decoding, the pre-parse scan, and classification without
 the binary. None of this establishes XSD conformance or acceptance.
 
+The `form fields` contract tests run the built binary over three synthetic
+fixtures and over generated documents. They assert the exact field list of the
+repeated-sibling fixture (paths, kinds, namespaces, and lengths) with and
+without `--show-values`, index assignment for repeated siblings and its
+absence for singletons, root and namespaced attributes together with the XSI
+and namespace-declaration exclusions, empty, whitespace-only, CDATA and
+comment-split values, the mixed rule, the 4096-scalar value cut, the
+1024-scalar path cut, the 10 000-field cap, that every listed path is unique,
+that a 110-deep chain of 120-scalar names over 10 000 leaves keeps its output
+bounded and finishes well inside ten seconds, that a 100 000-sibling document
+is listed and compared inside the same bound, and that both commands are
+byte-identical across runs. For `form diff` they cover every exit path: a
+refused or unrecognised OLD or NEW, the rule that NEW is never opened when OLD
+fails, `same_variant: false`, `identical: true` for a file compared with
+itself, and added, removed, and changed entries with and without values. One
+test asserts that the fixture's sentinel value never reaches standard error
+and reaches standard output only with `--show-values`. Core unit tests cover
+the walk, the path model, the arena that keeps one entry per node rather than
+one per path component, and the comparison, without the binary.
+
 The `schemas` contract tests run the built binary over the synthetic CC0 mini
 graph in `tests/fixtures/schemas/`: the stored good and tampered bundles, and
 copies generated into a scratch directory for an unpinned import, more

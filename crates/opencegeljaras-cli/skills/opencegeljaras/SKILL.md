@@ -1,14 +1,15 @@
 ---
 name: opencegeljaras
-description: Discover the capabilities and reference sources of the openCegeljaras development scaffold for Hungarian electronic company-court filings, recognise the format of a local company-form XML file, check a local mirror of the pinned official schemas against its digests, and check one form's XSD conformance against that verified mirror.
+description: Discover the capabilities and reference sources of the openCegeljaras development scaffold for Hungarian electronic company-court filings, recognise the format of a local company-form XML file, list its fields as stable paths or compare two forms field by field, check a local mirror of the pinned official schemas against its digests, and check one form's XSD conformance against that verified mirror.
 ---
 
 # openCegeljaras
 
 Run `opencegeljaras capabilities --json` before choosing an operation.
 The current stage is `scaffold`. The document operations are `form inspect`,
-`form validate`, `schemas list`, and `schemas verify`; `capabilities`,
-`sources`, `skill`, help, and version describe the tool itself.
+`form validate`, `form fields`, `form diff`, `schemas list`, and
+`schemas verify`; `capabilities`, `sources`, `skill`, help, and version
+describe the tool itself.
 
 ## Inspecting a form
 
@@ -39,6 +40,38 @@ or conflicting options — not that the document or bundle was bad: fix the
 command line and run `opencegeljaras --help`. That envelope appears on stdout
 only when `--json` is in the arguments before any `--` terminator; otherwise
 exit 2 is one fixed stderr line and stdout is empty.
+
+## Listing and comparing fields
+
+Run `opencegeljaras form fields <PATH> --json` on a recognised form to list
+its fields as paths, and `opencegeljaras form diff OLD NEW --json` to compare
+two of them field by field. Both run the `form inspect` boundary first, so
+exit 1 and exit 4 mean there what they mean for `form inspect`; `form diff`
+reads OLD first, never opens NEW when OLD fails, and reports `error.code`
+`old_not_recognized` or `new_not_recognized` at exit 4 with `data.side` naming
+the side. Exit 0 from `form diff` means both documents are recognised, whether
+or not they differ: read `data.identical`, never the exit code, to learn
+whether anything changed.
+
+A path is the element local names from the variant root down, joined with
+`/`, with attributes as `@name`. **Paths are positional**: every element that
+has a same-named sibling carries a 1-based index, so inserting or removing one
+entry renumbers the others. A single such edit therefore surfaces as several
+`changed` entries plus one `added` or `removed` entry; say so rather than
+reporting that many fields were edited. `field_count` is the number of listed
+fields, and `fields_truncated` marks a listing that stopped at the 10 000-field
+cap: entries near the cap may then be artefacts of it, and `identical` is
+false whatever else matched.
+
+Field values are personal and company data. They are hidden by default, and
+`values_redacted` is `true`; `value_length` still shows whether a field is
+empty or filled. Pass `--show-values` **only** when the operator asked to see
+or compare values, and say that the output then contains personal and company
+data. Values never reach standard error.
+
+Listing or comparing fields is neither validation, verification, nor
+acceptance. It says nothing about whether a form is schema-valid, signed,
+complete, correct, currently accepted, or filed.
 
 ## Checking a schema bundle
 

@@ -13,6 +13,8 @@ pub const STAGE: &str = "scaffold";
 pub const OPERATIONS: &[&str] = &[
     "form inspect",
     "form validate",
+    "form fields",
+    "form diff",
     "schemas list",
     "schemas verify",
 ];
@@ -72,6 +74,8 @@ mod tests {
             [
                 "form inspect",
                 "form validate",
+                "form fields",
+                "form diff",
                 "schemas list",
                 "schemas verify"
             ]

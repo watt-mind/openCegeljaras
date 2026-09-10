@@ -1,5 +1,6 @@
 //! Command-line entry point for the openCegeljaras scaffold.
 
+mod fields;
 mod form;
 mod output;
 mod schemas;
@@ -13,6 +14,7 @@ use clap::{Args, Parser, Subcommand};
 use opencegeljaras_core::{INTROSPECTION_COMMANDS, OPERATIONS, PROJECT, STAGE, source_catalog};
 use serde_json::{Value, json};
 
+use crate::fields::{DiffArgs, FieldsArgs};
 use crate::form::InspectArgs;
 use crate::output::{
     CommandError, CommandResult, failure, output, success, write_diagnostic, write_json, write_text,
@@ -64,6 +66,10 @@ enum FormCommand {
     Inspect(InspectArgs),
     /// Check one local form file against a verified local schema bundle.
     Validate(ValidateArgs),
+    /// List the fields of one recognised local form file as stable paths.
+    Fields(FieldsArgs),
+    /// Compare two recognised local form files field by field.
+    Diff(DiffArgs),
 }
 
 #[derive(Debug, Args)]
@@ -197,6 +203,12 @@ fn run() -> u8 {
         Command::Form {
             command: FormCommand::Validate(args),
         } => validate::validate(&args),
+        Command::Form {
+            command: FormCommand::Fields(args),
+        } => fields::fields(&args),
+        Command::Form {
+            command: FormCommand::Diff(args),
+        } => fields::diff(&args),
         Command::Schemas { command } => schemas::run(&command),
     };
 

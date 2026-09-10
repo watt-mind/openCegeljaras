@@ -28,6 +28,8 @@ fn capabilities_reports_the_read_only_domain_surface() {
         serde_json::json!([
             "form inspect",
             "form validate",
+            "form fields",
+            "form diff",
             "schemas list",
             "schemas verify"
         ])
@@ -48,7 +50,7 @@ fn capabilities_human_output_states_every_boundary() {
     let text = String::from_utf8(output.stdout).expect("output should be UTF-8");
     assert!(text.contains("stage: scaffold"));
     assert!(text.contains(
-        "implemented operations: form inspect, form validate, schemas list, schemas verify"
+        "implemented operations: form inspect, form validate, form fields, form diff, schemas list, schemas verify"
     ));
     assert!(text.contains("verification: not performed"));
     assert!(text.contains("submission: not performed"));
