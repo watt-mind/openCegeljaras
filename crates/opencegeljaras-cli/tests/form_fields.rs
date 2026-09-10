@@ -807,6 +807,34 @@ fn the_sentinel_value_reaches_standard_output_only_when_values_are_requested() {
 }
 
 #[test]
+fn capabilities_lists_both_operations_and_the_existing_ones_are_unchanged() {
+    let output = run(&["capabilities", "--json"]);
+    assert_eq!(output.status.code(), Some(0));
+    let operations = envelope(&output)["data"]["operations"].clone();
+    assert_eq!(
+        operations,
+        serde_json::json!([
+            "form inspect",
+            "form validate",
+            "form fields",
+            "form diff",
+            "schemas list",
+            "schemas verify",
+        ])
+    );
+
+    let text = stdout(&run(&["capabilities"]));
+    assert!(text.contains("form fields, form diff"));
+
+    let inspected = inspect("fields-repeated-siblings.xml");
+    assert_eq!(inspected.status.code(), Some(0));
+    assert!(
+        !stdout(&inspected).contains("fields:"),
+        "form inspect still reports only its own facts"
+    );
+}
+
+#[test]
 fn a_rejected_command_line_is_still_a_usage_error() {
     let output = run(&["form", "diff", "one.xml", "--json"]);
     assert_eq!(output.status.code(), Some(2));
