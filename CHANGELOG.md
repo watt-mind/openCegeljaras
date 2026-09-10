@@ -51,6 +51,10 @@
   reads.
 - `BSD-3-Clause` added to the licence allowlist for the `encoding_rs`
   ISO-8859-2 decoder.
+- The incomplete-graph markers that make an `xmllint` run `validator_failed`
+  are now looked for only on standard-error lines that are not themselves
+  `document.xml:LINE: element NAME: Schemas validity error :` findings, so a
+  document value quoting a marker's text stays an ordinary finding.
 
 No signature verification, submission, or receipt handling is implemented.
 Recognising a form establishes none of them, verifying a schema bundle is a

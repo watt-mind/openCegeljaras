@@ -43,7 +43,8 @@ fixed argument list, the working directory, the environment allowlist, the
 exit-code mapping, the timeout with a short `Duration`, a grandchild that keeps
 the standard-error pipe open past that timeout, the 1 MiB standard-error cap,
 the rule that a warning about the schema graph is a failure whatever the exit
-code, and that the `document.xml` copy is byte-identical to the input. Line
+code and only on a line that is not itself a validity error, and that the
+`document.xml` copy is byte-identical to the input. Line
 parsing, value redaction, message and finding truncation are unit-tested
 without any child process. Real-validator tests run the installed `xmllint`
 over the synthetic mini graph for a conforming and a nonconforming instance and

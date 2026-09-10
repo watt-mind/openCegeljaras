@@ -50,6 +50,35 @@ fn the_version_line_is_read_from_the_report() {
 }
 
 #[test]
+fn a_marker_inside_a_validity_error_line_is_still_a_finding() {
+    let validity = concat!(
+        "document.xml:12: element Nev: Schemas validity error : ",
+        "Element '{urn:x}Nev': 'Schemas parser warning Kft' is not a valid value."
+    );
+    assert!(
+        !reports_incomplete_graph(validity),
+        "a document value must not turn a finding into a failure"
+    );
+    assert!(
+        !reports_incomplete_graph(concat!(
+            "document.xml:3: element Cim: Schemas validity error : ",
+            "The value 'failed to load external entity' is not valid."
+        )),
+        "a quoted document value must not be read as a graph marker"
+    );
+
+    for line in [
+        "I/O error : Attempt to load network entity http://x",
+        "warning: failed to load external entity \"http://x\"",
+        "x.xsd:9: element import: Schemas parser warning : skipped",
+        "document.xml:12: element Nev: Schemas parser warning : skipped",
+    ] {
+        assert!(reports_incomplete_graph(line), "line: {line}");
+    }
+    assert!(!reports_incomplete_graph(""));
+}
+
+#[test]
 fn an_explicit_validator_path_must_name_a_regular_file() {
     assert_eq!(locate(Some(Path::new("/no/such/xmllint"))), None);
     assert_eq!(locate(Some(&fixture("good"))), None);
