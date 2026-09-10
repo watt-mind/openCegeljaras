@@ -28,8 +28,12 @@ reviewed redistribution terms. Current `sources` is not this schema registry.
 
 The [form inspection contract](form-inspection.md) specifies the read-only
 `form inspect` slice of this milestone: format recognition of the 2026
-wrapper and its three variants, fixed limits, and exit codes. It does not
-cover `schemas list` or XSD conformance.
+wrapper and its three variants, fixed limits, and exit codes. The
+[schema conformance contract](schema-conformance.md) covers `schemas list`,
+`schemas verify`, and `form validate` through an external libxml2
+validator; on 2026-09-10 both libxml2 and the Python xmlschema package
+loaded the form graph and agreed on two synthetic name-reservation
+instances.
 
 ## 2. Form validation and dossier preflight
 
