@@ -58,10 +58,9 @@ fn scan(text: &str, limits: &Limits) -> Result<Counts, Rejection> {
             }
         } else if rest.starts_with(b"</") {
             depth = depth.saturating_sub(1);
-            match scan_tag(bytes, start, usize::MAX) {
-                Tag::Ended { next, .. } => next,
-                Tag::Unterminated => break,
-                Tag::TooManyDeclarations => return Err(Rejection::LimitExceeded),
+            match skip_close_tag(bytes, start) {
+                Some(next) => next,
+                None => break,
             }
         } else {
             counts.elements += 1;
@@ -70,7 +69,11 @@ fn scan(text: &str, limits: &Limits) -> Result<Counts, Rejection> {
             if counts.elements > limits.elements || depth > limits.depth {
                 return Err(Rejection::LimitExceeded);
             }
-            match scan_tag(bytes, start, limits.namespace_declarations) {
+            let caps = Caps {
+                attributes: limits.attributes,
+                declarations: limits.namespace_declarations,
+            };
+            match scan_tag(bytes, start, &caps) {
                 Tag::Ended { next, self_closing } => {
                     if self_closing {
                         depth -= 1;
@@ -78,7 +81,7 @@ fn scan(text: &str, limits: &Limits) -> Result<Counts, Rejection> {
                     next
                 }
                 Tag::Unterminated => break,
-                Tag::TooManyDeclarations => return Err(Rejection::LimitExceeded),
+                Tag::LimitExceeded => return Err(Rejection::LimitExceeded),
             }
         };
     }
@@ -108,20 +111,48 @@ enum Tag {
     },
     /// The tag never closed. The parser reports the malformed input.
     Unterminated,
-    /// The tag declares more namespaces than the limit allows.
-    TooManyDeclarations,
+    /// The tag carries more attributes or namespace declarations than the
+    /// caps allow. Only start tags are scanned with finite caps.
+    LimitExceeded,
 }
 
-/// Scan one tag, counting the namespace declarations it makes.
+/// The per-element caps a start tag is scanned against.
+struct Caps {
+    /// Largest accepted number of attributes, excluding declarations.
+    attributes: usize,
+    /// Largest accepted number of `xmlns` and `xmlns:*` declarations.
+    declarations: usize,
+}
+
+impl Caps {
+    /// The caps for a tag that cannot carry attributes.
+    fn unbounded() -> Self {
+        Self {
+            attributes: usize::MAX,
+            declarations: usize::MAX,
+        }
+    }
+}
+
+/// What an attribute-name token names.
+enum Name {
+    /// An ordinary attribute.
+    Attribute,
+    /// An `xmlns` or `xmlns:*` namespace declaration.
+    Declaration,
+}
+
+/// Scan one start tag, counting the attributes and declarations it carries.
 ///
-/// Quoted attribute values may contain `>` and the text `xmlns`, so quoting is
-/// tracked and only attribute-name tokens outside quotes are counted. The scan
-/// stops at the first declaration past the limit, so a tag with hundreds of
-/// thousands of declarations costs no more than the prefix it takes to exceed
-/// it: the parser's own namespace handling compares every declaration on an
-/// element against all the earlier ones and is quadratic.
-fn scan_tag(bytes: &[u8], start: usize, max_declarations: usize) -> Tag {
+/// Quoted attribute values may contain `>`, `=`, and the text `xmlns`, so
+/// quoting is tracked and only name tokens outside quotes are counted. The
+/// scan stops at the first name past a cap, so a tag with hundreds of
+/// thousands of attributes costs no more than the prefix it takes to exceed
+/// one: the parser compares every declaration and every attribute on an
+/// element against all the earlier ones, and both checks are quadratic.
+fn scan_tag(bytes: &[u8], start: usize, caps: &Caps) -> Tag {
     let mut quote: Option<u8> = None;
+    let mut attributes = 0usize;
     let mut declarations = 0usize;
     for (index, &byte) in bytes.iter().enumerate().skip(start + 1) {
         match quote {
@@ -134,29 +165,72 @@ fn scan_tag(bytes: &[u8], start: usize, max_declarations: usize) -> Tag {
                     self_closing: bytes[index - 1] == b'/',
                 };
             }
-            None => {
-                if declares_namespace(bytes, index) {
-                    declarations += 1;
-                    if declarations > max_declarations {
-                        return Tag::TooManyDeclarations;
+            None => match attribute_name_at(bytes, index) {
+                Some(Name::Attribute) => {
+                    attributes += 1;
+                    if attributes > caps.attributes {
+                        return Tag::LimitExceeded;
                     }
                 }
-            }
+                Some(Name::Declaration) => {
+                    declarations += 1;
+                    if declarations > caps.declarations {
+                        return Tag::LimitExceeded;
+                    }
+                }
+                None => {}
+            },
         }
     }
     Tag::Unterminated
 }
 
-/// Whether an `xmlns` or `xmlns:*` attribute name starts at `index`.
-fn declares_namespace(bytes: &[u8], index: usize) -> bool {
-    const NAME: &[u8] = b"xmlns";
-    if !bytes[index..].starts_with(NAME) || !is_xml_space(bytes[index - 1]) {
-        return false;
+/// Skip a close tag, which carries no attributes and so no cap.
+///
+/// Scanning with [`Caps::unbounded`] cannot report [`Tag::LimitExceeded`];
+/// that arm is folded into the unterminated case so the caller has one way
+/// to stop and leave the rest to the parser.
+fn skip_close_tag(bytes: &[u8], start: usize) -> Option<usize> {
+    match scan_tag(bytes, start, &Caps::unbounded()) {
+        Tag::Ended { next, .. } => Some(next),
+        Tag::Unterminated | Tag::LimitExceeded => None,
     }
-    matches!(
-        bytes.get(index + NAME.len()),
-        Some(b':' | b'=') | Some(b' ' | b'\t' | b'\r' | b'\n')
-    )
+}
+
+/// What the attribute-name token starting at `index` names, if there is one.
+///
+/// A name token is one run of non-space, non-delimiter bytes that follows XML
+/// whitespace and is followed, after optional whitespace, by `=`. Anything
+/// else in a tag — the element name, an unquoted stray word, a value — is not
+/// counted.
+fn attribute_name_at(bytes: &[u8], index: usize) -> Option<Name> {
+    if !is_xml_space(bytes[index - 1]) || is_name_boundary(bytes[index]) {
+        return None;
+    }
+    let mut cursor = index;
+    while bytes
+        .get(cursor)
+        .copied()
+        .is_some_and(|byte| !is_name_boundary(byte))
+    {
+        cursor += 1;
+    }
+    let name = &bytes[index..cursor];
+    while bytes.get(cursor).copied().is_some_and(is_xml_space) {
+        cursor += 1;
+    }
+    if bytes.get(cursor) != Some(&b'=') {
+        return None;
+    }
+    if name == b"xmlns" || name.starts_with(b"xmlns:") {
+        return Some(Name::Declaration);
+    }
+    Some(Name::Attribute)
+}
+
+/// Whether a byte ends an attribute-name token.
+fn is_name_boundary(byte: u8) -> bool {
+    is_xml_space(byte) || matches!(byte, b'=' | b'/' | b'>' | b'"' | b'\'')
 }
 
 /// The XML whitespace an attribute name may follow.
@@ -268,6 +342,66 @@ mod tests {
             prescan("<a xmlns='urn:x' xmlns:b='urn:y'/>", &limits),
             Err(Rejection::LimitExceeded)
         );
+    }
+
+    #[test]
+    fn attributes_at_the_limit_pass_and_one_past_the_limit_fails() {
+        let limits = Limits::default();
+        let attributes = |count: usize, quote: char| {
+            (0..count)
+                .map(|index| format!(" a{index}={quote}1{quote}"))
+                .collect::<String>()
+        };
+        for quote in ['"', '\''] {
+            let at_limit = format!("<e{}/>", attributes(limits.attributes, quote));
+            assert!(prescan(&at_limit, &limits).is_ok(), "quote: {quote}");
+            let past = format!("<e{}/>", attributes(limits.attributes + 1, quote));
+            assert_eq!(
+                prescan(&past, &limits),
+                Err(Rejection::LimitExceeded),
+                "quote: {quote}"
+            );
+        }
+    }
+
+    #[test]
+    fn declarations_do_not_count_towards_the_attribute_limit() {
+        let limits = Limits::default();
+        let interleaved = |count: usize| {
+            (0..count)
+                .map(|index| format!(" xmlns:n{index}='urn:x:{index}'\n\ta{index}=\"1\""))
+                .collect::<String>()
+        };
+        let at_limit = format!("<e{}/>", interleaved(limits.attributes));
+        assert!(prescan(&at_limit, &limits).is_ok());
+        let past = format!("<e{}/>", interleaved(limits.attributes + 1));
+        assert_eq!(prescan(&past, &limits), Err(Rejection::LimitExceeded));
+    }
+
+    #[test]
+    fn only_name_tokens_outside_quotes_are_counted_as_attributes() {
+        let limits = Limits {
+            attributes: 2,
+            ..Limits::default()
+        };
+        for text in [
+            "<e a=\"x=1 y=2 z=3 w=4\" b='p=1 q=2'/>",
+            "<e\n\ta = \"1\"\r\n\tb\t=\t'2'\n/>",
+            "<e a=\"1\">x=1 y=2 z=3 w=4</e>",
+            "<e/>",
+        ] {
+            assert!(prescan(text, &limits).is_ok(), "{text}");
+        }
+        for text in [
+            "<e a=\"1\" b=\"2\" c=\"3\"/>",
+            "<e\na='1'\tb='2'\r\nc = '3'/>",
+        ] {
+            assert_eq!(
+                prescan(text, &limits),
+                Err(Rejection::LimitExceeded),
+                "{text}"
+            );
+        }
     }
 
     #[test]
