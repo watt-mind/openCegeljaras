@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="nyomtatvany.xsl"?>
+<n:Nyomtatvány xmlns:n="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#" xmlns:vk="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/valtozasbejegyzesiKerelem-20240101#">
+  <vk:VáltozásbejegyzésiKérelem>
+    <vk:Adatlap>
+      <vk:Azonosító>PLACEHOLDER-0002</vk:Azonosító>
+    </vk:Adatlap>
+    <vk:CégformátólFüggőAdatok/>
+  </vk:VáltozásbejegyzésiKérelem>
+</n:Nyomtatvány>
