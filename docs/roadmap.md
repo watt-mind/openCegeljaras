@@ -35,6 +35,9 @@ validator; on 2026-09-10 both libxml2 and the Python xmlschema package
 loaded the form graph and agreed on two synthetic name-reservation
 instances.
 
+The [form fields and diff contract](form-fields.md) covers `form fields`
+and `form diff`, the field-level inspection the research lists first.
+
 ## 2. Form validation and dossier preflight
 
 Proposed commands:
