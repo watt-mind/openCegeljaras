@@ -25,7 +25,7 @@ fn capabilities_reports_the_read_only_domain_surface() {
     assert_eq!(body["data"]["stage"], "scaffold");
     assert_eq!(
         body["data"]["operations"],
-        serde_json::json!(["form inspect"])
+        serde_json::json!(["form inspect", "schemas list", "schemas verify"])
     );
     assert_eq!(
         body["data"]["introspection_commands"],
@@ -42,7 +42,7 @@ fn capabilities_human_output_states_every_boundary() {
     assert!(output.stderr.is_empty());
     let text = String::from_utf8(output.stdout).expect("output should be UTF-8");
     assert!(text.contains("stage: scaffold"));
-    assert!(text.contains("implemented operations: form inspect"));
+    assert!(text.contains("implemented operations: form inspect, schemas list, schemas verify"));
     assert!(text.contains("verification: not performed"));
     assert!(text.contains("submission: not performed"));
 }

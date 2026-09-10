@@ -93,3 +93,29 @@ pub(crate) fn output(result: Result<(), io::Error>) -> CommandResult {
 pub(crate) fn write_diagnostic(message: &str) {
     let _ = io::stderr().lock().write_all(message.as_bytes());
 }
+
+/// Quote an untrusted string as an all-ASCII JSON string literal.
+///
+/// XML names, namespace URIs, and bundle-derived schema locations admit line
+/// separators and bidirectional format characters, so they are never printed
+/// raw: only printable ASCII survives, and everything else becomes a
+/// `\\uXXXX` escape, in surrogate pairs above the basic multilingual plane.
+pub(crate) fn quoted(text: &str) -> String {
+    let mut quoted = String::with_capacity(text.len() + 2);
+    quoted.push('"');
+    for character in text.chars() {
+        match character {
+            '"' => quoted.push_str("\\\""),
+            '\\' => quoted.push_str("\\\\"),
+            ' '..='~' => quoted.push(character),
+            _ => {
+                let mut units = [0u16; 2];
+                for unit in character.encode_utf16(&mut units) {
+                    quoted.push_str(&format!("\\u{unit:04x}"));
+                }
+            }
+        }
+    }
+    quoted.push('"');
+    quoted
+}
