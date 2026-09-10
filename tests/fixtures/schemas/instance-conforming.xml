@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture, CC0. Conforming instance of the mini graph. -->
+<w:MiniNyomtatvany xmlns:w="urn:opencegeljaras:fixture:wrapper"
+                   xmlns:b="urn:opencegeljaras:fixture:variant-b">
+  <b:VariantB>
+    <b:Szam>01-02-345678</b:Szam>
+  </b:VariantB>
+</w:MiniNyomtatvany>
