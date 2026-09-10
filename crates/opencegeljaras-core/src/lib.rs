@@ -1,5 +1,7 @@
 //! I/O-free capability and source-catalogue model for openCegeljaras.
 
+pub mod form;
+
 use serde::{Deserialize, Serialize};
 
 /// Human-facing project name.
