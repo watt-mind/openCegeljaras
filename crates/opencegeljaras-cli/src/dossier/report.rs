@@ -410,7 +410,11 @@ pub(super) fn preflight_report(
             finding.source.code()
         ));
     }
-    if let Some(collected) = &conformed.findings {
+    if let Some(collected) = conformed
+        .findings
+        .as_ref()
+        .filter(|collected| !collected.items.is_empty() || collected.truncated)
+    {
         report.push_str("xsd findings:\n");
         for finding in &collected.items {
             report.push_str(&format!(

@@ -717,6 +717,7 @@ fn the_preflight_human_report_prints_findings_and_a_verdict() {
         report.contains("\n  form_recognized: passed (form-2026)\n"),
         "{report}"
     );
+    assert!(!report.contains("xsd findings:"), "{report}");
     assert!(report.contains("\npreflight: incomplete\n"), "{report}");
     assert!(
         report.ends_with("well-formed: passed\nxsd conformance: not performed\nverification: not performed\nsubmission: not performed\n"),
