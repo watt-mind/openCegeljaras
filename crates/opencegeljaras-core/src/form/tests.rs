@@ -27,6 +27,7 @@ fn the_default_limits_are_the_contract_values() {
     assert_eq!(limits.elements, 200_000);
     assert_eq!(limits.text_bytes, 1024 * 1024);
     assert_eq!(limits.attributes, 64);
+    assert_eq!(limits.namespace_declarations, 64);
     assert_eq!(limits.parser_nodes(), 800_000);
 }
 
@@ -271,6 +272,53 @@ fn iso_8859_2_bytes_are_decoded_and_classified() {
     assert!(!inspection.input.bom);
     assert_eq!(inspection.form.status, FormStatus::Recognized);
     assert_eq!(inspection.input.bytes, bytes.len() as u64);
+}
+
+#[test]
+fn long_names_are_counted_whole_and_cut_only_when_reported() {
+    let prefix = "A".repeat(130);
+    let children = format!("<ck:{prefix}X/><ck:{prefix}Y/><ck:{prefix}X/>");
+    let text = wrapper(&format!(
+        "<ck:CégbejegyzésiKérelem xmlns:ck=\"{CK_NAMESPACE}\">{children}</ck:CégbejegyzésiKérelem>"
+    ));
+    let sections = inspected(&text).form.sections.expect("sections are listed");
+    assert_eq!(sections.len(), 2, "distinct long names must not merge");
+    assert_eq!(sections[0].count, 2);
+    assert_eq!(sections[1].count, 1);
+    assert!(sections.iter().all(|section| {
+        section.local_name.chars().count() == NAME_LIMIT + 1 && section.local_name.ends_with('…')
+    }));
+
+    let namespace = format!("urn:{}", "n".repeat(130));
+    let wide = format!(
+        "<r xmlns=\"{namespace}X\"><e xmlns=\"{namespace}Y\"/><e xmlns=\"{namespace}X\"/></r>"
+    );
+    let namespaces = inspected(&wide).structure.namespaces;
+    assert_eq!(
+        namespaces.len(),
+        2,
+        "distinct long namespaces must not merge"
+    );
+    assert!(namespaces.iter().all(|entry| entry.ends_with('…')));
+}
+
+#[test]
+fn one_element_may_not_declare_more_namespaces_than_the_limit() {
+    let declarations = |count: usize| {
+        (0..count)
+            .map(|index| format!(" xmlns:n{index}=\"urn:x:{index}\""))
+            .collect::<String>()
+    };
+    let limits = Limits::default();
+    let at_limit = format!("<a{}/>", declarations(limits.namespace_declarations));
+    assert!(inspect(at_limit.as_bytes(), &limits).is_ok());
+    let past = format!("<a{}/>", declarations(limits.namespace_declarations + 1));
+    assert_eq!(
+        inspect(past.as_bytes(), &limits)
+            .expect_err("one declaration past the limit")
+            .code,
+        Rejection::LimitExceeded
+    );
 }
 
 #[test]

@@ -107,7 +107,7 @@ pub(crate) fn walk(
             attributes += count;
             schema_location |= declares_schema_location(node);
             if let Some(namespace) = node.tag_name().namespace() {
-                namespaces.insert(truncate_name(namespace));
+                namespaces.insert(namespace);
             }
             stack.extend(node.children().map(|child| (child, depth + 1)));
         } else if let Some(text) = node.text().filter(|_| node.is_text()) {
@@ -125,7 +125,11 @@ pub(crate) fn walk(
             max_depth,
             attributes,
             text_bytes,
-            namespaces: namespaces.into_iter().take(REPORT_CAP).collect(),
+            namespaces: namespaces
+                .into_iter()
+                .take(REPORT_CAP)
+                .map(truncate_name)
+                .collect(),
             namespaces_truncated,
         },
         schema_location,
@@ -210,25 +214,29 @@ fn classify_variant(root: Node<'_, '_>) -> FormFacts {
 }
 
 /// Direct element children of the variant root, in first-appearance order.
+///
+/// Names are counted whole and cut only when they are reported, so two
+/// distinct long names never merge into one section.
 fn sections(variant: Node<'_, '_>) -> (Vec<Section>, bool) {
-    let mut sections: Vec<Section> = Vec::new();
+    let mut counted: Vec<(&str, usize)> = Vec::new();
     let mut truncated = false;
     for child in variant.children().filter(Node::is_element) {
-        let local_name = truncate_name(child.tag_name().name());
-        if let Some(section) = sections
-            .iter_mut()
-            .find(|section| section.local_name == local_name)
-        {
-            section.count += 1;
-        } else if sections.len() == REPORT_CAP {
+        let local_name = child.tag_name().name();
+        if let Some((_, count)) = counted.iter_mut().find(|(name, _)| *name == local_name) {
+            *count += 1;
+        } else if counted.len() == REPORT_CAP {
             truncated = true;
         } else {
-            sections.push(Section {
-                local_name,
-                count: 1,
-            });
+            counted.push((local_name, 1));
         }
     }
+    let sections = counted
+        .into_iter()
+        .map(|(local_name, count)| Section {
+            local_name: truncate_name(local_name),
+            count,
+        })
+        .collect();
     (sections, truncated)
 }
 
