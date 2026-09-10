@@ -3,7 +3,9 @@
 ## Unreleased
 
 - Parse on a dedicated 16 MiB stack so the 128-level depth limit holds on
-  Windows and in debug builds; install the XSD validator in the coverage job.
+  Windows and in debug builds.
+- Install the XSD validator in the coverage job, run CodeQL only where code
+  scanning uploads are available, and keep fixture bytes exact on checkout.
 - Initial unpublished two-crate Rust scaffold for company-filing tooling.
 - Capability, source-catalog, and embedded-skill introspection.
 - Dated research, metadata-only schema inventory, architecture, and roadmap.

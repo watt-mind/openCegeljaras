@@ -344,3 +344,19 @@ fn section_and_namespace_lists_are_capped() {
     assert_eq!(inspection.structure.namespaces.len(), 64);
     assert!(inspection.structure.namespaces_truncated);
 }
+
+#[test]
+fn the_depth_limit_holds_on_a_thread_with_a_tiny_stack() {
+    // The tokenizer recurses per nesting level, so without the dedicated
+    // parsing stack a debug build needs roughly two megabytes for 128
+    // levels; this thread offers a quarter of a megabyte.
+    let document = "<a>".repeat(128) + &"</a>".repeat(128);
+    let outcome = std::thread::Builder::new()
+        .stack_size(256 * 1024)
+        .spawn(move || inspect(document.as_bytes(), &Limits::default()))
+        .expect("the test thread should spawn")
+        .join()
+        .expect("the parse must not overflow the tiny stack");
+    let inspection = outcome.expect("a well-formed document is inspected");
+    assert_eq!(inspection.structure.max_depth, 128);
+}

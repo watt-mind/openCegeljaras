@@ -197,7 +197,9 @@ and HTML content must not execute during inspection.
 The bounded parse runs on a dedicated thread with a 16 MiB stack because
 the XML tokenizer recurses once per nesting level and the main thread's
 stack is 1 MiB on Windows; the documented depth limit therefore holds on
-every platform and in debug builds.
+every platform and in debug builds. A scoped worker thread joined before
+the call returns is a computational resource, not the process spawning the
+core boundary forbids.
 
 No ambient network or clock belongs in the core. Future checks needing a date
 or external evidence receive those explicitly. Do not write cryptography or

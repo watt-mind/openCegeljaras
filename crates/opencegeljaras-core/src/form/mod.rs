@@ -340,6 +340,9 @@ impl BoundedInput {
     }
 }
 
+/// Stack reserved for the parsing thread; see `parse_bounded`.
+const PARSE_STACK_BYTES: usize = 16 * 1024 * 1024;
+
 /// Parse already-read bytes under `limits` into a bounded tree.
 ///
 /// This is the single entry point into decoding, the pre-parse scan, and
@@ -354,9 +357,6 @@ impl BoundedInput {
 /// Returns a [`Failure`] when the input is too large, is not decodable under
 /// an accepted encoding, contains a prohibited construct, exceeds a limit, or
 /// is not well-formed XML, and whatever `visit` itself returns.
-/// Stack reserved for the parsing thread; see `parse_bounded`.
-const PARSE_STACK_BYTES: usize = 16 * 1024 * 1024;
-
 pub(crate) fn parse_bounded<T: Send>(
     bytes: &[u8],
     limits: &Limits,
@@ -394,7 +394,6 @@ pub(crate) fn parse_bounded<T: Send>(
     // with an explicit stack keeps the limit meaningful on every platform;
     // the reservation is virtual and costs nothing until touched.
     let text = &decoded.text;
-    let failure = |code| input.failure(code);
     let outcome: Result<Result<T, Failure>, Rejection> = std::thread::scope(|scope| {
         let handle = std::thread::Builder::new()
             .name("opencegeljaras-parse".to_owned())
@@ -403,12 +402,16 @@ pub(crate) fn parse_bounded<T: Send>(
                 let document = tree::parse(text, limits)?;
                 Ok(visit(&document, input))
             })
-            .map_err(|_| Rejection::LimitExceeded)?;
-        handle.join().map_err(|_| Rejection::LimitExceeded)?
+            .expect("the parsing thread should be spawnable");
+        // A panic inside the parser or the visitor is a bug in this crate,
+        // not a property of the document, so it propagates unchanged.
+        handle
+            .join()
+            .unwrap_or_else(|payload| std::panic::resume_unwind(payload))
     });
     match outcome {
         Ok(result) => result,
-        Err(code) => Err(failure(code)),
+        Err(code) => Err(input.failure(code)),
     }
 }
 
