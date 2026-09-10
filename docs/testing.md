@@ -13,10 +13,11 @@ fixtures in `tests/fixtures/forms/` and against generated oversized, over-deep,
 over-wide, and long-text inputs, a missing file, and a directory. They assert
 each fixture's exit code, `error.code`, and `error.message`, the JSON and human
 shapes for exit 0 and exit 4, that stderr is empty on exit 0 and exactly one
-line otherwise, that no path ever reaches stdout or stderr, that limits hold at
-the limit and one past it, and that output is byte-identical across runs. Core
-unit tests cover decoding, the pre-parse scan, and classification without the
-binary. None of this establishes XSD conformance or acceptance.
+line otherwise, that no path ever reaches stdout or stderr, that every limit
+holds at the limit and one past it, including per-element attribute and
+namespace declaration counts, and that output is byte-identical across runs.
+Core unit tests cover decoding, the pre-parse scan, and classification without
+the binary. None of this establishes XSD conformance or acceptance.
 
 Before implementing further parsing, create synthetic fixtures independently
 from the published schemas. Cover positive and negative cases, mixed namespaces,

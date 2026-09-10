@@ -18,7 +18,7 @@ dependencies at this stage.
 
 | Command | Behavior |
 | :--- | :--- |
-| `capabilities [--json]` | Reports scaffold status, empty document operations, introspection commands |
+| `capabilities [--json]` | Reports scaffold status, the implemented document operations, introspection commands |
 | `sources [--json]` | Prints bundled reference metadata; no fetching or freshness check |
 | `skill [--json]` | Prints the embedded agent instructions |
 | `form inspect <PATH> [--json]` | Recognises one local form document's format under fixed limits |
@@ -100,7 +100,11 @@ remain unsupported rather than being renamed or silently converted.
 ## Resource and trust boundaries
 
 Before accepting input, implement limits for bytes, XML depth, node/text counts,
-archive entry count, expanded size, and compression ratio. Reject DTD/entity
+per-element attribute and namespace-declaration counts, archive entry count,
+expanded size, and compression ratio. A cap that only the parser would enforce
+is not enough when the parser's own handling of that construct is quadratic:
+`form inspect` caps namespace declarations per element in its pre-parse scan
+for that reason. Reject DTD/entity
 expansion and resolve XSD imports only from an audited local bundle. Preserve
 original encoding and bytes where signatures depend on them. External XSLT
 and HTML content must not execute during inspection.

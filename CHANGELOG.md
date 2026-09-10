@@ -12,6 +12,8 @@
   parsing, 2026 wrapper and variant recognition, and a new error envelope with
   exit code 1 for refused inputs and 4 for unrecognised documents.
 - Synthetic company-form fixtures under `tests/fixtures/forms/`.
+- A pre-parse cap of 64 namespace declarations per element, because the tree
+  parser compares each declaration against every earlier one on the element.
 - `BSD-3-Clause` added to the licence allowlist for the `encoding_rs`
   ISO-8859-2 decoder.
 
