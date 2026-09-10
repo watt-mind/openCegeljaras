@@ -6,8 +6,10 @@ local schema bundle (package 3) and an explicit external validator adapter
 (package 4). Neither package redistributes official schemas, and neither
 result is acceptance by any authority.
 
-Status: **contract, not implemented.** `capabilities` may list the new
-operations only after the behaviour and tests below exist.
+Status: package 3 (`schemas list`, `schemas verify`) is implemented and
+reviewed; package 4 (`form validate`) is a contract awaiting
+implementation. `capabilities` lists an operation only once its behaviour
+and tests exist.
 
 ## Problem and context
 
@@ -165,8 +167,11 @@ manifest resource, in manifest order:
    resolved location must be a manifest URL, and for `import` its
    `namespace` attribute must equal that resource's `target_namespace`.
    Otherwise the resource is status `unpinned_import` and lists the
-   offending resolved locations. Dossier-graph resources stop after
-   step 4 and are reported with `import_audit: "not_performed"`.
+   offending resolved locations, de-duplicated in first-appearance order
+   and capped at 64 with `locations_truncated: true`. Dossier-graph
+   resources stop after step 4; `checks.import_audit` describes the form
+   closure only, and a dossier resource appears in `problems` only when
+   its digest check fails.
 
 No directory walk is performed; files that are not manifest resources are
 never opened, listed, or counted.
@@ -183,7 +188,7 @@ dossier-graph resource is `verified` after step 4. JSON `data`:
               "verified_count": 149, "missing": 0, "mismatch": 0,
               "oversize": 0, "unparseable": 0, "unpinned_import": 0 },
   "problems": [ { "url": "https://…", "status": "mismatch",
-                  "locations": [] } ],
+                  "locations": [], "locations_truncated": false } ],
   "checks": { "digests": "passed", "import_audit": "passed",
               "xsd_conformance": "not_performed" },
   "notice": "digest and import audit of a local mirror; not a licence, not validation"

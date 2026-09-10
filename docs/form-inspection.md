@@ -6,8 +6,8 @@ of a 2026 company-form XML document. It does not describe XSD conformance,
 signature verification, filing, or court acceptance, and its output must never
 be read as any of those.
 
-Status: **contract, not implemented.** The `capabilities` command may list
-`form inspect` only after the behaviour and tests below exist.
+Status: implemented and reviewed; this document remains the contract the
+implementation is held to.
 
 ## Problem and context
 
