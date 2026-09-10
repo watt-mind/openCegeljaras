@@ -152,17 +152,27 @@ Fixed constants in `opencegeljaras-core`, exposed as a `Limits` struct with
 | Attributes on one element, excluding namespace declarations | 64 | `limit_exceeded` |
 | Namespace declarations (`xmlns` and `xmlns:*`) on one element | 64 | `limit_exceeded` |
 
-Depth, element count, and per-element namespace declarations are enforced
-by a linear pre-scan of the decoded text that skips comments, CDATA
-sections, and processing instructions, so a deeply nested document is
-rejected before the tree parser sees it. The namespace-declaration cap
+Depth, element count, and per-element attribute and namespace-declaration
+counts are enforced by a linear pre-scan of the decoded text that skips
+comments, CDATA sections, and processing instructions, so a deeply nested
+document is rejected before the tree parser sees it. The namespace-declaration cap
 exists because the parser checks each new declaration against every earlier
 one on the same element, which is quadratic and was measured at tens of
-seconds for a 16 MiB file of declarations. A
-document nested 100 000 levels deep must be rejected without a stack
-overflow. Text and attribute limits are checked while walking the finished
-tree. The pre-scan only needs to be conservative for well-formed input;
-anything it miscounts on malformed input is rejected by the parser.
+seconds for a 16 MiB file of declarations. The parser's duplicate-attribute
+check is quadratic in the same way, so the attribute cap is also enforced in
+the pre-scan; the tree walk re-checks both as defence in depth. A document
+nested 100 000 levels deep must be rejected without a stack overflow. Text
+limits are checked while walking the finished tree. The pre-scan only needs
+to be conservative for well-formed input; anything it miscounts on malformed
+input is rejected by the parser.
+
+One bounded cost is accepted rather than capped: a well-formed document may
+declare many namespaces on nested elements and then use prefixed names in
+many leaves, and the parser resolves each prefix by scanning the inherited
+declarations. Within all limits above this was measured at roughly fifteen
+seconds for a 15 MiB document and cannot exceed about a minute. A
+document-wide namespace cap was rejected because generated forms may
+legitimately redeclare namespaces on every element.
 
 Parser errors map to codes as follows, and positions are always dropped:
 `DtdDetected` is `prohibited_construct` (defence in depth behind the
@@ -347,7 +357,8 @@ Rules for the fields:
   most 64 entries.
 - Element local names and namespace URIs are the only document-derived
   strings in the output. They are never text content or attribute values,
-  and each is cut at 128 Unicode scalar values with a `…` marker.
+  and each is cut at 128 Unicode scalar values with a `…` marker, which the
+  human-output escaping rule below renders as `\u2026`.
   Unnamespaced elements report `namespace: null`. In human output every
   document-derived string is printed as a JSON string literal (quoted, with
   control and non-ASCII characters escaped), because XML names and URIs
