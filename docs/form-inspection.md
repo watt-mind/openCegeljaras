@@ -393,8 +393,11 @@ report and the stderr line; exit 1 prints nothing on stdout.
 `form` is a subcommand group with the single `inspect` subcommand.
 `opencegeljaras form` alone, `form validate`, `form inspect` without a path,
 or a second positional are usage errors (exit 2) with the existing fixed
-diagnostic. `--json` keeps its meaning. No `--limit`, `--schema`, or
-`--profile` options exist in this milestone.
+diagnostic. (Since 2026-09-10 `form validate` is an implemented subcommand,
+described in the [schema conformance contract](schema-conformance.md); it is
+still a usage error without its required `--bundle`, so this milestone's
+statement and its test continue to hold.) `--json` keeps its meaning. No
+`--limit`, `--schema`, or `--profile` options exist in this milestone.
 
 ## Ownership for package 2
 

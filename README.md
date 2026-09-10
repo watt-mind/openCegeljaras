@@ -5,15 +5,17 @@ checking Hungarian electronic company-court filings (**e-cégeljárás**) and
 interpreting their receipts.
 
 **Status: scaffold.** Alongside `capabilities`, `sources`, `skill`, help, and
-version there are three read-only operations: `form inspect`, `schemas list`,
-and `schemas verify`. `form inspect` decodes a local form file under fixed
-limits, checks that it is well-formed XML, and reports which company-form
-wrapper and variant it carries. `schemas list` prints the pinned schema
-manifest compiled into the binary, and `schemas verify` checks a local mirror
-you supplied yourself against those pinned digests and audits the form graph's
-imports. None of this proves that a file is XSD-valid, signed, correctly
-filled in, currently accepted, or filed: there is still no XSD validator,
-dossier builder, signature verifier, submission transport, or receipt parser.
+version there are four read-only operations: `form inspect`, `form validate`,
+`schemas list`, and `schemas verify`. `form inspect` decodes a local form file
+under fixed limits, checks that it is well-formed XML, and reports which
+company-form wrapper and variant it carries. `schemas list` prints the pinned
+schema manifest compiled into the binary, and `schemas verify` checks a local
+mirror you supplied yourself against those pinned digests and audits the form
+graph's imports. `form validate` adds XSD conformance against that verified
+mirror, through an `xmllint` you installed yourself. None of this proves that
+a file is signed, correctly filled in, currently accepted, or filed: there is
+still no dossier builder, signature verifier, submission transport, or receipt
+parser.
 No release has been published. This independent project is not a government
 service.
 
@@ -56,10 +58,13 @@ cargo run --locked -p opencegeljaras-cli -- schemas list --json
 cargo run --locked -p opencegeljaras-cli -- schemas verify \
   --bundle tests/fixtures/schemas/good \
   --manifest tests/fixtures/schemas/manifest.json --json
+cargo run --locked -p opencegeljaras-cli -- form validate \
+  tests/fixtures/forms/nevfoglalasi-conforming.xml --bundle YOUR_MIRROR --json
 ```
 
 `capabilities` reports `stage: "scaffold"` and
-`operations: ["form inspect", "schemas list", "schemas verify"]`.
+`operations: ["form inspect", "form validate", "schemas list", "schemas
+verify"]`.
 Introspection commands are listed separately from document operations.
 `form inspect` exits 0 for a recognised 2026 form, 1 for an input it refuses,
 and 4 for a well-formed document that is not a supported form; recognition is
@@ -76,6 +81,27 @@ URL. That is a digest and import audit of your own copy: it is not a
 redistribution licence, not XSD validation, and not acceptance by any
 authority. It exits 4 when the mirror does not match, and never downloads,
 writes, or modifies anything.
+
+## Checking XSD conformance
+
+`form validate PATH --bundle DIR` inspects the file, verifies the bundle, and
+then runs one `xmllint` from libxml2 2.9.14 up to but excluding 2.13, which you
+install yourself: `--xmllint EXE` names it, otherwise the first one on `PATH`
+is used. The bytes the inspector accepted are copied into a private temporary
+directory as `document.xml`, and the validator is spawned once there with a
+cleared environment and exactly `--nonet --noout --schema ROOT document.xml`.
+Nothing the document names is ever resolved and no catalog is used.
+
+Exit 0 means the form conforms to the pinned 2026 graph as that libxml2 version
+interprets it. It is **not** the technical conditions, **not** a signature
+check, and **not** acceptance by any authority. Exit 4 means a check was
+performed and failed: the document is not a recognised form, or it is
+nonconforming and `data.findings` lists the violations. Exit 5 is new and means
+a required check could not be performed at all — an unverified bundle, no
+supported validator, or a validator that produced no result — so conformance is
+reported as `not_performed` rather than as a failure. Findings have every
+document value replaced by `'…'`; `--show-values` keeps them and can expose
+personal data, so pass it only when you want the values.
 
 ## Intended workflow
 

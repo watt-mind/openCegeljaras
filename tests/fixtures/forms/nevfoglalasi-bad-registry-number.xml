@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Nyomtatvány xmlns="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#"
+  xmlns:nk="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/nevfoglalasiKerelem-20210401#"
+  xmlns:tc="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101#"
+  xmlns:jka="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/adatlap/jogiKepviseloAdatai-20210101#"
+  xmlns:nev="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101#"
+  xmlns:email="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/email-20221001#">
+  <nk:NévfoglalásiKérelem>
+    <nk:Adatlap><cgjsz:Cégjegyzékszám xmlns:cgjsz="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/basic/cegjegyzekszam-20210101#">99-99-999999</cgjsz:Cégjegyzékszám>
+      <tc:TagoltCím><tc:Hely>Példaváros</tc:Hely></tc:TagoltCím>
+      <jka:JogiKépviselőAdatai>
+        <nev:Név>Minta Ügyvéd</nev:Név>
+        <tc:TagoltCím><tc:Hely>Példaváros</tc:Hely></tc:TagoltCím>
+        <email:E-mail>minta@example.com</email:E-mail>
+      </jka:JogiKépviselőAdatai>
+    </nk:Adatlap>
+    <nk:Névfoglalások>
+      <nk:Névfoglalás><nev:Név>Példa Korlátolt Felelősségű Társaság</nev:Név></nk:Névfoglalás>
+    </nk:Névfoglalások>
+  </nk:NévfoglalásiKérelem>
+</Nyomtatvány>

@@ -229,7 +229,7 @@ fn verify(args: &VerifyArgs) -> CommandResult {
 
 /// Why a verification could not produce a bundle result.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum VerifyError {
+pub(crate) enum VerifyError {
     /// The bundle directory could not be canonicalised or is not a directory.
     BundleUnreadable,
     /// The named manifest file is not a readable regular file under the cap.
@@ -242,7 +242,7 @@ enum VerifyError {
 
 impl VerifyError {
     /// The stable machine-readable code.
-    fn code(self) -> &'static str {
+    pub(crate) fn code(self) -> &'static str {
         match self {
             Self::BundleUnreadable => "bundle_unreadable",
             Self::ManifestUnreadable => "manifest_unreadable",
@@ -252,7 +252,7 @@ impl VerifyError {
     }
 
     /// The fixed diagnostic text. It never names a path or a file.
-    fn message(self) -> &'static str {
+    pub(crate) fn message(self) -> &'static str {
         match self {
             Self::BundleUnreadable => "the bundle directory could not be read",
             Self::ManifestUnreadable => "the manifest could not be read as a regular file",
@@ -526,4 +526,55 @@ fn verify_report(manifest: &SchemaManifest, audit: &Audit, source: &str) -> Stri
 /// The word used for a verified or unverified graph.
 fn verdict(verified: bool) -> &'static str {
     if verified { "verified" } else { "unverified" }
+}
+
+/// A bundle verification performed on behalf of another command.
+///
+/// `form validate` needs the same digest comparison and import audit before it
+/// spawns anything, and it reports the identical `data` object, so the check
+/// is run here rather than reimplemented.
+pub(crate) struct BundleCheck {
+    /// The full `schemas verify` `data` object.
+    pub(crate) data: Value,
+    /// Whether every form-closure resource verified.
+    pub(crate) form_closure_verified: bool,
+    /// The canonical path of the form root inside the bundle, when readable.
+    pub(crate) form_root: Option<PathBuf>,
+}
+
+/// Why a bundle check produced no result at all.
+pub(crate) enum BundleProblem {
+    /// The bundle directory or the named manifest file was refused.
+    Refused(VerifyError),
+    /// The compiled manifest is unusable; the diagnostic is already written.
+    Internal,
+}
+
+/// Verify one bundle for another command and report the form root's path.
+pub(crate) fn check_bundle(
+    bundle: &Path,
+    manifest_path: Option<&Path>,
+) -> Result<BundleCheck, BundleProblem> {
+    let unpinned = manifest_path.is_some();
+    let bundle = fs::canonicalize(bundle)
+        .ok()
+        .filter(|bundle| bundle.is_dir())
+        .ok_or(BundleProblem::Refused(VerifyError::BundleUnreadable))?;
+    let manifest = match manifest_path {
+        None => compiled().map_err(|_| BundleProblem::Internal)?,
+        Some(path) => read_manifest(path).map_err(BundleProblem::Refused)?,
+    };
+
+    let audit = audit_bundle(&bundle, &manifest);
+    let source = if unpinned { "file" } else { "compiled" };
+    let form_root = manifest
+        .roots
+        .first()
+        .and_then(|root| resource_path(&bundle, root))
+        .and_then(|path| fs::canonicalize(path).ok());
+    Ok(BundleCheck {
+        data: verify_data(&manifest, &audit, source, unpinned),
+        form_closure_verified: audit.closure_verified,
+        form_root,
+    })
 }

@@ -16,6 +16,8 @@ ever fetched from those hosts: the mirrored bytes are the ones stored here.
 | `manifest.json` | The fixture manifest, passed with `--manifest` |
 | `good/` | A complete mirror laid out as `<host>/<path>` |
 | `tampered/` | The same mirror with one changed and one removed file |
+| `instance-conforming.xml` | A document the mini graph accepts, for the real-validator tests |
+| `instance-nonconforming.xml` | The same with a number violating the shared pattern |
 
 The graph is a wrapper importing two variant schemas, both of which import one
 shared simple-type schema. One of those imports is written with an `http://`

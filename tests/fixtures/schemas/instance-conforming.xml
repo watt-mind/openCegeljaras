@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture, CC0. Conforming instance of the mini graph's second
+     variant, which is the schema root the real-validator tests use because it
+     reaches the shared simple types without the deliberately unresolvable
+     http import that the wrapper's first variant carries. -->
+<b:VariantB xmlns:b="urn:opencegeljaras:fixture:variant-b">
+  <b:Szam>01-02-345678</b:Szam>
+</b:VariantB>

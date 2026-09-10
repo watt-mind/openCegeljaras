@@ -3,6 +3,8 @@
 mod form;
 mod output;
 mod schemas;
+mod validate;
+mod xmllint;
 
 use std::process::ExitCode;
 
@@ -15,6 +17,7 @@ use crate::output::{
     CommandError, CommandResult, output, success, write_diagnostic, write_json, write_text,
 };
 use crate::schemas::SchemasCommand;
+use crate::validate::ValidateArgs;
 
 const SKILL: &str = include_str!("../skills/opencegeljaras/SKILL.md");
 
@@ -54,6 +57,8 @@ enum Command {
 enum FormCommand {
     /// Recognise the format of one local form file. Not validation.
     Inspect(InspectArgs),
+    /// Check one local form file against a verified local schema bundle.
+    Validate(ValidateArgs),
 }
 
 #[derive(Debug, Args)]
@@ -152,6 +157,9 @@ fn run() -> u8 {
         Command::Form {
             command: FormCommand::Inspect(args),
         } => form::inspect(&args),
+        Command::Form {
+            command: FormCommand::Validate(args),
+        } => validate::validate(&args),
         Command::Schemas { command } => schemas::run(&command),
     };
 

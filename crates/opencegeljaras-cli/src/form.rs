@@ -47,7 +47,7 @@ pub(crate) fn inspect(args: &InspectArgs) -> CommandResult {
 ///
 /// The failure reason is never distinguished: an absent file, a directory, a
 /// permission error, and a mid-read error all produce `input_unreadable`.
-fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
+pub(crate) fn read_input(path: &Path, limits: &Limits) -> Result<Vec<u8>, Failure> {
     let unreadable = || Failure {
         code: Rejection::InputUnreadable,
         input: None,
@@ -121,7 +121,7 @@ fn reported(code: &str, exit: u8) -> CommandError {
 }
 
 /// The `data` object of a refused input, with unestablished facts omitted.
-fn rejection_data(rejection: &Failure) -> Value {
+pub(crate) fn rejection_data(rejection: &Failure) -> Value {
     let input = rejection.input.as_ref().map_or(Value::Null, |input| {
         let mut object = Map::new();
         object.insert("bytes".to_owned(), json!(input.bytes));
@@ -147,7 +147,7 @@ fn rejection_data(rejection: &Failure) -> Value {
 }
 
 /// The `data` object of a completed inspection.
-fn inspection_data(inspection: &Inspection) -> Value {
+pub(crate) fn inspection_data(inspection: &Inspection) -> Value {
     let input = &inspection.input;
     let structure = &inspection.structure;
     let form = &inspection.form;
@@ -215,6 +215,18 @@ fn inspection_data(inspection: &Inspection) -> Value {
 
 /// One fact per line, in the order fixed by the form inspection contract.
 fn human_report(inspection: &Inspection) -> String {
+    let mut report = human_facts(inspection);
+    report.push_str("xsd conformance: not performed\n");
+    report.push_str("verification: not performed\n");
+    report.push_str("submission: not performed\n");
+    report
+}
+
+/// The document facts alone, up to and including the well-formedness line.
+///
+/// `form validate` prints the same lines and then reports what it established
+/// beyond them, so the two commands cannot drift apart.
+pub(crate) fn human_facts(inspection: &Inspection) -> String {
     let input = &inspection.input;
     let structure = &inspection.structure;
     let form = &inspection.form;
@@ -256,9 +268,6 @@ fn human_report(inspection: &Inspection) -> String {
         report.push_str("  …\n");
     }
     report.push_str("well-formed: passed\n");
-    report.push_str("xsd conformance: not performed\n");
-    report.push_str("verification: not performed\n");
-    report.push_str("submission: not performed\n");
     report
 }
 

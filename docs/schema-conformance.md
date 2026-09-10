@@ -6,10 +6,8 @@ local schema bundle (package 3) and an explicit external validator adapter
 (package 4). Neither package redistributes official schemas, and neither
 result is acceptance by any authority.
 
-Status: package 3 (`schemas list`, `schemas verify`) is implemented and
-reviewed; package 4 (`form validate`) is a contract awaiting
-implementation. `capabilities` lists an operation only once its behaviour
-and tests exist.
+Status: packages 3 and 4 are implemented and reviewed; this document
+remains the contract the implementation is held to.
 
 ## Problem and context
 
@@ -277,7 +275,12 @@ Behaviour, in order:
    `-`-as-stdin ambiguity, no user path in the child's argv or stderr. The
    cost is one temporary write of at most 16 MiB. No catalog is created:
    the form graph resolves relatively from the canonical bundle path, and
-   `--nonet` makes any absolute location fail closed.
+   `--nonet` blocks any absolute location. libxml2 only warns when it
+   skips such a location and may still exit 0, so the adapter treats any
+   stderr line containing `Attempt to load network entity`,
+   `failed to load external entity`, or `Schemas parser warning` as
+   `validator_failed` regardless of the exit code; the package 3 import
+   audit makes this unreachable with a verified closure.
 5. Spawn the validator once with the temporary directory as working
    directory, a cleared environment plus the pass-through allowlist below,
    and the arguments `--nonet --noout --schema ROOT document.xml`, where
@@ -295,10 +298,18 @@ Behaviour, in order:
    validity error : MESSAGE`. `LINE` becomes an integer, `NAME` becomes
    `element` (cut at 128 scalars), `MESSAGE` is trimmed. Lines that do not
    match are counted in `unparsed_lines` and never echoed; the trailing
-   `document.xml fails to validate` line is expected and not counted.
+   `document.xml validates` and `document.xml fails to validate` lines and
+   empty lines are expected and not counted. Stderr is drained by a reader
+   bounded by the same deadline as the child, so a grandchild that
+   inherits the pipe cannot hold the CLI open past the timeout.
 7. Redact values. A single-quoted span in `MESSAGE` is kept only if it is
-   a qualified name matching `'\{[^{}']*\}[^'\s]*'` or it directly follows
-   the text `[facet` plus one space and is one of the XSD facet names. Every other
+   a qualified name matching `'\{[^{}']*\}[^'\s]*'` and does not directly
+   follow the text `The value` plus one space or an apostrophe, colon, and
+   space (both positions where libxml2 prints a document value), or it directly
+   follows the text `[facet` plus one space and is one of the XSD facet
+   names, or it is one of libxml2's fixed content-type keywords
+   `element-only`, `mixed`, `empty`, `simple`, or it is an XSD built-in
+   type name prefixed `xs:`. Every other
    single-quoted span is replaced by `'…'`. If the message contains an odd
    number of apostrophes, or any quoted span cannot be classified
    unambiguously, the entire message becomes the fixed text
@@ -388,9 +399,10 @@ here, not something CI re-establishes on every run.
 
 Mechanics are tested without the real bundle and without a real xmllint:
 a fake validator that is the integration-test executable itself,
-re-executed through `std::env::current_exe()` with a marker argument so no
-extra binary ships, controlled by a script file whose name is fixed in its
-working directory, that prints a chosen version line, writes
+re-executed through a small launcher script (needed because the test
+harness rejects xmllint's flags) with a marker argument so no extra binary
+ships, controlled by a script file with a fixed name in the launcher's
+case directory, that prints a chosen version line, writes
 chosen stderr lines, exits with a chosen code, sleeps, or floods stderr.
 That exercises the version gate at both bounds, argument construction
 (the fake records its argv and cwd), the environment allowlist (the fake
@@ -400,9 +412,13 @@ value starting with `{`, message and finding truncation, the timeout with
 a short `Duration`, the stderr cap, a missing validator, and the
 `document.xml` copy being byte-identical to the input.
 
-Real-validator tests are `#[cfg_attr(not(target_os = "linux"), ignore)]`;
-on Linux they fail, not skip, when `xmllint` is absent, and CI installs
-`libxml2-utils` on the Linux test job. They cover the synthetic mini graph
+Real-validator and launcher-based tests are compiled only on Linux, with
+ignored stubs of the same names elsewhere so `cargo test` output stays
+comparable; the whole workspace must compile warning-free on macOS and
+Windows under `-D warnings`. On Linux they fail, not skip, when `xmllint`
+is absent, and CI installs `libxml2-utils` on the Linux test job. Test
+scratch directories are removed when the test ends. They cover the
+synthetic mini graph
 with the real xmllint for a conforming and a nonconforming instance. A
 further `#[ignore]` test validates the two real fixtures against the
 bundle named by `OPENCEGELJARAS_SCHEMA_BUNDLE` and panics with a fixed
@@ -415,7 +431,7 @@ message when the variable is unset.
 | `crates/opencegeljaras-core/src/form/` (shared entry point extraction), `schema/` (new), `lib.rs` exports | 3 |
 | `crates/opencegeljaras-cli/src/schemas.rs` (new) | 3 |
 | `tests/fixtures/schemas/` (new) | 3 |
-| `crates/opencegeljaras-cli/src/validate.rs`, `xmllint.rs`, the fake validator bin (new) | 4 |
+| `crates/opencegeljaras-cli/src/validate.rs`, `xmllint.rs`, the test launcher (new) | 4 |
 | `tests/fixtures/forms/` additions | 4 |
 | `.github/workflows/ci.yml` (install `libxml2-utils` on the Linux test job only) | 4 |
 | `Cargo.toml`, `Cargo.lock`, `README.md`, `docs/architecture.md`, `docs/testing.md`, `CHANGELOG.md`, `SKILL.md` | both |
