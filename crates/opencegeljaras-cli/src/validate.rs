@@ -253,7 +253,7 @@ fn cut(text: &str, limit: usize) -> String {
 }
 
 /// Copy the four `form inspect` fact fields out of an inspect `data` object.
-fn facts_of(source: &Value) -> Map<String, Value> {
+pub(crate) fn facts_of(source: &Value) -> Map<String, Value> {
     let mut facts = Map::new();
     for key in ["input", "root", "form", "structure"] {
         facts.insert(

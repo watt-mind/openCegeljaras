@@ -213,12 +213,17 @@ pub(crate) fn inspection_data(inspection: &Inspection) -> Value {
     })
 }
 
+/// The four lines every completed report ends with.
+///
+/// They are the boundary of what this tool establishes: the document parsed,
+/// and nothing else was checked. `form fields` and `form diff` print their own
+/// lines before them and never in place of them.
+pub(crate) const BOUNDARY_LINES: &str = "well-formed: passed\nxsd conformance: not performed\nverification: not performed\nsubmission: not performed\n";
+
 /// One fact per line, in the order fixed by the form inspection contract.
-fn human_report(inspection: &Inspection) -> String {
-    let mut report = human_facts(inspection);
-    report.push_str("xsd conformance: not performed\n");
-    report.push_str("verification: not performed\n");
-    report.push_str("submission: not performed\n");
+pub(crate) fn human_report(inspection: &Inspection) -> String {
+    let mut report = human_document_facts(inspection);
+    report.push_str(BOUNDARY_LINES);
     report
 }
 
@@ -227,6 +232,16 @@ fn human_report(inspection: &Inspection) -> String {
 /// `form validate` prints the same lines and then reports what it established
 /// beyond them, so the two commands cannot drift apart.
 pub(crate) fn human_facts(inspection: &Inspection) -> String {
+    let mut report = human_document_facts(inspection);
+    report.push_str("well-formed: passed\n");
+    report
+}
+
+/// The document facts up to and including the namespace list.
+///
+/// `form fields` inserts its field listing between these lines and the
+/// boundary lines.
+pub(crate) fn human_document_facts(inspection: &Inspection) -> String {
     let input = &inspection.input;
     let structure = &inspection.structure;
     let form = &inspection.form;
@@ -267,7 +282,6 @@ pub(crate) fn human_facts(inspection: &Inspection) -> String {
     if structure.namespaces_truncated {
         report.push_str("  …\n");
     }
-    report.push_str("well-formed: passed\n");
     report
 }
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Nyomtatvány xmlns="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#"
+  xmlns:ck="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegbejegyzesiKerelem-20260101#"
+  xmlns:tc="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101#">
+  <ck:CégbejegyzésiKérelem ck:Cégforma="Kft">
+    <ck:Adatlap ck:Sorszám="1">
+      <tc:TagoltCím>
+        <tc:Hely>Példaváros</tc:Hely>
+        <tc:Ország>Magyarország</tc:Ország>
+      </tc:TagoltCím>
+    </ck:Adatlap>
+    <ck:Adatlap>
+      <ck:Azonosító>PLACEHOLDER-0003</ck:Azonosító>
+    </ck:Adatlap>
+  </ck:CégbejegyzésiKérelem>
+</Nyomtatvány>

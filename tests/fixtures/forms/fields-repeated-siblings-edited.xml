@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Nyomtatvány xmlns="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/cegnyomtatvany-20260101#"
+  xmlns:nk="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/nevfoglalasiKerelem-20210401#"
+  xmlns:tc="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/complex/tagoltCim-20210101#"
+  xmlns:nev="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/nev-20210101#"
+  xmlns:email="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/common/simple/email-20221001#"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <nk:NévfoglalásiKérelem nk:Cégforma="Kft" xsi:schemaLocation="http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/nevfoglalasiKerelem-20210401# nevfoglalasiKerelem.xsd">
+    <!-- Placeholder data only. Nothing here is a real company or person. -->
+    <nk:Adatlap nk:Sorszám="1">
+      <tc:TagoltCím>
+        <tc:Hely>PLACEHOLDER-0002</tc:Hely>
+        <tc:Ország>Magyarország</tc:Ország>
+      </tc:TagoltCím>
+      <nev:Név nev:Típus="rövid" tc:Típus="teljes">Minta Ügyvéd</nev:Név>
+      <nk:Név>Minta Példa Kft</nk:Név>
+      <nk:Üres/>
+      <nk:CsakSzóköz>   </nk:CsakSzóköz>
+      <nk:Megjegyzés><![CDATA[<nem elem> & jel]]></nk:Megjegyzés>
+      <nk:Kettévágott>elő<!-- a comment splits this leaf's text -->utó</nk:Kettévágott>
+    </nk:Adatlap>
+    <nk:Adatlap nk:Megye="Példa">
+      <email:E-mail>minta@example.com</email:E-mail>
+    </nk:Adatlap>
+    <nk:Vegyes>vegyes szöveg<nk:Belső>belső érték</nk:Belső></nk:Vegyes>
+    <nk:Névfoglalások>
+      <nk:Névfoglalás><nev:Név>Második Példa Kft</nev:Név></nk:Névfoglalás>
+      <nk:Névfoglalás><nev:Név>Harmadik Példa Kft</nev:Név></nk:Névfoglalás>
+    </nk:Névfoglalások>
+  </nk:NévfoglalásiKérelem>
+</Nyomtatvány>
