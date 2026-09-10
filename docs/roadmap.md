@@ -31,8 +31,9 @@ The [form inspection contract](form-inspection.md) specifies the read-only
 wrapper and its three variants, fixed limits, and exit codes. The
 [schema conformance contract](schema-conformance.md) covers `schemas list`,
 `schemas verify`, and `form validate` through an external libxml2
-validator; the pinned graph was verified in two independent
-implementations on 2026-09-10.
+validator; on 2026-09-10 both libxml2 and the Python xmlschema package
+loaded the form graph and agreed on two synthetic name-reservation
+instances.
 
 ## 2. Form validation and dossier preflight
 
