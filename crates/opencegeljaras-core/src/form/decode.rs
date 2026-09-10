@@ -151,7 +151,7 @@ fn sniff_declaration(body: &[u8]) -> Result<Sniff, Rejection> {
 
     Ok(Sniff {
         declaration: true,
-        label: encoding_label(&body[5..end]),
+        label: encoding_label(&body[5..end])?,
     })
 }
 
@@ -159,7 +159,12 @@ fn sniff_declaration(body: &[u8]) -> Result<Sniff, Rejection> {
 ///
 /// The name must appear whole, preceded by XML whitespace, followed by `=`
 /// with optional whitespace and a quoted value.
-fn encoding_label(declaration: &[u8]) -> Option<Vec<u8>> {
+///
+/// # Errors
+///
+/// A value whose opening quote is never closed inside the declaration is
+/// `malformed_xml`: the declaration ran past the `?>` this sniff found.
+fn encoding_label(declaration: &[u8]) -> Result<Option<Vec<u8>>, Rejection> {
     let name = b"encoding";
     for start in 1..declaration.len() {
         if !declaration[start..].starts_with(name) || !is_xml_space(declaration[start - 1]) {
@@ -182,10 +187,13 @@ fn encoding_label(declaration: &[u8]) -> Option<Vec<u8>> {
         };
         cursor += 1;
         let value = &declaration[cursor..];
-        let end = value.iter().position(|&byte| byte == quote)?;
-        return Some(value[..end].to_vec());
+        let end = value
+            .iter()
+            .position(|&byte| byte == quote)
+            .ok_or(Rejection::MalformedXml)?;
+        return Ok(Some(value[..end].to_vec()));
     }
-    None
+    Ok(None)
 }
 
 /// Normalise a declared label to one of the two accepted encodings.
@@ -336,8 +344,14 @@ mod tests {
     }
 
     #[test]
-    fn an_unterminated_quoted_label_is_ignored() {
-        let result = decoded(b"<?xml version='1.0' encoding='utf-8 ?><a/>");
-        assert_eq!(result.encoding, UTF_8_LABEL);
+    fn an_unterminated_quoted_label_is_malformed() {
+        for bytes in [
+            b"<?xml version='1.0' encoding='utf-8 ?><a/>".as_slice(),
+            b"<?xml version=\"1.0\" encoding=\"?>windows-1250\"?><a/>".as_slice(),
+        ] {
+            let error = decode(bytes).expect_err("an unterminated value is refused");
+            assert_eq!(error.code, Rejection::MalformedXml);
+            assert_eq!(error.encoding, None);
+        }
     }
 }
