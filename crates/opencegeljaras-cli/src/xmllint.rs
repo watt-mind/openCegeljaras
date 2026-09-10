@@ -13,7 +13,7 @@
 use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Stdio};
-use std::thread;
+use std::thread::{self, JoinHandle};
 use std::time::{Duration, Instant};
 
 /// The validator name reported in output. Only libxml2's tool is supported.
@@ -32,6 +32,17 @@ const STDERR_CAP: usize = 1024 * 1024;
 const VERSION_MARKER: &str = "using libxml version ";
 /// How long a poll of the child waits before looking again.
 const POLL_INTERVAL: Duration = Duration::from_millis(5);
+/// Stderr fragments that mean the schema graph did not load completely.
+///
+/// `--nonet` only makes libxml2 *warn* when it skips an absolute location, and
+/// it can still exit 0 afterwards, so a run that printed any of these did not
+/// answer the conformance question and is reported as a failure. With a
+/// verified form closure the package 3 import audit makes this unreachable.
+pub(crate) const INCOMPLETE_GRAPH_MARKERS: [&str; 3] = [
+    "Attempt to load network entity",
+    "failed to load external entity",
+    "Schemas parser warning",
+];
 
 /// Environment variables passed through to the child on this platform.
 ///
@@ -141,8 +152,7 @@ fn drain(mut source: impl Read) -> Vec<u8> {
 ///
 /// `None` means the deadline passed. `Some(None)` means the child ended
 /// without an exit code, which on Unix is a signal.
-fn wait_until(child: &mut Child, timeout: Duration) -> Option<Option<i32>> {
-    let deadline = Instant::now().checked_add(timeout);
+fn wait_until(child: &mut Child, deadline: Option<Instant>) -> Option<Option<i32>> {
     loop {
         match child.try_wait() {
             Ok(Some(status)) => return Some(status.code()),
@@ -158,10 +168,28 @@ fn wait_until(child: &mut Child, timeout: Duration) -> Option<Option<i32>> {
     }
 }
 
+/// Collect the drained standard error, giving up at the same deadline.
+///
+/// A grandchild that inherited the pipe keeps it open after the child itself
+/// has been reaped, so the reader is bounded exactly as the child is. Past the
+/// deadline the thread is abandoned rather than joined: it holds only its own
+/// buffer and one pipe end, and the process is about to report a failure.
+fn collect_until(reader: JoinHandle<Vec<u8>>, deadline: Option<Instant>) -> Option<Vec<u8>> {
+    loop {
+        if reader.is_finished() {
+            return reader.join().ok();
+        }
+        if deadline.is_none_or(|deadline| Instant::now() >= deadline) {
+            return None;
+        }
+        thread::sleep(POLL_INTERVAL);
+    }
+}
+
 /// Spawn one prepared command and collect its exit code and standard error.
 ///
-/// `None` covers a failed spawn and a timeout alike; in both cases no child is
-/// left behind.
+/// `None` covers a failed spawn, a timeout, and standard error that stayed
+/// open past the deadline alike; no child is left behind in any of them.
 fn execute(command: &mut Command, timeout: Duration) -> Option<(Option<i32>, String)> {
     clear_environment(command);
     let mut child = command
@@ -176,8 +204,9 @@ fn execute(command: &mut Command, timeout: Duration) -> Option<(Option<i32>, Str
         return None;
     };
     let reader = thread::spawn(move || drain(stderr));
-    let code = wait_until(&mut child, timeout);
-    let captured = reader.join().unwrap_or_default();
+    let deadline = Instant::now().checked_add(timeout);
+    let code = wait_until(&mut child, deadline);
+    let captured = collect_until(reader, deadline)?;
     code.map(|code| (code, String::from_utf8_lossy(&captured).into_owned()))
 }
 
@@ -247,6 +276,13 @@ pub(crate) fn run(
         .arg(root)
         .arg(DOCUMENT_NAME);
     let (code, stderr) = execute(&mut command, timeout).ok_or_else(|| failed(None))?;
+    if stderr.lines().any(|line| {
+        INCOMPLETE_GRAPH_MARKERS
+            .iter()
+            .any(|mark| line.contains(mark))
+    }) {
+        return Err(failed(code));
+    }
     match code {
         Some(0) => Ok(Run {
             version,

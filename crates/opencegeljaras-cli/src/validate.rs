@@ -45,10 +45,67 @@ const REDACTED_SPAN: &str = "'…'";
 const FACET_PREFIX: &str = "[facet ";
 /// The text introducing a document value in a validator message.
 const VALUE_PREFIX: &str = "The value ";
+/// The other position libxml2 prints a document value in: after a quoted name.
+///
+/// `Element '{ns}Kod': '17' is not a valid value of the atomic type
+/// 'xs:integer'.` and its `attribute 'a': '17' …` form both put the value
+/// straight after an apostrophe, a colon, and a space.
+const VALUE_INFIX: &str = "': ";
 /// The separator between the element name and the message on a stderr line.
 const ERROR_MARKER: &str = ": Schemas validity error : ";
 /// The separator between the line number and the element name.
 const ELEMENT_MARKER: &str = " element ";
+/// libxml2's fixed content-type keywords, which are never document values.
+const CONTENT_TYPES: &[&str] = &["element-only", "mixed", "empty", "simple"];
+/// The XSD built-in type names, always printed with the `xs:` prefix.
+const BUILTIN_TYPES: &[&str] = &[
+    "xs:anyType",
+    "xs:anySimpleType",
+    "xs:string",
+    "xs:boolean",
+    "xs:decimal",
+    "xs:float",
+    "xs:double",
+    "xs:duration",
+    "xs:dateTime",
+    "xs:time",
+    "xs:date",
+    "xs:gYearMonth",
+    "xs:gYear",
+    "xs:gMonthDay",
+    "xs:gDay",
+    "xs:gMonth",
+    "xs:hexBinary",
+    "xs:base64Binary",
+    "xs:anyURI",
+    "xs:QName",
+    "xs:NOTATION",
+    "xs:normalizedString",
+    "xs:token",
+    "xs:language",
+    "xs:NMTOKEN",
+    "xs:NMTOKENS",
+    "xs:Name",
+    "xs:NCName",
+    "xs:ID",
+    "xs:IDREF",
+    "xs:IDREFS",
+    "xs:ENTITY",
+    "xs:ENTITIES",
+    "xs:integer",
+    "xs:nonPositiveInteger",
+    "xs:negativeInteger",
+    "xs:long",
+    "xs:int",
+    "xs:short",
+    "xs:byte",
+    "xs:nonNegativeInteger",
+    "xs:unsignedLong",
+    "xs:unsignedInt",
+    "xs:unsignedShort",
+    "xs:unsignedByte",
+    "xs:positiveInteger",
+];
 /// The XSD facet names whose quoted spans are never document values.
 const FACET_NAMES: &[&str] = &[
     "length",
@@ -528,6 +585,11 @@ fn redact(message: &str) -> String {
 }
 
 /// Decide what one quoted span is, from the text before it and its content.
+///
+/// Structural text is kept only where libxml2 never prints a document value.
+/// A value can be shaped like anything, a qualified name and a type name
+/// included, so a structural-looking span in a value position is refused as
+/// ambiguous rather than printed.
 fn classify(before: &str, content: &str) -> Span {
     if before.ends_with(FACET_PREFIX) {
         return if FACET_NAMES.contains(&content) {
@@ -536,14 +598,21 @@ fn classify(before: &str, content: &str) -> Span {
             Span::Ambiguous
         };
     }
-    if !is_qualified_name(content) {
+    if !is_structural(content) {
         return Span::Redact;
     }
-    if before.ends_with(VALUE_PREFIX) {
+    if before.ends_with(VALUE_PREFIX) || before.ends_with(VALUE_INFIX) {
         Span::Ambiguous
     } else {
         Span::Keep
     }
+}
+
+/// Whether one span names structure rather than describing a document value.
+fn is_structural(content: &str) -> bool {
+    is_qualified_name(content)
+        || CONTENT_TYPES.contains(&content)
+        || BUILTIN_TYPES.contains(&content)
 }
 
 /// Whether one span is a qualified name in Clark notation.

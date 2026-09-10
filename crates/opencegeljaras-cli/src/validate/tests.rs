@@ -90,6 +90,55 @@ fn a_value_shaped_like_a_qualified_name_redacts_the_whole_message() {
 }
 
 #[test]
+fn a_value_printed_after_a_quoted_name_is_never_kept() {
+    for message in [
+        "Element '{urn:x}Kod': '{urn:v}x' is not a valid value of the atomic type 'xs:integer'.",
+        "attribute 'a': '{x}y' is not a valid value of the atomic type 'xs:integer'.",
+        "Element '{urn:x}Kod': 'mixed' is not a valid value of the atomic type 'xs:integer'.",
+    ] {
+        assert_eq!(redact(message), REDACTED_MESSAGE, "{message}");
+    }
+}
+
+#[test]
+fn a_plain_value_after_a_quoted_name_is_replaced_and_the_type_kept() {
+    assert_eq!(
+        redact("Element '{urn:x}Kod': '17a' is not a valid value of the atomic type 'xs:integer'."),
+        "Element '{urn:x}Kod': '…' is not a valid value of the atomic type 'xs:integer'."
+    );
+}
+
+#[test]
+fn attribute_names_are_redacted_but_content_types_are_kept() {
+    assert_eq!(
+        redact("Element '{urn:x}A', attribute 'nev': attribute is not allowed."),
+        "Element '{urn:x}A', attribute '…': attribute is not allowed."
+    );
+    assert_eq!(
+        redact("Element '{urn:x}A': the content type is 'element-only'."),
+        "Element '{urn:x}A': the content type is 'element-only'."
+    );
+}
+
+#[test]
+fn only_the_listed_structural_keywords_are_kept() {
+    for kept in [
+        "{urn:x}A",
+        "element-only",
+        "mixed",
+        "empty",
+        "simple",
+        "xs:integer",
+        "xs:anyType",
+    ] {
+        assert!(is_structural(kept), "{kept}");
+    }
+    for redacted in ["Nev", "xs:egesz", "xsd:integer", "element only", "17"] {
+        assert!(!is_structural(redacted), "{redacted}");
+    }
+}
+
+#[test]
 fn an_unknown_name_after_a_facet_redacts_the_whole_message() {
     let message = "Element '{urn:x}Nev': [facet 'titok'] rejected.";
     assert_eq!(redact(message), REDACTED_MESSAGE);
