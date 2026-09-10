@@ -10,7 +10,7 @@ use crate::form::{
 };
 
 /// The XML Schema instance namespace whose location hints are never resolved.
-const XSI_NAMESPACE: &str = "http://www.w3.org/2001/XMLSchema-instance";
+pub(crate) const XSI_NAMESPACE: &str = "http://www.w3.org/2001/XMLSchema-instance";
 /// Common prefix of every company-form namespace.
 const NAMESPACE_ROOT: &str = "http://schema.e-cegjegyzek.hu/schema/cegnyomtatvany/";
 /// Local name of the wrapper element.

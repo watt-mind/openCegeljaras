@@ -7,11 +7,16 @@
 //! authority acceptance.
 
 mod decode;
+mod fields;
 mod prescan;
 mod tree;
 
 use roxmltree::Document;
 
+pub use fields::{
+    DIFF_NOTICE, Diff, FIELD_LIMIT, FIELDS_NOTICE, Field, FieldKind, FieldList, Listing,
+    PATH_LIMIT, Path, VALUE_LIMIT, diff,
+};
 pub use tree::{PROFILE, WRAPPER_NAMESPACE};
 
 /// The UTF-8 label, normalised as it is reported.
@@ -20,7 +25,7 @@ pub const UTF_8_LABEL: &str = "UTF-8";
 pub const NOTICE: &str =
     "format recognition only; not schema validation, verification, or acceptance";
 /// The largest number of Unicode scalar values kept from a document string.
-const NAME_LIMIT: usize = 128;
+pub(crate) const NAME_LIMIT: usize = 128;
 
 /// Fixed resource limits applied to one document. There are no overrides.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -397,21 +402,52 @@ pub(crate) fn parse_bounded<T>(
 /// is not well-formed XML.
 pub fn inspect(bytes: &[u8], limits: &Limits) -> Result<Inspection, Failure> {
     parse_bounded(bytes, limits, |document, input| {
-        let (structure, schema_location_declared) =
-            tree::walk(document, limits).map_err(|code| input.failure(code))?;
-        Ok(Inspection {
-            input: InputFacts {
-                bytes: input.bytes,
-                bom: input.bom,
-                xml_declaration: input.xml_declaration,
-                encoding: input.encoding,
-                stylesheet_pi: tree::stylesheet_pi(document),
-                schema_location_declared,
-            },
-            root: tree::root_facts(document),
-            form: tree::classify(document),
-            structure,
+        inspect_document(document, input, limits)
+    })
+}
+
+/// Inspect one already-parsed document, and list its fields when it is a
+/// recognised form.
+///
+/// The listing is the `form inspect` boundary plus the field walk: an input
+/// this crate refuses is refused here unchanged, and a well-formed document
+/// that is not a recognised form carries no fields.
+///
+/// # Errors
+///
+/// Returns the same [`Failure`] values as [`inspect`].
+pub fn list_fields(bytes: &[u8], limits: &Limits) -> Result<Listing, Failure> {
+    parse_bounded(bytes, limits, |document, input| {
+        let inspection = inspect_document(document, input, limits)?;
+        let listed =
+            (inspection.form.status == FormStatus::Recognized).then(|| fields::walk(document));
+        Ok(Listing {
+            inspection,
+            fields: listed,
         })
+    })
+}
+
+/// The structural facts and the classification of one already-parsed document.
+fn inspect_document(
+    document: &Document<'_>,
+    input: BoundedInput,
+    limits: &Limits,
+) -> Result<Inspection, Failure> {
+    let (structure, schema_location_declared) =
+        tree::walk(document, limits).map_err(|code| input.failure(code))?;
+    Ok(Inspection {
+        input: InputFacts {
+            bytes: input.bytes,
+            bom: input.bom,
+            xml_declaration: input.xml_declaration,
+            encoding: input.encoding,
+            stylesheet_pi: tree::stylesheet_pi(document),
+            schema_location_declared,
+        },
+        root: tree::root_facts(document),
+        form: tree::classify(document),
+        structure,
     })
 }
 
