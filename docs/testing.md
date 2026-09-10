@@ -61,8 +61,9 @@ non-allowed host, or an `http` scheme. They assert the list, `--urls`, and
 verify shapes, every exit code and fixed message, that stderr is empty on
 exit 0 and exactly one line otherwise, that no local path reaches either
 stream, and that output is byte-identical across runs. Core unit tests cover
-the manifest rules, the compiled manifest's 149 resources and 139-resource form
-closure, RFC 3986 resolution, scheme normalisation, and digesting.
+the manifest rules, the compiled manifest's 149 resources, its 139-resource
+form closure and its 10-resource dossier closure disjoint from it, RFC 3986
+resolution, scheme normalisation, and digesting.
 
 The `form validate` tests never need a real bundle or a real xmllint for the
 mechanics. The fake validator is the running test executable itself,
@@ -85,9 +86,40 @@ Windows; on Linux they fail rather than skip when `xmllint` is absent, and CI
 installs `libxml2-utils` on the Linux test job. Every test scratch directory is
 removed when its test ends.
 
-Two tests marked `#[ignore]` use a real mirror named by
-`OPENCEGELJARAS_SCHEMA_BUNDLE`: one verifies the mirror, the other validates
-the two real form fixtures against it. Run them with
+The `dossier` contract tests run the built binary over the fifteen synthetic
+CC0 containers in `tests/fixtures/dossiers/` and over dossiers generated into a
+scratch directory. They assert every recognition status including the 2014 and
+2023 namespaces and the default Microsec namespace, the documented JSON and
+human shapes, that the carried `form` object is exactly what `form inspect`
+reports over the same payload, every `payload` reason in precedence order
+including the pre-decode length check, the `rejected` and exit-4 payload
+shapes, the nested-dossier and unknown-algorithm rules, the ISO-8859-2 dossier,
+the 256-document cap with `documents_truncated`, that a declared title, the
+suffix-role sentinel, and the company-identity values reach standard output
+only with `--show-values` and standard error never, each finding code in each
+reachable status, the receipt rule and its notice, every exit path, and that
+output is byte-identical across runs. With the fake validator they cover the
+preflight XSD path: a passing and a failing conformance with redacted messages,
+the human `xsd findings` lines, and a validator that produces no result. A
+tampered copy of the mini graph's dossier root exercises `bundle_unverified`, a
+manifest stripped of its second root `manifest_invalid`, and a generated
+10 000 004-byte text node `payload_exceeds_validator_limit` with the validator
+never spawned. The mini graph's dossier-style resource carries a DOCTYPE and is
+not a usable schema, so there is no Linux real-xmllint test for preflight. Core
+unit tests cover the two `Limits` profiles field by field, recognition, the
+payload precedence, the strict base64 decoder, the `xs:dateTime` lexical check,
+the findings and the verdict, a text node the dossier profile accepts and the
+form profile refuses, and — for all 194 role patterns — that only the reviewed
+construct subset occurs, that every pattern compiles, and that the literal
+title derived from each one matches it. A `#[cfg(unix)]` test creates a FIFO
+with `mkfifo` and asserts under a timeout that `form inspect` refuses it as
+`input_unreadable` instead of blocking on the open.
+
+Three tests marked `#[ignore]` use a real mirror named by
+`OPENCEGELJARAS_SCHEMA_BUNDLE`: one verifies the mirror, one validates the two
+real form fixtures against it, and one runs `dossier preflight` over the two
+evidence dossiers, expecting the conforming one to pass the XSD finding and the
+bad-procedure-title one to fail it on the enumeration facet. Run them with
 `cargo test --workspace -- --ignored`; they panic with a fixed message when the
 variable is unset. CI does not run them, and no official schema is stored in
 this repository. Verifying a bundle is

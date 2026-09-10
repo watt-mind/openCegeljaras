@@ -5,8 +5,9 @@ checking Hungarian electronic company-court filings (**e-cégeljárás**) and
 interpreting their receipts.
 
 **Status: scaffold.** Alongside `capabilities`, `sources`, `skill`, help, and
-version there are six read-only operations: `form inspect`, `form validate`,
-`form fields`, `form diff`, `schemas list`, and `schemas verify`.
+version there are eight read-only operations: `form inspect`, `form validate`,
+`form fields`, `form diff`, `schemas list`, `schemas verify`,
+`dossier inspect`, and `dossier preflight`.
 `form inspect` decodes a local form file under fixed limits, checks that it is
 well-formed XML, and reports which company-form wrapper and variant it
 carries. `form fields` lists a recognised form's fields as stable paths, and
@@ -14,10 +15,13 @@ carries. `form fields` lists a recognised form's fields as stable paths, and
 schema manifest compiled into the binary, and `schemas verify` checks a local
 mirror you supplied yourself against those pinned digests and audits the form
 graph's imports. `form validate` adds XSD conformance against that verified
-mirror, through an `xmllint` you installed yourself. None of this proves that
-a file is signed, correctly filled in, currently accepted, or filed: there is
-still no dossier builder, signature verifier, submission transport, or receipt
-parser.
+mirror, through an `xmllint` you installed yourself. `dossier inspect` reports
+what one 2026 company-court e-dossier (`.es3`) says about itself and about the
+form it carries, and `dossier preflight` turns that into deterministic findings
+and, with a verified mirror, an XSD result for the outer dossier. None of this
+proves that a file is signed, correctly filled in, currently accepted, or
+filed: there is still no dossier builder, signature verifier, submission
+transport, or receipt parser.
 No release has been published. This independent project is not a government
 service.
 
@@ -67,11 +71,15 @@ cargo run --locked -p opencegeljaras-cli -- form fields \
 cargo run --locked -p opencegeljaras-cli -- form diff \
   tests/fixtures/forms/fields-repeated-siblings.xml \
   tests/fixtures/forms/fields-repeated-siblings-edited.xml --json
+cargo run --locked -p opencegeljaras-cli -- dossier inspect \
+  tests/fixtures/dossiers/nevfoglalas-2026.es3 --json
+cargo run --locked -p opencegeljaras-cli -- dossier preflight \
+  tests/fixtures/dossiers/nevfoglalas-2026.es3 --json
 ```
 
 `capabilities` reports `stage: "scaffold"` and
 `operations: ["form inspect", "form validate", "form fields", "form diff",
-"schemas list", "schemas verify"]`.
+"schemas list", "schemas verify", "dossier inspect", "dossier preflight"]`.
 Introspection commands are listed separately from document operations.
 `form inspect` exits 0 for a recognised 2026 form, 1 for an input it refuses,
 and 4 for a well-formed document that is not a supported form; recognition is
@@ -133,6 +141,33 @@ only with `--show-values`, which can expose them, and they never reach
 standard error. Field lengths are always reported, so an agent can see that a
 field is empty or filled without reading it. Neither command validates,
 verifies, or accepts anything.
+
+## Inspecting a dossier
+
+`dossier inspect PATH` reads one `.es3` container under a 64 MiB boundary and
+reports the procedure title and category it declares, whether it is a receipt,
+its document list with each document's schema role, declared media type,
+transform chain and signature and timestamp counts, and — for the one document
+that is plain base64 XML — the `form inspect` result over the decoded payload.
+Declared titles and company-identity values are hidden unless you pass
+`--show-values`. Nothing is resolved: no `OBJREF`, no `Location`, no
+acknowledgement address; zip and encrypt transforms are never applied and a
+nested dossier is flagged, never opened. Reading a receipt never acknowledges
+service.
+
+`dossier preflight PATH` adds eleven deterministic findings — the procedure
+title, the category, the fixed `Documents` identifier, the presence and
+recognition of the application form, whether its variant matches the procedure,
+whether every document role is known, whether every transform chain is
+supported, whether a signature and a timestamp are present, and XSD conformance.
+Each finding names its source: `xsd-2026` for the schema, `form-2026` for the
+form contract, `openCegeljaras` for a rule this project derives. Presence is all
+that is established for signatures and timestamps; **validity is never
+assessed** and needs openSzigno's `verify` with your own trust material.
+With `--bundle DIR` the dossier closure of your mirror is digest-verified and
+one `xmllint` checks the outer XML. `preflight.status: passed` means those
+findings passed and the outer XML conforms, and nothing more: it is not the
+technical conditions, not signature validity, and not acceptance.
 
 ## Intended workflow
 

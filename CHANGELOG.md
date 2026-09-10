@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+- Reviewed contract and implementation of the read-only `dossier inspect` and
+  `dossier preflight` operations over one 2026 company-court e-dossier: a
+  second bounded `Limits` profile, dossier recognition, the schema's 194
+  document-role patterns as compiled interoperability data, strict base64
+  decoding of one plain-base64 XML payload with a pre-decode length check, the
+  carried form's `form inspect` result, eleven deterministic findings with
+  fixed details, and XSD conformance of the outer dossier against a
+  digest-verified dossier closure through the existing `xmllint` adapter.
+- New exit-5 code `payload_exceeds_validator_limit` for a text node past the
+  validator's own 10 000 000-byte ceiling, reported without spawning it.
+- `schemas verify` reports `dossier_closure_verified` alongside
+  `form_closure_verified`, additively.
+- Refuse a path that is not a regular file before opening it, so that a FIFO
+  named as a form, a dossier, a manifest, or a bundle resource can no longer
+  block the command.
+- Synthetic company-dossier fixtures under `tests/fixtures/dossiers/`.
 - Parse on a dedicated 16 MiB stack so the 128-level depth limit holds on
   Windows and in debug builds.
 - Install the XSD validator in the coverage job, run CodeQL only where code

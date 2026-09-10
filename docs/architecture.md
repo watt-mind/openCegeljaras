@@ -25,6 +25,8 @@ dependencies at this stage.
 | `form validate <PATH> --bundle DIR [--manifest FILE] [--xmllint EXE] [--show-values] [--json]` | Checks XSD conformance against a verified local bundle through an external `xmllint` |
 | `form fields <PATH> [--show-values] [--json]` | Lists one recognised form's fields as stable positional paths |
 | `form diff OLD NEW [--show-values] [--json]` | Compares two recognised forms field by field |
+| `dossier inspect <PATH> [--show-values] [--json]` | Reports what one local 2026 e-dossier says about itself and about the form it carries |
+| `dossier preflight <PATH> [--bundle DIR] [--manifest FILE] [--xmllint EXE] [--show-values] [--json]` | Turns that report into deterministic findings and, with a verified bundle, one XSD result for the outer dossier |
 | `schemas list [--json \| --urls]` | Prints the pinned schema manifest compiled into the binary; fetches nothing |
 | `schemas verify --bundle DIR [--manifest FILE] [--json]` | Digest-checks a local schema mirror and audits the form graph's imports |
 | `--help`, `--version` | Prints CLI usage or package version |
@@ -132,6 +134,94 @@ and `notice` stay at the top level of `data`.
 The [form fields and diff contract](form-fields.md) fixes the path model, both
 output shapes, and the caps. Listing or comparing fields is neither
 validation, verification, nor acceptance.
+
+`dossier inspect` and `dossier preflight` read one 2026 company-court e-dossier
+through the same bounded entry point under a second `Limits` profile: input and
+one text node up to 64 MiB, 1 000 000 elements, four times that in parser nodes,
+depth 128, 64 attributes and 256 namespace declarations per element. Both
+profiles are constants in the core with a unit test asserting each field.
+Recognition takes the root element `Dossier`; structural lookups take the first
+`DossierProfile` and the first `Documents` child in the dossier's own namespace,
+and a `ds:Object` belongs to the `Document` that contains it by containment
+only — `OBJREF`, `Id`, `SIGREF`, and `SIGREFLIST` are never resolved, and
+`Location` and `AckEmail` are never followed or contacted. The 194 document-role
+patterns of the schema are compiled once as fully anchored regular expressions
+under a 1 MiB compiled-program limit; a matched `role` is the pattern's own
+fixed text, never the declared title. Only a document whose chain is exactly
+`base64` and whose declared media type is XML has its payload decoded, into
+memory, at most 16 MiB, and inspected by `form inspect`; zip and encrypt
+transforms are never applied and a nested dossier is flagged, never opened.
+Reading a receipt dossier never acknowledges service.
+
+`dossier preflight` evaluates eleven findings, each `{ code, status, source,
+detail }` where `detail` is fixed by the code and the status and is never a
+document value. With `--bundle` it verifies the bundle with the package 3 rules,
+requires `dossier_closure_verified` — every resource reachable from the
+manifest's second root, digest-verified; the dossier closure's two DOCTYPE
+resources are digest-only by contract — and runs the same xmllint adapter with
+`ROOT` set to that root and the dossier bytes as `document.xml`, so the
+temporary copy is up to 64 MiB for a dossier. A manifest that pins no second
+root is `manifest_invalid`. `schemas verify` gains `dossier_closure_verified` in
+both of its output forms, additively. Both commands add these fixed codes and
+messages:
+
+| Code | Exit | Message |
+| :--- | :--- | :--- |
+| `input_too_large` | 1 | the input exceeds the 64 MiB limit |
+| `unsupported_version` | 4 | the dossier namespace version is not supported |
+| `unrecognized_root` | 4 | the root element is not a company dossier |
+| `preflight_failed` | 4 | at least one preflight finding failed |
+| `bundle_unverified` | 5 | the schema bundle's dossier closure does not match the pinned manifest |
+| `payload_exceeds_validator_limit` | 5 | a text node exceeds the validator's 10 000 000-byte limit |
+| `validator_unavailable` | 5 | no supported xmllint validator could be run |
+| `validator_failed` | 5 | the validator did not produce a conformance result |
+
+`dossier preflight` also returns `form inspect`'s exit 1 codes and `schemas
+verify`'s `bundle_unreadable`, `manifest_unreadable`, and `manifest_invalid` at
+exit 1. An unperformed XSD check is reported at exit 5 even when a deterministic
+finding also failed, so that the operator learns the conformance question was
+never answered rather than believing it was; `preflight.status` still reports
+`failed` in that case. `preflight.status` is `passed` when every finding passed
+or did not apply and the XSD check was performed, `failed` when any finding
+failed, `incomplete` when nothing failed but something was not performed, and
+`not_applicable` for a receipt. A `passed` status means those findings passed
+and the outer XML conforms, and nothing more.
+
+Each finding's `detail` is one of these fixed strings:
+
+| Code | Status | Detail |
+| :--- | :--- | :--- |
+| `procedure_title` | `passed` | the procedure title is one of the six enumerated titles |
+| `procedure_title` | `failed` | the procedure title is not one of the six enumerated titles |
+| `dossier_category` | `passed` | the dossier category is a filing category |
+| `dossier_category` | `failed` | the dossier category is not a filing category |
+| `documents_id` | `passed` | the documents container carries the fixed identifier |
+| `documents_id` | `failed` | the documents container does not carry the fixed identifier |
+| `form_document_present` | `passed` | exactly one document carries the application-form role |
+| `form_document_present` | `failed` | the application-form role is carried by no document or by several |
+| `form_recognized` | `passed` | the form document is a recognised 2026 company form |
+| `form_recognized` | `failed` | the form document is not a recognised 2026 company form |
+| `form_recognized` | `not_performed` | no inspected form payload was available |
+| `form_matches_procedure` | `passed` | the form variant is the one the procedure title requires |
+| `form_matches_procedure` | `failed` | the form variant is not the one the procedure title requires |
+| `form_matches_procedure` | `not_applicable` | the procedure title requires no particular form variant |
+| `form_matches_procedure` | `not_performed` | no recognised form was available to compare |
+| `document_roles_known` | `passed` | every listed document title matches a schema role pattern |
+| `document_roles_known` | `failed` | a listed document title matches no schema role pattern |
+| `document_roles_known` | `not_performed` | the document list was cut at the document limit |
+| `transforms_supported` | `passed` | every transform chain is one the specification defines |
+| `transforms_supported` | `failed` | a transform chain is not one the specification defines |
+| `signature_present` | `passed` | at least one signature element is present; validity was not assessed |
+| `signature_present` | `failed` | no signature element is present |
+| `timestamp_present` | `passed` | at least one timestamp element is present; validity was not assessed |
+| `timestamp_present` | `failed` | no timestamp element is present |
+| `xsd_conformance` | `passed` | the dossier conforms to the pinned 2026 dossier graph |
+| `xsd_conformance` | `failed` | the dossier does not conform to the pinned 2026 dossier graph |
+| `xsd_conformance` | `not_performed` | `no schema bundle was given`, or the exit-5 code that stopped the check |
+| any filing rule | `not_applicable` | the dossier is a receipt |
+
+The [dossier preflight contract](dossier-preflight.md) fixes the recognition
+rules, the payload precedence, both output shapes, and the caps.
 
 A usage error is any rejected command line: an unknown command, a missing or
 extra argument, or conflicting options such as `schemas list --urls --json`.
