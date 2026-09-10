@@ -38,7 +38,7 @@ absence for singletons, root and namespaced attributes together with the XSI
 and namespace-declaration exclusions, empty, whitespace-only, CDATA and
 comment-split values, the mixed rule, the 4096-scalar value cut, the
 1024-scalar path cut, the 10 000-field cap, that every listed path is unique,
-that a 110-deep chain of 128-scalar names over 10 000 leaves keeps its output
+that a 110-deep chain of 120-scalar names over 10 000 leaves keeps its output
 bounded and finishes well inside ten seconds, that a 100 000-sibling document
 is listed and compared inside the same bound, and that both commands are
 byte-identical across runs. For `form diff` they cover every exit path: a

@@ -125,6 +125,10 @@ whenever both sides are recognised, identical or not: the difference is in
 | `old_not_recognized` | 4 | the OLD document is not a recognised form |
 | `new_not_recognized` | 4 | the NEW document is not a recognised form |
 
+On those exits the failing side's key (`data.old` or `data.new`) holds its
+four inspect fact fields (`input`, `root`, `form`, `structure`); `checks`
+and `notice` stay at the top level of `data`.
+
 The [form fields and diff contract](form-fields.md) fixes the path model, both
 output shapes, and the caps. Listing or comparing fields is neither
 validation, verification, nor acceptance.
