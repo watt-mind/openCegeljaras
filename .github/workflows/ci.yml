@@ -31,7 +31,7 @@ jobs:
         with:
           toolchain: stable
           components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       - uses: taiki-e/install-action@d438492cf8a250514fa2d34b30bc3c0dc37c65ff # v2.87.8
         with:
           tool: cargo-machete@0.9.2
@@ -72,7 +72,7 @@ jobs:
         with:
           toolchain: stable
           components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       - name: Install the external XSD validator
         if: runner.os == 'Linux'
         run: |
@@ -100,7 +100,7 @@ jobs:
         with:
           persist-credentials: false
       - uses: dtolnay/rust-toolchain@688313b0823df1393bcebb1b4add0438a6d36884 # 1.88 @ 2026-09-03
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           prefix-key: v0-rust-msrv-${{ env.MSRV }}
       - name: Verify the selected MSRV
@@ -140,7 +140,7 @@ jobs:
         with:
           toolchain: stable
           components: llvm-tools-preview
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       - uses: taiki-e/install-action@d438492cf8a250514fa2d34b30bc3c0dc37c65ff # v2.87.8
         with:
           tool: cargo-llvm-cov@0.9.1
